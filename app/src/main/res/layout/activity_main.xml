@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logare in Aplicatie"
+        android:layout_marginTop="125dp"
+        android:textSize="12sp"/>
+    <EditText
+        android:id="@+id/editTextPIN"
+        android:layout_marginTop="25dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/pin"
+        android:textAlignment="center"
+        android:maxLength="6"
+        android:inputType="numberDecimal"/>
+    <Button
+        android:id="@+id/button_logare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_logare_foreground"
+        android:padding="15dp"
+        android:elegantTextHeight="true"
+        android:elevation="15dp"/>
+
+</LinearLayout>
