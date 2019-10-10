@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, " Utilizator neidentificat", Toast.LENGTH_SHORT).show();
             }
 
-            ;
-        };
+
+        }
     });
 }
     public String numeUtilizator(){

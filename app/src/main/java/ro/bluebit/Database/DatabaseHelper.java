@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =8 ;
+    public final static int VERSIUNE_BAZA_DE_DATE =9 ;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
@@ -21,12 +21,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(Constructor.SQL_CREAZA_TABEL_UTILIZATORI);
-        Log.e("Baza de date", "Tabela " + Constructor.TabelaUtilizatorPin.NUME_TABEL + " a fost creata");
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.TabelaUtilizatorPin.NUME_TABEL);
         onCreate(db);
         String sqlSir="";
@@ -36,6 +30,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlSir);
         sqlSir="INSERT INTO Tabela_utilizatori (_id, nume, pin, nivel_acces,_id_departament) VALUES   (3, 'Vasile', 333333, 4, 2)";
         db.execSQL(sqlSir);
+        Log.e("Baza de date", "Tabela " + Constructor.TabelaUtilizatorPin.NUME_TABEL + " a fost creata");
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+
     }
 
     public boolean verificPin (String pin){

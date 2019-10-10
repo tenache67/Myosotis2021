@@ -24,10 +24,10 @@ public class SelectieInitialaActivity extends AppCompatActivity {
 
         ArrayList<ClasaIteme> listaIteme = new ArrayList<>();
         listaIteme.add(new ClasaIteme(R.drawable.ic_flight,"Trimitere noua"));
-        listaIteme.add(new ClasaIteme(R.drawable.ic_scanare,"Scanare colet"));
+        listaIteme.add(new ClasaIteme(R.drawable.ic_scanare,"Informatii trimitere"));
         listaIteme.add(new ClasaIteme(R.drawable.ic_email,"Incarca trimiteri"));
         listaIteme.add(new ClasaIteme(R.drawable.ic_download,"Descarca trimiteri"));
-        listaIteme.add(new ClasaIteme(R.drawable.ic_verificare_trimiteri,"Informatii trimiteri"));
+
 
         mRecyclerView = findViewById(R.id.recycler_activitate1_id);
         mRecyclerView.setHasFixedSize(true);
