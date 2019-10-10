@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
-import ro.bluebit.UTILITARE.Main2Activity;
+import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 public class MainActivity extends AppCompatActivity {
     Button acceseaza;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (res == true) {
                     Toast.makeText(MainActivity.this, " Bun venit "+ numeUtilizator(), Toast.LENGTH_LONG).show();
-                    Intent selectieTransare = new Intent(MainActivity.this, Main2Activity.class);
+                    Intent selectieTransare = new Intent(MainActivity.this, SelectieInitialaActivity.class);
                     startActivity(selectieTransare);
                 }
             else{
