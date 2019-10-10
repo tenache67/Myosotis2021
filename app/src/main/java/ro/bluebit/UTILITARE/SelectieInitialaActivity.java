@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class SelectieInitialaActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        Toast.makeText(this, "Pentru iesire foloseste butonul de logout", Toast.LENGTH_SHORT).show();
     }
 }
 
