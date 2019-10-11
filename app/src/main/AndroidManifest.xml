@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activitate3"></activity>
+        <activity android:name=".TrimitereNouaDupaCompletareCodQR"></activity>
+        <activity android:name=".ActivitateTrimitereNoua" />
         <activity android:name=".UTILITARE.SelectieInitialaActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
