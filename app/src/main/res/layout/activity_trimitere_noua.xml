@@ -8,9 +8,10 @@
 
     <EditText
         android:id="@+id/edittext_scanare_id"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:inputType="number"
         />
 
 
