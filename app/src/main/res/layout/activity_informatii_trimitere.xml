@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#26a500"
     tools:context=".InformatiiTrimitere">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/TVInfoExpeditor_id"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:text="Expeditor:"
+        android:textSize="25sp"
+        android:textStyle="bold">
+    </TextView>
+    <TextView
+        android:id="@+id/Info_expeditor_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Expeditor"
+        android:textSize="25sp"
+        android:layout_toEndOf="@+id/TVInfoExpeditor_id"
+        android:textStyle="bold">
+    </TextView>
+    <TextView
+        android:id="@+id/TVInfoDestinatar_id"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:text="Destinatar:"
+        android:textSize="25sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold">
+    </TextView>
+    <TextView
+        android:id="@+id/Info_destinatar_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Destinatar"
+        android:textSize="25sp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@+id/TVInfoDestinatar_id"
+        android:textStyle="bold">
+    </TextView>
+    <TextView
+        android:id="@+id/TVInfoPrioritate_id"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:text="Prioritate:"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp">
+
+    </TextView>
+    <TextView
+        android:id="@+id/Info_prioritate_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Prioritate:"
+        android:textSize="25sp"
+        android:layout_toEndOf="@+id/TVInfoPrioritate_id"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp">
+
+    </TextView>
+    <TextView
+        android:id="@+id/TVInfoConditiiSpeciale_id"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:text="Cond. speciale?"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="150dp">
+    </TextView>
+    <TextView
+        android:id="@+id/Info_conditii_id"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:text="  DA"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/TVInfoConditiiSpeciale_id"
+        android:layout_marginTop="150dp">
+    </TextView>
+
+
+
+</RelativeLayout>
