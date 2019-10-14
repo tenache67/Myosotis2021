@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffef8e"
+    tools:context=".TrimitereNouaDupaCompletareCodQR">
+
+    <TextView
+        android:id="@+id/TVExpeditor_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Expeditor:"
+        android:textSize="30sp"
+        android:textStyle="bold">
+    </TextView>
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@+id/TVExpeditor_id">
+
+    </EditText>
+    <TextView
+        android:id="@+id/TVDestinatar_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Destinatar:"
+        android:textSize="30sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold">
+    </TextView>
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@+id/TVDestinatar_id">
+
+    </EditText>
+    <TextView
+        android:id="@+id/TVPrioritate_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Prioritate:"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp">
+
+    </TextView>
+    <Spinner
+        android:id="@+id/spinner_prioritate_id"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_toEndOf="@+id/TVPrioritate_id">
+
+    </Spinner>
+    <TextView
+        android:id="@+id/TVConditiiSpeciale_id"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:text="Cond. speciale?"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="150dp">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinner_condspec_id"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_alignEnd="@+id/TVConditiiSpeciale_id"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="-86dp">
+
+    </Spinner>
+
+</RelativeLayout>

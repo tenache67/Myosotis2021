@@ -6,19 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import ro.bluebit.Activitate3;
+import ro.bluebit.ActivitateQRInformatiiTrimitere;
+import ro.bluebit.ActivitateTrimitereNoua;
+import ro.bluebit.InformatiiTrimitere;
 import ro.bluebit.R;
 import ro.bluebit.UTILITARE.ClasaIteme;
+import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewHolder> {
     private ArrayList<ClasaIteme> mListaIteme;
@@ -56,14 +56,27 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemeViewHolder holder, final int position) {
         ClasaIteme itemCurent = mListaIteme.get(position);
         holder.mImageView.setImageResource(itemCurent.getResurseImagini());
         holder.mLinieTextView.setText(itemCurent.getTextLinie());
         holder.mLinieTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), Activitate3.class);
+                final Intent intent;
+                switch (position){ // Adauga case-uri in continuare pentru activitatile noi pe care vrei sa le deschizi
+                    case 0:
+                        intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
+                        break;
+
+                    case 1:
+                        intent =  new Intent(view.getContext(), ActivitateQRInformatiiTrimitere.class);
+                        break;
+
+                    default:
+                        intent =  new Intent(view.getContext(), SelectieInitialaActivity.class);
+                        break;
+                }
                 view.getContext().startActivity(intent);
             }
         });
