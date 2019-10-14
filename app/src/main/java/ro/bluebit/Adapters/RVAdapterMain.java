@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import ro.bluebit.ActivitateQRInformatiiTrimitere;
 import ro.bluebit.ActivitateTrimitereNoua;
+import ro.bluebit.Descarca_Trimiteri_Activity;
+import ro.bluebit.Incarca_Trimiteri_Activity;
 import ro.bluebit.InformatiiTrimitere;
 import ro.bluebit.R;
 import ro.bluebit.UTILITARE.ClasaIteme;
@@ -72,7 +74,12 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                     case 1:
                         intent =  new Intent(view.getContext(), ActivitateQRInformatiiTrimitere.class);
                         break;
-
+                    case 2:
+                        intent =  new Intent(view.getContext(), Incarca_Trimiteri_Activity.class);
+                        break;
+                    case 3:
+                        intent =  new Intent(view.getContext(), Descarca_Trimiteri_Activity.class);
+                        break;
                     default:
                         intent =  new Intent(view.getContext(), SelectieInitialaActivity.class);
                         break;
