@@ -1,6 +1,7 @@
 package ro.bluebit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,11 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trimitere_noua_dupa_completare_cod_qr);
+
+        Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
+        setSupportActionBar(toolbarSimplu);
+        toolbarSimplu.setSubtitle("Activitate Trimitere Noua");
+
         PopulareSpinner(); // Metoda de populare a spinnerelor
     }
 

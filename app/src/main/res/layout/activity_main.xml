@@ -5,15 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logare in Aplicatie"
-        android:layout_marginTop="125dp"
-        android:textSize="12sp"/>
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarSimplu"/>
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Logare in Aplicatie"-->
+<!--        android:layout_marginTop="125dp"-->
+<!--        android:textSize="12sp"/>-->
     <EditText
         android:id="@+id/editTextPIN"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="125dp"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:hint="@string/pin"
