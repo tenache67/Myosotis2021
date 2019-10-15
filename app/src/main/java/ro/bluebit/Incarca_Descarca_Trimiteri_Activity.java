@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Incarca_Trimiteri_Activity extends AppCompatActivity {
+public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
 
 
     @Override
@@ -31,6 +31,10 @@ public class Incarca_Trimiteri_Activity extends AppCompatActivity {
 
         EditText cod_bare=findViewById(R.id.cod_bare);
 
+
+        Bundle extras = getIntent().getExtras();
+        String incarcare = String.valueOf(extras.getInt("incarcare"));
+        String descarcare = String.valueOf(extras.getInt("descarcare"));
         //validarea daca lungimea codului este corecta
         String cod=cod_bare.getText().toString();
         int a = cod.length();
