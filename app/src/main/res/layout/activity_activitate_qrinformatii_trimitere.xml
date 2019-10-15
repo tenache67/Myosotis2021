@@ -15,7 +15,10 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:maxLength="13"
         android:inputType="number"
         />
+
+
 
 </RelativeLayout>

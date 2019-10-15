@@ -12,9 +12,16 @@
         android:id="@+id/edittext_scanare_id"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/camerapreview"
         android:inputType="number"
         />
+    <SurfaceView
+        android:layout_width="300dp"
+        android:layout_height="335dp"
+        android:id="@+id/camerapreview">
+
+    </SurfaceView>
 
 
 </RelativeLayout>
