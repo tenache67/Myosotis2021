@@ -65,6 +65,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
             @Override
             public void onClick(View view) {
                 final Intent intent;
+
                 switch (position){ // Adauga case-uri in continuare pentru activitatile noi pe care vrei sa le deschizi
                     case 0:
                         intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
@@ -75,9 +76,11 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                         break;
                     case 2:
                         intent =  new Intent(view.getContext(), Incarca_Trimiteri_Activity.class);
+                        intent.putExtra("ACTIUNE","incarcare");
                         break;
                     case 3:
                         intent =  new Intent(view.getContext(), Descarca_Trimiteri_Activity.class);
+                        intent.putExtra("ACTIUNE","descarcare");
                         break;
                     default:
                         intent =  new Intent(view.getContext(), SelectieInitialaActivity.class);
