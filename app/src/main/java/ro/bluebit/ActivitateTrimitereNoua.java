@@ -1,6 +1,7 @@
 package ro.bluebit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,9 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trimitere_noua);
+        Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
+        setSupportActionBar(toolbarSimplu);
+        toolbarSimplu.setSubtitle("Scaneaza codul de bare");
         IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
 
     }
