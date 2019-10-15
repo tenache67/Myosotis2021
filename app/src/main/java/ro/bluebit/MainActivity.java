@@ -1,6 +1,7 @@
 package ro.bluebit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
+
+        Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
+        setSupportActionBar(toolbarSimplu);
+        toolbarSimplu.setSubtitle("Logare in aplicatie");
 
         parola = findViewById(R.id.editTextPIN);
         acceseaza = findViewById(R.id.button_logare);

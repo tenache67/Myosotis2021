@@ -1,6 +1,7 @@
 package ro.bluebit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,11 @@ public class ActivitateQRInformatiiTrimitere extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activitate_qrinformatii_trimitere);
+
+        Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
+        setSupportActionBar(toolbarSimplu);
+        toolbarSimplu.setSubtitle("Scaneaza codul de bare:");
+
         IntroducereCodQR();
     }
 

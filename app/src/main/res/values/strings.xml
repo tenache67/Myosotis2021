@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Myosotis</string>
     <string name="pin">PIN DIN 6 CIFRE </string>
+    <string name="cod_bare">13 CARACTERE </string>
+    <string name="iesire">Delogare</string>
 </resources>

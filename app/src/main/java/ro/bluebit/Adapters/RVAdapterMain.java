@@ -15,7 +15,8 @@ import java.util.ArrayList;
 
 import ro.bluebit.ActivitateQRInformatiiTrimitere;
 import ro.bluebit.ActivitateTrimitereNoua;
-import ro.bluebit.InformatiiTrimitere;
+import ro.bluebit.Descarca_Trimiteri_Activity;
+import ro.bluebit.Incarca_Trimiteri_Activity;
 import ro.bluebit.R;
 import ro.bluebit.UTILITARE.ClasaIteme;
 import ro.bluebit.UTILITARE.SelectieInitialaActivity;
@@ -64,6 +65,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
             @Override
             public void onClick(View view) {
                 final Intent intent;
+
                 switch (position){ // Adauga case-uri in continuare pentru activitatile noi pe care vrei sa le deschizi
                     case 0:
                         intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
@@ -72,7 +74,14 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                     case 1:
                         intent =  new Intent(view.getContext(), ActivitateQRInformatiiTrimitere.class);
                         break;
-
+                    case 2:
+                        intent =  new Intent(view.getContext(), Incarca_Trimiteri_Activity.class);
+                        intent.putExtra("ACTIUNE","incarcare");
+                        break;
+                    case 3:
+                        intent =  new Intent(view.getContext(), Descarca_Trimiteri_Activity.class);
+                        intent.putExtra("ACTIUNE","descarcare");
+                        break;
                     default:
                         intent =  new Intent(view.getContext(), SelectieInitialaActivity.class);
                         break;

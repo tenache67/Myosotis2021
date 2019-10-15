@@ -7,6 +7,9 @@
     android:background="#ffef8e"
     tools:context=".TrimitereNouaDupaCompletareCodQR">
 
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarSimplu"/>
+
     <TextView
         android:id="@+id/TVExpeditor_id"
         android:layout_width="150dp"

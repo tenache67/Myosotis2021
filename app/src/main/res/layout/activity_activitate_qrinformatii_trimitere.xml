@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ActivitateQRInformatiiTrimitere">
 
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarSimplu"/>
+
     <EditText
         android:id="@+id/edittext_qr_informatii_id"
         android:layout_width="150dp"
