@@ -97,7 +97,8 @@ public class Constructor {
     public static final String SQL_CREAZA_TABEL_RUTE_P_LUCRU = (" create table if not exists " +
             Tabela_Rute_P_Lucru.NUME_TABEL + " ( " +
             Tabela_Rute_P_Lucru.COL_ID_RUTA + Tip.INTREG + " , " +
-            Tabela_Rute_P_Lucru.COL_ID_P_LUCRU + Tip.INTREG
+            Tabela_Rute_P_Lucru.COL_ID_P_LUCRU + Tip.INTREG + " , " +
+            "PRIMARY KEY ("+Tabela_Rute_P_Lucru.COL_ID_RUTA + " , " +Tabela_Rute_P_Lucru.COL_ID_P_LUCRU+")"
             + ")");
 
 
