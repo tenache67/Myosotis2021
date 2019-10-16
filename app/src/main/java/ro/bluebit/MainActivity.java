@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
-
+        SQLiteDatabase db = myDb.getReadableDatabase();
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Logare in aplicatie");
