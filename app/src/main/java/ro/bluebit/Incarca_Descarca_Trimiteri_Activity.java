@@ -3,24 +3,17 @@ package ro.bluebit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseIntArray;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
-import ro.bluebit.UTILITARE.LogicaVerificari;
 
 public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     EditText cod_bare;
@@ -29,19 +22,24 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lay_incarca_trimiteri);
+        setContentView(R.layout.lay_incarca_descarca_trimiteri);
 
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-        toolbarSimplu.setSubtitle("Incarca trimiteri:");
+
 
         EditText cod_bare=findViewById(R.id.cod_bare);
 
 
         Bundle extras = getIntent().getExtras();
-        String incarcare = String.valueOf(extras.getInt("incarcare"));
-        String descarcare = String.valueOf(extras.getInt("descarcare"));
-        //validarea daca lungimea codului este corecta
+        String preluareIntent = extras.getString("ACTIUNE");
+
+
+        if (preluareIntent.equals("incarcare")  ){
+            toolbarSimplu.setSubtitle("Incarca trimiteri:");
+        }
+       else
+            toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
         }
 
@@ -50,7 +48,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
 
 
     //validarea  lungimii codului de bare
-    public void  verificaLungimeCobBare() {
+    public void  verificaLungimeCodBare() {
         String cod = cod_bare.getText().toString();
         int a = cod.length();
         if (a != 13) {

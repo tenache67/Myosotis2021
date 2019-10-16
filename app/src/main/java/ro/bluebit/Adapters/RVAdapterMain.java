@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import ro.bluebit.ActivitateQRInformatiiTrimitere;
 import ro.bluebit.ActivitateTrimitereNoua;
-import ro.bluebit.Descarca_Trimiteri_Activity;
 import ro.bluebit.Incarca_Descarca_Trimiteri_Activity;
 import ro.bluebit.R;
 import ro.bluebit.UTILITARE.ClasaIteme;
