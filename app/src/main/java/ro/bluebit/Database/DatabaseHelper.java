@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =14;
+    public final static int VERSIUNE_BAZA_DE_DATE =16;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
