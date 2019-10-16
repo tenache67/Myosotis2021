@@ -23,6 +23,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +32,7 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
+    public static ArrayList<String> StocareCodBare = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
         toolbarSimplu.setSubtitle("Scaneaza codul de bare");
 
         IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
-        BarcodeScanner();
+        BarcodeScanner(); // Metoda BarcodeScanner
     }
 
     public void IntroducereCodQR() {
@@ -71,6 +73,10 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+                                        String ag=EditTextCodQR.getText().toString().trim();
+                                        if(ag.length() != 0){
+                                            StocareCodBare.add(ag);
+                                        }
                                        startActivity(intent);
                                     }
                                 },
@@ -136,6 +142,7 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
                             Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                             vibrator.vibrate(1000);
                             EditTextCodQR.setText(qrCodes.valueAt(0).displayValue);
+
                         }
                     });
                 }
