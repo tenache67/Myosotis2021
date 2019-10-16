@@ -3,6 +3,8 @@ package ro.bluebit.UTILITARE;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import ro.bluebit.Database.Constructor;
+
 public class LogicaVerificari {
 
     public LogicaVerificari() {
@@ -40,5 +42,13 @@ public class LogicaVerificari {
 
         }else return false;
     }
+
+    //Verificare cod de bare in plaja
+    public  static String SQL_QUERY_OBTINE_VALIDARE_PLAJA_CODURI (int CodBare){
+        return " SELECT "+ Constructor.Tabela_Plaja_Cod.COL_ID_LOT +" from " + Constructor.Tabela_Plaja_Cod.NUME_TABEL +
+                " where " + CodBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM+ " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM;
+
+    };
+
 }
 
