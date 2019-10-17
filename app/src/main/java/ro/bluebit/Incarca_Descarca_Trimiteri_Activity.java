@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 
@@ -30,11 +31,13 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     String preiaCodBare;
     TextView afisareMesaj;
 
+    public static ArrayList<String> StocareCodBare = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lay_incarca_descarca_trimiteri);
         myDb = new DatabaseHelper(this);
+        SQLiteDatabase db=myDb.getReadableDatabase();
         cod_bare=findViewById(R.id.cod_bare);
         afisareMesaj=findViewById(R.id.reporter);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
@@ -46,15 +49,34 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
             toolbarSimplu.setSubtitle("Incarca trimiteri:");
         } else
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
-        stocareCodBareDinScanner=new Long[10];
 
         cod_bare.addTextChangedListener(watchCodBare);
-
+        preiaCodBare=cod_bare.getText().toString();
 
     }
+//VERIFICARE EXISTENTA COD IN PLAJA DE CODURI
+    int verificPlajaCod(){
+        SQLiteDatabase db = myDb.getReadableDatabase();
+         String SQLverifPlaja=(" SELECT " + Constructor.Tabela_Plaja_Cod.COL_ID_LOT + " from " + Constructor.Tabela_Plaja_Cod.NUME_TABEL +
+                " where " + preiaCodBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM);
+        Cursor crs = db.rawQuery(SQLverifPlaja, null);
+        crs.moveToFirst();
 
-
+        int rezultat =crs.getColumnIndexOrThrow(Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
+       return rezultat;
+    }
+//VERIFICARE CORECTITUDINE COD
+    boolean verificCorectitudineCod(){
+        long a=Integer.parseInt(preiaCodBare);
+        long[]cod= new long[1];
+        cod[0]=a;
+        long plaja=parseLong(preiaCodBare);
+        boolean bol = LogicaVerificari.verifCorectitudinelongsBare(cod);
+        return bol;
+    }
+// CREAREA TEXT WATCHERULUI PERSONALIZAT
     public TextWatcher watchCodBare =new TextWatcher() {
+
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -64,40 +86,47 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
         }
+        private Timer timer = new Timer();
+        private final long DELAY = 5000; // milliseconds
+
 
         @Override
         public void afterTextChanged(Editable editable) {
-
             if (editable.length()==0)
                 afisareMesaj.setText("Nu ai introdus nici o cifra");
                 else if (editable.length()<=12)
                 afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
-            else if (editable.length()==13)
+
+            else if (editable.length()==13 )
                 afisareMesaj.setText(preiaCodBare);
-                afisareMesaj.getHighlightColor();
-            preiaCodBare=cod_bare.getText().toString();
+                preiaCodBare=cod_bare.getText().toString();
+            timer.cancel();
+            timer = new Timer();
+            timer.schedule(
+                    new TimerTask() {
+                        @Override
+
+                        public void run() {
+
+                             if ( verificCorectitudineCod ()|| verificPlajaCod() > 0)
+
+                            StocareCodBare.add(preiaCodBare);
+                             cod_bare.setText("");
+                        }
+                    },
+                    DELAY
+            );
+
 
         }
     };
 
-    public Long VerificarePreiaCodBare (){
-        int [] preiaCB=new int[1];
-        int a=Integer.parseInt(preiaCodBare);
-        for (int i=0;i<preiaCB.length; i++);{
 
-        }
-
-        LogicaVerificari.verifCorectitudineCodBare(rezultat[]);
-    }
 }
 
 
 
-//        long asdf=1234567891234l;
-//        SQLiteDatabase db =myDb.getReadableDatabase();
-//        db.execSQL(LogicaVerificari.SQL_QUERY_OBTINE_VALIDARE_PLAJA_CODURI(asdf));
 
-// AICI URMEAZA INSERTURILE SI ALTE METODE
 
 
 

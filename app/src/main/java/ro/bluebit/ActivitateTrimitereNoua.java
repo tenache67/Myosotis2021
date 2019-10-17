@@ -68,15 +68,15 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
                         timer = new Timer();
                         timer.schedule(
                                 new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                       Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
-                                       startActivity(intent);
-                                    }
-                                },
-                                DELAY
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+                            startActivity(intent);
+                        }
+                    },
+                    DELAY
                         );
-                    }
+                }
                 }
         );
     }
