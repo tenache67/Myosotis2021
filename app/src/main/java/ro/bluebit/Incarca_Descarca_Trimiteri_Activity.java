@@ -6,9 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     Long[] stocareCodBareDinScanner;
     String preiaCodBare;
     TextView afisareMesaj;
-
+    public final String TAG= "incarca_descarca";
     public static ArrayList<String> StocareCodBare = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         crs.moveToFirst();
 
         int rezultat =crs.getColumnIndexOrThrow(Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
+        Log.e(TAG, "verific existenta codului");
        return rezultat;
     }
 //VERIFICARE CORECTITUDINE COD
@@ -72,7 +75,10 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         cod[0]=a;
         long plaja=parseLong(preiaCodBare);
         boolean bol = LogicaVerificari.verifCorectitudinelongsBare(cod);
+        Log.e(TAG, "verificCorectitudineCod");
         return bol;
+
+
     }
 // CREAREA TEXT WATCHERULUI PERSONALIZAT
     public TextWatcher watchCodBare =new TextWatcher() {
@@ -97,7 +103,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
                 else if (editable.length()<=12)
                 afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
 
-            else if (editable.length()==13 )
+            else
+                if (editable.length()==13 )
                 afisareMesaj.setText(preiaCodBare);
                 preiaCodBare=cod_bare.getText().toString();
             timer.cancel();
