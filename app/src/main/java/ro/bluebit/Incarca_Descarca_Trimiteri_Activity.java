@@ -62,7 +62,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
          String SQLverifPlaja=(" SELECT " + Constructor.Tabela_Plaja_Cod.COL_ID_LOT + " from " + Constructor.Tabela_Plaja_Cod.NUME_TABEL +
                 " where " + preiaCodBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM);
         Cursor crs = db.rawQuery(SQLverifPlaja, null);
-  //      crs.moveToFirst();
+        crs.moveToFirst();
 
         int rezultat =crs.getColumnIndexOrThrow(Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
         Log.e(TAG, "verific existenta codului");

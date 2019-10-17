@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =16;
+    public final static int VERSIUNE_BAZA_DE_DATE =17;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
@@ -42,11 +42,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlSir);
         sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (3, 'Vasile', 333333, 4, 2)";
         db.execSQL(sqlSir);
+        sqlSir="INSERT INTO Tabela_plaja_cod (id_lot, val_minima, val_maxima) VALUES   (10, 1000000000000, 9999999999999)";
+        db.execSQL(sqlSir);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.TabelaUtilizatorPin.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Incarc_Descarc.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_P_Lucru.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pachete.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Plaja_Cod.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Rute.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Rute_P_Lucru.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Tipuri.NUME_TABEL);
+
+
         onCreate(db);
 
     }
