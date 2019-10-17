@@ -70,10 +70,12 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     }
 //VERIFICARE CORECTITUDINE COD
     boolean verificCorectitudineCod(){
-        long a=Integer.parseInt(preiaCodBare);
+        long a=parseLong(preiaCodBare);
         long[]cod= new long[1];
-        cod[0]=a;
-        long plaja=parseLong(preiaCodBare);
+        for (int i = 0; i < cod.length; i++) {
+            cod[i] = a;
+        }
+
         boolean bol = LogicaVerificari.verifCorectitudinelongsBare(cod);
         Log.e(TAG, "verificCorectitudineCod");
         return bol;
