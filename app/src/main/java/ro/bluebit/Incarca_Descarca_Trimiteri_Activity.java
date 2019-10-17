@@ -62,26 +62,23 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
          String SQLverifPlaja=(" SELECT " + Constructor.Tabela_Plaja_Cod.COL_ID_LOT + " from " + Constructor.Tabela_Plaja_Cod.NUME_TABEL +
                 " where " + preiaCodBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM);
         Cursor crs = db.rawQuery(SQLverifPlaja, null);
-        crs.moveToFirst();
+  //      crs.moveToFirst();
 
         int rezultat =crs.getColumnIndexOrThrow(Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
         Log.e(TAG, "verific existenta codului");
        return rezultat;
     }
 //VERIFICARE CORECTITUDINE COD
-    boolean verificCorectitudineCod(){
-        long a=parseLong(preiaCodBare);
-        long[]cod= new long[1];
-        for (int i = 0; i < cod.length; i++) {
-            cod[i] = a;
-        }
+//    boolean verificCorectitudineCod() {
+//        boolean bol = LogicaVerificari.verifCorectitudineBare(preiaCodBare);
+//        Log.e(TAG, "verificCorectitudineCod");
+//        if (bol = false) {
+//            afisareMesaj.setText("Nu ai introdus un cod valid");
+//            cod_bare.setText("");
+//
+//    }return bol;
+//    }
 
-        boolean bol = LogicaVerificari.verifCorectitudinelongsBare(cod);
-        Log.e(TAG, "verificCorectitudineCod");
-        return bol;
-
-
-    }
 // CREAREA TEXT WATCHERULUI PERSONALIZAT
     public TextWatcher watchCodBare =new TextWatcher() {
 
@@ -116,11 +113,10 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
                         @Override
 
                         public void run() {
-
-                             if ( verificCorectitudineCod ()|| verificPlajaCod() > 0)
-
+                          //  if ( verificCorectitudineCod ()|| verificPlajaCod() > 0)
+                             if ( verificPlajaCod() > 0)
                             StocareCodBare.add(preiaCodBare);
-                             cod_bare.setText("");
+                            // cod_bare.setText("");
                         }
                     },
                     DELAY

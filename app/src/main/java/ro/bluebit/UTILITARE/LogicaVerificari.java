@@ -17,22 +17,33 @@ public class LogicaVerificari {
     }
 
 
-    public static boolean verifCorectitudinelongsBare(long []longs) {
-        long[] a = new long[13];
-        a[0] = longs[0];
-        a[1] = longs[1];
-        a[2] = longs[2];
-        a[3] = longs[3];
-        a[4] = longs[4];
-        a[5] = longs[5];
-        a[6] = longs[6];
-        a[7] = longs[7];
-        a[8] = longs[8];
-        a[9] = longs[9];
-        a[10] = longs[10];
-        a[11] = longs[11];
-        a[12] = longs[12];
-        a[13] = longs[13];
+    public static boolean verifCorectitudineBare(String numbers) {
+//        String[] myArray = numbers.split("");
+//        for(int i=0; i<myArray.length; i++)
+//        { myArray[i] + = myArray[1]; }
+
+        String[] parts = numbers.split(" ");
+        long [] n1 = new long[parts.length];
+        for(int n = 0; n < parts.length; n++) {
+            n1[n] = parseLong(parts[n]);
+        }
+        
+//use myArray, it's an array of numbers
+        long [] a = new long[13];
+        a[1] = n1[1];
+        a[2] = n1[2];
+        a[3] = n1[3];
+        a[4] = n1[4];
+        a[5] = n1[5];
+        a[6] = n1[6];
+        a[7] = n1[7];
+        a[8] = n1[8];
+        a[9] = n1[9];
+        a[10] = n1[10];
+        a[11] = n1[11];
+        a[12] = n1[12];
+        a[13] = n1[13];
+
         double suma = 3 * (a[1] + a[3] + a[5] + a[7] + a[9] + a[11]) + (a[0] + a[2] + a[4] + a[6] + a[8] + a[10] + a[12]);
         double rezultat = Math.round(suma / 10.0) * 10;
         double diferenta = rezultat - suma;
