@@ -3,22 +3,15 @@ package ro.bluebit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
@@ -37,14 +30,14 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lay_incarca_descarca_trimiteri);
+        setContentView(R.layout.layout_scaneaza_cod_bare);
         myDb = new DatabaseHelper(this);
         SQLiteDatabase db=myDb.getReadableDatabase();
         cod_bare=findViewById(R.id.cod_bare);
         afisareMesaj=findViewById(R.id.reporter);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-
+        TextWatcher watchCodBare =new LogicaVerificari.SuperTextWatcher();
         Bundle extras = getIntent().getExtras();
         String preluareIntent = extras.getString("ACTIUNE");
         if (preluareIntent.equals("incarcare")) {
@@ -53,7 +46,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
         cod_bare.addTextChangedListener(watchCodBare);
-        preiaCodBare=cod_bare.getText().toString();
+//        preiaCodBare=cod_bare.getText().toString();
 
     }
 //VERIFICARE EXISTENTA COD IN PLAJA DE CODURI
@@ -69,65 +62,21 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
        return rezultat;
     }
 //VERIFICARE CORECTITUDINE COD
-//    boolean verificCorectitudineCod() {
-//        boolean bol = LogicaVerificari.verifCorectitudineBare(preiaCodBare);
-//        Log.e(TAG, "verificCorectitudineCod");
-//        if (bol = false) {
+    double verificCorectitudineCod() {
+        double corect = LogicaVerificari.verifCorectitudineBare(preiaCodBare);
+        Log.e(TAG, "verificCorectitudineCod");
+//        if (corect != 1) {
 //            afisareMesaj.setText("Nu ai introdus un cod valid");
 //            cod_bare.setText("");
-//
-//    }return bol;
-//    }
-
-// CREAREA TEXT WATCHERULUI PERSONALIZAT
-    public TextWatcher watchCodBare =new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-        private Timer timer = new Timer();
-        private final long DELAY = 5000; // milliseconds
+  //      }
+        return corect;
+    }
 
 
-        @Override
-        public void afterTextChanged(Editable editable) {
-            if (editable.length()==0)
-                afisareMesaj.setText("Nu ai introdus nici o cifra");
-                else if (editable.length()<=12)
-                afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
-
-            else
-                if (editable.length()==13 )
-                afisareMesaj.setText(preiaCodBare);
-                preiaCodBare=cod_bare.getText().toString();
-            timer.cancel();
-            timer = new Timer();
-            timer.schedule(
-                    new TimerTask() {
-                        @Override
-
-                        public void run() {
-                          //  if ( verificCorectitudineCod ()|| verificPlajaCod() > 0)
-                             if ( verificPlajaCod() > 0)
-                            StocareCodBare.add(preiaCodBare);
-                            // cod_bare.setText("");
-                        }
-                    },
-                    DELAY
-            );
+    }
 
 
-        }
-    };
 
-
-}
 
 
 

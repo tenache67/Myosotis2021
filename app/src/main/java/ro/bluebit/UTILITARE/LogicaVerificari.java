@@ -2,10 +2,16 @@ package ro.bluebit.UTILITARE;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 
@@ -17,41 +23,22 @@ public class LogicaVerificari {
     }
 
 
-    public static boolean verifCorectitudineBare(String numbers) {
-//        String[] myArray = numbers.split("");
-//        for(int i=0; i<myArray.length; i++)
-//        { myArray[i] + = myArray[1]; }
+    public static double verifCorectitudineBare(String numar) {
 
-        String[] parts = numbers.split(" ");
-        long [] n1 = new long[parts.length];
-        for(int n = 0; n < parts.length; n++) {
-            n1[n] = parseLong(parts[n]);
+        String temp = Long.toString(Long.parseLong(numar));
+        int[] a = new int[temp.length()];
+        for (int i = 0; i < temp.length(); i++) {
+            a[i] = temp.charAt(i) - '0';
         }
-        
-//use myArray, it's an array of numbers
-        long [] a = new long[13];
-        a[1] = n1[1];
-        a[2] = n1[2];
-        a[3] = n1[3];
-        a[4] = n1[4];
-        a[5] = n1[5];
-        a[6] = n1[6];
-        a[7] = n1[7];
-        a[8] = n1[8];
-        a[9] = n1[9];
-        a[10] = n1[10];
-        a[11] = n1[11];
-        a[12] = n1[12];
-        a[13] = n1[13];
-
-        double suma = 3 * (a[1] + a[3] + a[5] + a[7] + a[9] + a[11]) + (a[0] + a[2] + a[4] + a[6] + a[8] + a[10] + a[12]);
-        double rezultat = Math.round(suma / 10.0) * 10;
+        double suma = 3 * (a[1] + a[3] + a[5] + a[7] + a[9] + a[11]) + (a[0] +a[2] + a[4] + a[6] + a[8] + a[10]  );
+        double rezultat = Math.ceil(suma/10 )*10;
         double diferenta = rezultat - suma;
-        if (diferenta == a[13]) {
 
-            return true;
+        if (diferenta == a[12]) {
 
-        } else return false;
+
+
+        }  return 1;
     }
 
 //Verificare longs de bare in plaja
@@ -77,6 +64,52 @@ public class LogicaVerificari {
         return b;
     }
 
+    public static  class SuperTextWatcher implements TextWatcher{
+        TextView afisareMesaj; String preiaCodBare;
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+        private Timer timer = new Timer();
+        private final long DELAY = 5000; // milliseconds
+
+
+        @Override
+        public void afterTextChanged(final Editable editable) {
+            if (editable.length()==0)
+                afisareMesaj.setText("Nu ai introdus nici o cifra");
+                else if (editable.length()<=12)
+                afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
+
+            else
+                if (editable.length()==13 )
+                afisareMesaj.setText(preiaCodBare);
+//                preiaCodBare=cod_bare.getText().toString();
+            timer.cancel();
+            timer = new Timer();
+            timer.schedule(
+                    new TimerTask() {
+                        @Override
+
+                        public void run() {
+//                          //  if ( verificCorectitudineCod ()==1 )
+//                                if ( verificCorectitudineCod ()==1 && verificPlajaCod() > 0)
+//                            StocareCodBare.add(preiaCodBare);
+
+                            // cod_bare.setText("");
+                        }
+                    },
+                    DELAY
+            );
+
+
+        }
+    }
 
 }
 

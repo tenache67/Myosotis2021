@@ -64,6 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+
     public boolean verificPin (String pin){
         String [] columns ={Constructor.TabelaUtilizatorPin.COL_PIN};
         SQLiteDatabase db = getReadableDatabase();
