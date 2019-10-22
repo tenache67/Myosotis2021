@@ -20,7 +20,7 @@ import ro.bluebit.UTILITARE.LogicaVerificari;
 
 import static java.lang.Long.parseLong;
 
-public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
+public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     EditText cod_bare;
     DatabaseHelper myDb;
     Long[] stocareCodBareDinScanner;
@@ -38,7 +38,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         afisareMesaj=findViewById(R.id.reporter);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-        //TextWatcher watchCodBare =new CustomTextWatcher(cod_bare,afisareMesaj,preiaCodBare);
+        TextWatcher watchCodBare =new CustomTextWatcher(cod_bare,afisareMesaj,preiaCodBare,this);
         Bundle extras = getIntent().getExtras();
         String preluareIntent = extras.getString("ACTIUNE");
         if (preluareIntent.equals("incarcare")) {
@@ -46,12 +46,28 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         } else
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
-        //cod_bare.addTextChangedListener(watchCodBare);
+        cod_bare.addTextChangedListener(watchCodBare);
 
 
     }
 
-    }
+    //obtinere acces la baza de date
+
+//    SQLiteDatabase db = myDb.getReadableDatabase();
+//    //inlaturarea zerourilor din sirul de caractere
+//    String codBareFaraZerouri= LogicaVerificari.RemoveZero(preiaCodBare);
+//    //transformarea sirului de caractere in long
+//    long codBareScurt = parseLong(codBareFaraZerouri);
+//    //verificare existenta in plaja de coduri
+//    boolean existInPlajaCoduri =LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
+//    //transformarea in long a sirului da caractere din edittext
+//    long codBareLung = parseLong(preiaCodBare);
+//    //verificarea existentei inregistrarii in tabela Antet  Trimiteri
+//    boolean existInAntetTrimiteri =LogicaVerificari.verificareExistentaInAntetTrimiteri(db,codBareLung);
+
+}
+
+
 
 
 
