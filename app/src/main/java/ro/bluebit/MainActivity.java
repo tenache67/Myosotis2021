@@ -42,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
                  Boolean res = myDb.verificPin(parola.getText().toString());
 
             if (res == true) {
-                    Toast.makeText(MainActivity.this, " Bun venit "+ numeUtilizator(), Toast.LENGTH_LONG).show();
-                    Intent selectieTransare = new Intent(MainActivity.this, SelectieInitialaActivity.class);
-                    startActivity(selectieTransare);
+                    Toast.makeText(MainActivity.this, " Bun venit "+ numeUtilizator()+ "  id:  " + id_Utilizator(), Toast.LENGTH_LONG).show();
+                    Intent logareUtilizator = new Intent(MainActivity.this, SelectieInitialaActivity.class);
+                    String idUtilizator=id_Utilizator();
+                    logareUtilizator.putExtra("UTILIZATOR", "idUtilizator");
+                    startActivity(logareUtilizator);
                 }
             else{
                 Toast.makeText(MainActivity.this, " Utilizator neidentificat", Toast.LENGTH_SHORT).show();
@@ -66,5 +68,19 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
         return result;
+    }
+    public String id_Utilizator(){
+        SQLiteDatabase db = myDb.getReadableDatabase();
+        String result ="";
+
+        String queryUtilizator =( "select "+ Constructor.TabelaUtilizatorPin.COL_ID + " from " + Constructor.TabelaUtilizatorPin.NUME_TABEL +
+                " where " + Constructor.TabelaUtilizatorPin.COL_PIN +" = " + parola.getText().toString().trim() );
+        Cursor cursor = db.rawQuery(queryUtilizator, null);
+        if (cursor.moveToFirst()) {
+            result = cursor.getString(cursor.getColumnIndex(Constructor.TabelaUtilizatorPin.COL_ID));
+        }
+        cursor.close();
+        return result;
+
     }
 }

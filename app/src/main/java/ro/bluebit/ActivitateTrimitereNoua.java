@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -16,6 +17,8 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -23,28 +26,47 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.security.Timestamp;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ActivitateTrimitereNoua extends AppCompatActivity {
+import ro.bluebit.Database.Constructor;
+import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.UTILITARE.CustomTextWatcher;
+
+public class ActivitateTrimitereNoua extends BazaAppCompat {
     EditText EditTextCodQR;
+    TextView afisareMesaj;
+    String PreiaCodBare;
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
+    DatabaseHelper myDb;
+    public static ArrayList<String> StocareCodBare = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trimitere_noua);
-
-        surfaceView=findViewById(R.id.camerapreview);
+        setContentView(R.layout.layout_scaneaza_cod_bare);
+        EditTextCodQR = findViewById(R.id.cod_bare);
+        afisareMesaj = findViewById(R.id.reporter);
+        //surfaceView=findViewById(R.id.camerapreview);
 
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Scaneaza codul de bare");
+        CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj,PreiaCodBare,this);
+        //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
+       // BarcodeScanner(); // Metoda BarcodeScanner
 
-        IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
-        BarcodeScanner();
+        EditTextCodQR.addTextChangedListener(customTextWatcher);
+
+                //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
+        //                " WHERE " + Constructor.TabAntetLegaturi.COL_3 + " = " + codTV.getText().toString();
+
     }
 
     public void IntroducereCodQR() {
@@ -71,6 +93,10 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+                                        String ag=EditTextCodQR.getText().toString().trim();
+                                        if(ag.length() != 0){
+                                            StocareCodBare.add(ag);
+                                        }
                                        startActivity(intent);
                                     }
                                 },
@@ -80,69 +106,78 @@ public class ActivitateTrimitereNoua extends AppCompatActivity {
                 }
         );
     }
-    public void BarcodeScanner(){
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ALL_FORMATS).build();
 
-
-        cameraSource = new CameraSource.Builder(this,barcodeDetector)
-                .setRequestedPreviewSize(1920,1080).setAutoFocusEnabled(true).build();
-
-
-
-
-
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                try
-                {
-
-
-                    cameraSource.start(surfaceHolder);
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                cameraSource.stop();
-            }
-        });
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-
-                if (qrCodes.size()!=0){
-                    EditTextCodQR.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(1000);
-                            EditTextCodQR.setText(qrCodes.valueAt(0).displayValue);
-                        }
-                    });
-                }
-            }
-        });
+    @Override
+    public void executalacodvalid(String sCodBare) {
+        super.executalacodvalid(sCodBare);
+        Toast.makeText(this, "Valoarea primita"+sCodBare+ Calendar.getInstance().getTimeInMillis(), Toast.LENGTH_SHORT).show();
 
     }
+    // SCANNER COD BARE
+//    public void BarcodeScanner(){
+//        barcodeDetector = new BarcodeDetector.Builder(this)
+//                .setBarcodeFormats(Barcode.ALL_FORMATS).build();
+//
+//
+//        cameraSource = new CameraSource.Builder(this,barcodeDetector)
+//                .setRequestedPreviewSize(1920,1080).setAutoFocusEnabled(true).build();
+//
+//
+//
+//
+//
+//        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+//            @Override
+//            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+//                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//
+//                    return;
+//                }
+//                try
+//                {
+//
+//
+//                    cameraSource.start(surfaceHolder);
+//                } catch (IOException e){
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+//                cameraSource.stop();
+//            }
+//        });
+//        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+//            @Override
+//            public void release() {
+//
+//            }
+//
+//            @Override
+//            public void receiveDetections(Detector.Detections<Barcode> detections) {
+//                final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
+//
+//                if (qrCodes.size()!=0){
+//                    EditTextCodQR.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+//                            vibrator.vibrate(1000);
+//                            EditTextCodQR.setText(qrCodes.valueAt(0).displayValue);
+//
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
+//    }
 
 
 }
