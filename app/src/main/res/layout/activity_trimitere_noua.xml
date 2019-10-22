@@ -15,15 +15,15 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/cod_bare"
         android:maxLength="13"
-        android:layout_below="@+id/camerapreview"
+        android:layout_centerInParent="true"
         android:inputType="number"
         />
-    <SurfaceView
-        android:layout_width="300dp"
-        android:layout_height="335dp"
-        android:id="@+id/camerapreview">
+<!--    <SurfaceView-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="335dp"-->
+<!--        android:id="@+id/camerapreview">-->
 
-    </SurfaceView>
+<!--    </SurfaceView>-->
 
 
 </RelativeLayout>
