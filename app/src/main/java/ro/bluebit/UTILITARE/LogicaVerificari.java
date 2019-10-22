@@ -41,12 +41,5 @@ public class LogicaVerificari {
                 " where " + longsBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM;
 
     }
-
-    ;
-
-
-
-
-
 }
 

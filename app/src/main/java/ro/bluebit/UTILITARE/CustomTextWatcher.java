@@ -1,5 +1,6 @@
 package ro.bluebit.UTILITARE;
 
+import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -8,15 +9,19 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ro.bluebit.BazaAppCompat;
+
 import static ro.bluebit.Incarca_Descarca_Trimiteri_Activity.StocareCodBare;
 
 public class CustomTextWatcher implements TextWatcher {
     EditText codBare;
     TextView afisareMesaj;
+    BazaAppCompat Activitate;
     String preiaCodBare;
-    public CustomTextWatcher(EditText codBare, TextView afisareMesaj,String preiaCodBare ) {
+    public CustomTextWatcher(EditText codBare, TextView afisareMesaj,String preiaCodBare, BazaAppCompat activitate) {
         this.codBare = codBare;
         this.afisareMesaj = afisareMesaj;
+
     }
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
