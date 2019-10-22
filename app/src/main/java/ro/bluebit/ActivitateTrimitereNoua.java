@@ -110,7 +110,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
-        Toast.makeText(this, "Valoarea primita"+sCodBare+ Calendar.getInstance().getTimeInMillis(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Valoarea primita"+sCodBare, Toast.LENGTH_SHORT).show();
 
     }
     // SCANNER COD BARE
