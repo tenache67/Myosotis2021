@@ -21,6 +21,7 @@ public class CustomTextWatcher implements TextWatcher {
     public CustomTextWatcher(EditText codBare, TextView afisareMesaj,String preiaCodBare, BazaAppCompat activitate) {
         this.codBare = codBare;
         this.afisareMesaj = afisareMesaj;
+        this.Activitate = activitate;
 
     }
     @Override
@@ -54,8 +55,8 @@ public class CustomTextWatcher implements TextWatcher {
                     @Override
 
                     public void run() {
+                            Activitate.executalacodvalid(preiaCodBare);
 
-                            StocareCodBare.add(preiaCodBare);
 
                             }
                 },

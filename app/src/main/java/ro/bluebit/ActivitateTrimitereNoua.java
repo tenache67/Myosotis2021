@@ -17,6 +17,8 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -24,15 +26,21 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.security.Timestamp;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.UTILITARE.CustomTextWatcher;
 
 public class ActivitateTrimitereNoua extends BazaAppCompat {
     EditText EditTextCodQR;
+    TextView afisareMesaj;
+    String PreiaCodBare;
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
@@ -42,18 +50,19 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trimitere_noua);
-
+        setContentView(R.layout.layout_scaneaza_cod_bare);
+        EditTextCodQR = findViewById(R.id.cod_bare);
+        afisareMesaj = findViewById(R.id.reporter);
         //surfaceView=findViewById(R.id.camerapreview);
 
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Scaneaza codul de bare");
-
-        IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
+        CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj,PreiaCodBare,this);
+        //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
        // BarcodeScanner(); // Metoda BarcodeScanner
 
-
+        EditTextCodQR.addTextChangedListener(customTextWatcher);
 
                 //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
         //                " WHERE " + Constructor.TabAntetLegaturi.COL_3 + " = " + codTV.getText().toString();
@@ -101,6 +110,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
+        Toast.makeText(this, "Valoarea primita"+sCodBare+ Calendar.getInstance().getTimeInMillis(), Toast.LENGTH_SHORT).show();
 
     }
     // SCANNER COD BARE

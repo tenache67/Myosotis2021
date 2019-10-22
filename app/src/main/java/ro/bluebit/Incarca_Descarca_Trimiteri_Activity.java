@@ -38,7 +38,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         afisareMesaj=findViewById(R.id.reporter);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-        TextWatcher watchCodBare =new CustomTextWatcher(cod_bare,afisareMesaj,preiaCodBare);
+        //TextWatcher watchCodBare =new CustomTextWatcher(cod_bare,afisareMesaj,preiaCodBare);
         Bundle extras = getIntent().getExtras();
         String preluareIntent = extras.getString("ACTIUNE");
         if (preluareIntent.equals("incarcare")) {
@@ -46,7 +46,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         } else
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
-        cod_bare.addTextChangedListener(watchCodBare);
+        //cod_bare.addTextChangedListener(watchCodBare);
 
 
     }
