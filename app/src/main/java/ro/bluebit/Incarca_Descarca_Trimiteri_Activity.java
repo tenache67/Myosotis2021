@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 
 import static java.lang.Long.parseLong;
@@ -37,7 +38,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
         afisareMesaj=findViewById(R.id.reporter);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-        TextWatcher watchCodBare =new LogicaVerificari.SuperTextWatcher();
+        TextWatcher watchCodBare =new CustomTextWatcher(cod_bare,afisareMesaj,preiaCodBare);
         Bundle extras = getIntent().getExtras();
         String preluareIntent = extras.getString("ACTIUNE");
         if (preluareIntent.equals("incarcare")) {
@@ -46,34 +47,15 @@ public class Incarca_Descarca_Trimiteri_Activity extends AppCompatActivity {
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
         cod_bare.addTextChangedListener(watchCodBare);
-//        preiaCodBare=cod_bare.getText().toString();
-
-    }
-//VERIFICARE EXISTENTA COD IN PLAJA DE CODURI
-    int verificPlajaCod(){
-        SQLiteDatabase db = myDb.getReadableDatabase();
-         String SQLverifPlaja=(" SELECT " + Constructor.Tabela_Plaja_Cod.COL_ID_LOT + " from " + Constructor.Tabela_Plaja_Cod.NUME_TABEL +
-                " where " + preiaCodBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM);
-        Cursor crs = db.rawQuery(SQLverifPlaja, null);
-        crs.moveToFirst();
-
-        int rezultat =crs.getColumnIndexOrThrow(Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
-        Log.e(TAG, "verific existenta codului");
-       return rezultat;
-    }
-//VERIFICARE CORECTITUDINE COD
-    double verificCorectitudineCod() {
-        double corect = LogicaVerificari.verifCorectitudineBare(preiaCodBare);
-        Log.e(TAG, "verificCorectitudineCod");
-//        if (corect != 1) {
-//            afisareMesaj.setText("Nu ai introdus un cod valid");
-//            cod_bare.setText("");
-  //      }
-        return corect;
-    }
 
 
     }
+
+    }
+
+
+
+
 
 
 
