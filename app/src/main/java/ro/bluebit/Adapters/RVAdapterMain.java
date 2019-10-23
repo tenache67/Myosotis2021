@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
     public static class ItemeViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
         public TextView mLinieTextView;
+        public RelativeLayout ChenarLayout;
         Context context;
 
 
@@ -42,6 +44,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
             this.context = context;
             mImageView = itemView.findViewById(R.id.imageview_id);
             mLinieTextView = itemView.findViewById(R.id.TextViewRecycler_id);
+            ChenarLayout = itemView.findViewById(R.id.chenarlayout_id);
 
         }
     }
@@ -60,7 +63,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
         ClasaIteme itemCurent = mListaIteme.get(position);
         holder.mImageView.setImageResource(itemCurent.getResurseImagini());
         holder.mLinieTextView.setText(itemCurent.getTextLinie());
-        holder.mLinieTextView.setOnClickListener(new View.OnClickListener() {
+        holder.ChenarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Intent intent;

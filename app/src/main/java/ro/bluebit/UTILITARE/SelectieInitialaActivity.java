@@ -47,6 +47,10 @@ public class SelectieInitialaActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        Bundle extras = getIntent().getExtras();
+        String idUtilizator = extras.getString("idUtilizator");
+
+
 
     }
 

@@ -43,7 +43,7 @@ public class CustomTextWatcher implements TextWatcher {
         if (editable.length()==0)
             afisareMesaj.setText("Nu ai introdus nici o cifra");
         else if (editable.length()<=12)
-            afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
+            afisareMesaj.setText("Codul introdus are mai putin de 13 caractere");
 
         else
         if (editable.length()==13 ) {
