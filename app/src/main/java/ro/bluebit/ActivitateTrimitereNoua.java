@@ -60,7 +60,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj,PreiaCodBare,this);
         //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
        // BarcodeScanner(); // Metoda BarcodeScanner
-
+        Toast.makeText(this,getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
         EditTextCodQR.addTextChangedListener(customTextWatcher);
 
                 //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
@@ -113,13 +113,16 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
         db.beginTransaction();
-        String SqlSir = "Insert into "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ "("+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+")" +"Values"
-                + "("+ EditTextCodQR.getText().toString()+")";
+        String SqlSir = "Insert into "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ " ("+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+") " +"Values"
+                + " ("+ EditTextCodQR.getText().toString()+")";
+        db.execSQL(SqlSir);
+        db.endTransaction();
+
+
         Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
         startActivity(intent);
 
-        db.execSQL(SqlSir);
-        db.endTransaction();
+
     }
     // SCANNER COD BARE
 //    public void BarcodeScanner(){

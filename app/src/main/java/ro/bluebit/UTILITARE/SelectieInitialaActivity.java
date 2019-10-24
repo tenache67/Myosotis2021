@@ -43,12 +43,12 @@ public class SelectieInitialaActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_activitate1_id);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new RVAdapterMain(listaIteme);
+        mAdapter = new RVAdapterMain(listaIteme,this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         Bundle extras = getIntent().getExtras();
-        String idUtilizator = extras.getString("idUtilizator");
+        String idUtilizator = extras.getString("UTILIZATOR");
 
 
 
