@@ -71,6 +71,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                 switch (position){ // Adauga case-uri in continuare pentru activitatile noi pe care vrei sa le deschizi
                     case 0:
                         intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
+
                         break;
 
                     case 1:
