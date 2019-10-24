@@ -44,7 +44,6 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
-    DatabaseHelper myDb;
     public static ArrayList<String> StocareCodBare = new ArrayList<String>();
 
     @Override
@@ -111,7 +110,16 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
         Toast.makeText(this, "Valoarea primita "+sCodBare, Toast.LENGTH_SHORT).show();
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        SQLiteDatabase db = myDb.getWritableDatabase();
+        db.beginTransaction();
+        String SqlSir = "Insert into "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ "("+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+")" +"Values"
+                + "("+ EditTextCodQR.getText().toString()+")";
+        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+        startActivity(intent);
 
+        db.execSQL(SqlSir);
+        db.endTransaction();
     }
     // SCANNER COD BARE
 //    public void BarcodeScanner(){
