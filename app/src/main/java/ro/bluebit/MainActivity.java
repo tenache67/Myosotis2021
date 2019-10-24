@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, " Bun venit "+ numeUtilizator()+ "  id:  " + id_Utilizator(), Toast.LENGTH_LONG).show();
                     Intent logareUtilizator = new Intent(MainActivity.this, SelectieInitialaActivity.class);
                     String idUtilizator=id_Utilizator();
-                    logareUtilizator.putExtra("UTILIZATOR", "idUtilizator");
+                    logareUtilizator.putExtra("UTILIZATOR", idUtilizator);
                     startActivity(logareUtilizator);
                 }
             else{

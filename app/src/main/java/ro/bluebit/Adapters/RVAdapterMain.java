@@ -2,6 +2,7 @@ package ro.bluebit.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,10 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
     private ArrayList<ClasaIteme> mListaIteme;
     private Context context;
 
-    public RVAdapterMain(ArrayList<ClasaIteme>listaIteme){
+    public RVAdapterMain(ArrayList<ClasaIteme>listaIteme,Context context){
         mListaIteme = listaIteme;
         this.context=context;
+
     }
 
 
@@ -70,19 +72,26 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
 
                 switch (position){ // Adauga case-uri in continuare pentru activitatile noi pe care vrei sa le deschizi
                     case 0:
+
                         intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
 
+
+
+                        intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         break;
 
                     case 1:
                         intent =  new Intent(view.getContext(), ActivitateQRInformatiiTrimitere.class);
+                        intent.putExtra("UTILIZATOR","idUtilizator");
                         break;
                     case 2:
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
+                        intent.putExtra("UTILIZATOR","idUtilizator");
                         intent.putExtra("ACTIUNE","incarcare");
                         break;
                     case 3:
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
+                        intent.putExtra("UTILIZATOR","idUtilizator");
                         intent.putExtra("ACTIUNE","descarcare");
                         break;
                     default:

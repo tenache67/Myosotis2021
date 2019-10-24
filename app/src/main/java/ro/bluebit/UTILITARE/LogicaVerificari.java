@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,5 +42,34 @@ public class LogicaVerificari {
                 " where " + longsBare + " between " + Constructor.Tabela_Plaja_Cod.COL_MINIM + " and " + Constructor.Tabela_Plaja_Cod.COL_MAXIM;
 
     }
-}
+    public static String[] getPlucru(SQLiteDatabase db) {
+        String selectQuery = Constructor.SQL_QUERY_OBTI_PLUCRU;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        String[] retPlucru = new String[cursor.getCount()];
+        if (cursor.moveToFirst()) {
+            for(int i=0;i<cursor.getCount();i++) {
+                retPlucru[i]=cursor.getString(cursor.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+                cursor.moveToNext();
+            }
+        }
+        return retPlucru;
 
+    }
+}
+//    public static int[] getCodInt(SQLiteDatabase db) {
+//        String selectQuery = Constructor.SQL_QUERY_OBTI_COD_INT;
+//        Cursor cursor = db.rawQuery(selectQuery, null);
+//        int[] retCodInt = new int[cursor.getCount()];
+//        if (cursor.moveToFirst()) {
+//            for (int i = 0; i < cursor.getCount(); i++) {
+//                //cursor.getInt(0)
+//                retCodInt[i] = cursor.getInt(0);
+//                cursor.moveToNext();
+//
+//            }
+////            do {
+////                retCodInt[cursor.getCount()]= cursor.getInt(cursor.getColumnIndex("cod_int"));
+////            }
+////            while (cursor.moveToNext());
+//        }
+//        return retCodInt;

@@ -209,5 +209,8 @@ public class Constructor {
             Tabela_Tipuri.COL_DENUMIRE + Tip.INTREG
             + ")");
 
+    public static  final String SQL_QUERY_OBTI_PLUCRU = (
+            "SELECT "+ Tabela_P_Lucru.COL_DENUMIRE+ " FROM " +Tabela_P_Lucru.NUME_TABEL);
+
 
 }
