@@ -82,16 +82,16 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
 
                     case 1:
                         intent =  new Intent(view.getContext(), ActivitateQRInformatiiTrimitere.class);
-                        intent.putExtra("UTILIZATOR","idUtilizator");
+                        intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         break;
                     case 2:
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
-                        intent.putExtra("UTILIZATOR","idUtilizator");
+                        intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         intent.putExtra("ACTIUNE","incarcare");
                         break;
                     case 3:
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
-                        intent.putExtra("UTILIZATOR","idUtilizator");
+                        intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         intent.putExtra("ACTIUNE","descarcare");
                         break;
                     default:
