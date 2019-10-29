@@ -71,21 +71,12 @@ public class LogicaVerificari {
         return retPlucru;
 
     }
+    //obtinere id din tabela ANTET TRIMITERI
+    public static  int getId_Antet_Trimiteri (long codBare){
+        return Integer.parseInt((" select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " from "+
+                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+
+                " where "+ codBare +" = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE));
+    }
+
 }
-//    public static int[] getCodInt(SQLiteDatabase db) {
-//        String selectQuery = Constructor.SQL_QUERY_OBTI_COD_INT;
-//        Cursor cursor = db.rawQuery(selectQuery, null);
-//        int[] retCodInt = new int[cursor.getCount()];
-//        if (cursor.moveToFirst()) {
-//            for (int i = 0; i < cursor.getCount(); i++) {
-//                //cursor.getInt(0)
-//                retCodInt[i] = cursor.getInt(0);
-//                cursor.moveToNext();
-//
-//            }
-////            do {
-////                retCodInt[cursor.getCount()]= cursor.getInt(cursor.getColumnIndex("cod_int"));
-////            }
-////            while (cursor.moveToNext());
-//        }
-//        return retCodInt;
+

@@ -20,7 +20,7 @@ public class Constructor {
         public static final String TIMESTAMP = " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ";
         public static final String ACTIV = " integer not null default 1";// unde 1 este activ
         public static final String GPS = " [double latitude, double longitude] ";
-        public static final String COD_BARE=" integer not null default 0000000000000";
+        public static final String COD_BARE="  text not null default \'\' ";
     }
 
     // TABELA UTILIZATORI

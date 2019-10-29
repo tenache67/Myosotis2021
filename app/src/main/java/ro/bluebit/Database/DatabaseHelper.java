@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =18;
+    public final static int VERSIUNE_BAZA_DE_DATE =20;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
@@ -42,8 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlSir);
         sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (3, 'Vasile', 333333, 4, 2)";
         db.execSQL(sqlSir);
-        sqlSir="INSERT INTO Tabela_plaja_cod (id_lot, val_minima, val_maxima) VALUES   (10, 1000000000000, 9999999999999)";
-        db.execSQL(sqlSir);
+//        sqlSir="INSERT INTO Tabela_plaja_cod (id_lot, val_minima, val_maxima) VALUES   (10, 1000000000000, 9999999999999)";
+//        db.execSQL(sqlSir);
     }
 
     @Override
