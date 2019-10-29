@@ -3,11 +3,13 @@ package ro.bluebit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.widget.Toolbar;
+
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
+import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 import static java.lang.Long.parseLong;
 
@@ -61,13 +64,13 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Scaneaza codul de bare");
-        CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj,PreiaCodBare,this);
+        CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR, afisareMesaj, PreiaCodBare, this);
         //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
-       // BarcodeScanner(); // Metoda BarcodeScanner
-        Toast.makeText(this,getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
+        // BarcodeScanner(); // Metoda BarcodeScanner
+        Toast.makeText(this, getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
         EditTextCodQR.addTextChangedListener(customTextWatcher);
 
-                //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
+        //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
         //                " WHERE " + Constructor.TabAntetLegaturi.COL_3 + " = " + codTV.getText().toString();
 
     }
@@ -113,13 +116,13 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
-        Toast.makeText(this, "Valoarea primita "+sCodBare, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Valoarea primita " + sCodBare, Toast.LENGTH_SHORT).show();
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
 
 
         //inlaturarea zerourilor din sirul de caractere
-        String codBareFaraZerouri= LogicaVerificari.RemoveZero(sCodBare);
+        String codBareFaraZerouri = LogicaVerificari.RemoveZero(sCodBare);
         //transformarea sirului de caractere in long
         long codBareScurt = parseLong(codBareFaraZerouri);
         //verificare existenta in plaja de coduri
@@ -127,44 +130,53 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //transformarea in long a sirului da caractere din edittext
         long codBareLung = parseLong(sCodBare);
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
-        boolean existInAntetTrimiteri =LogicaVerificari.verificareExistentaInAntetTrimiteri(db,codBareLung);
+        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, codBareLung);
 
         if (existInPlajaCoduri)
-            Toast.makeText(this, "Codul de bare "+sCodBare +"exista in plaja de coduri", Toast.LENGTH_SHORT).show();
-        else  {
+            Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();
+        else {
             Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "Corectati codul sau introduceti unul nou", Toast.LENGTH_SHORT).show();
         }
 
 
-
-        if(existInPlajaCoduri && existInAntetTrimiteri){
-            Toast.makeText(this, "Codul de bare "+sCodBare +"exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
-            EditTextCodQR.setText("");}
-        else
-        if (existInPlajaCoduri && !existInAntetTrimiteri)
+        if (existInPlajaCoduri && existInAntetTrimiteri) {
+            Toast.makeText(this, "Codul de bare " + sCodBare + "exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
+            EditTextCodQR.setText("");
+        } else if (existInPlajaCoduri && !existInAntetTrimiteri)
 
             Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
-        String ag=EditTextCodQR.getText().toString().trim();
-        if(ag.length() != 0){
-            StocareCodBare.add(ag);
-            insertData();
+        Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
+        String ag = EditTextCodQR.getText().toString().trim();
+//        if(ag.length() != 0){
+//            StocareCodBare.add(ag);
+        //insertData();
 //            db.beginTransaction();
-//            String SqlSir = "Insert into "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ " ("+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+","+Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR+") " +"Values"
-//                    + " ("+ EditTextCodQR.getText().toString()+","+Intent.getIntent().getExtras().getString("UTILIZATOR")+")";
+//        String SqlSir = "Insert into " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " (" + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + "," + Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR + ") " + "Values"
+ //               + " (" + EditTextCodQR.getText().toString() + "," + getIntent().getExtras().getString("UTILIZATOR") + ")";
+
+//                Cursor crs = db.rawQuery(SqlSir,null);
+//                crs.moveToFirst();
+ //               int idAT =(crs.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
+
 //            db.execSQL(SqlSir);
 //            db.endTransaction();
-        }
+        //      }
+
+        //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
+        intent.putExtra("CodBare",EditTextCodQR.getText().toString());
+        intent.putExtra("UTILIZATOR",getIntent().getExtras().getString("UTILIZATOR"));
         startActivity(intent);
         EditTextCodQR.setText("");
     }
+
     public boolean insertData() {
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
+
         ContentValues contentValue = new ContentValues();
-        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE,EditTextCodQR.getText().toString());
-        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR,getIntent().getExtras().getString("UTILIZATOR"));
+        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, EditTextCodQR.getText().toString());
+        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
 
         long result = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue);
         if (result == -1) {
@@ -178,8 +190,8 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
 //        startActivity(intent);
     }
 
-    }
-    // SCANNER COD BARE
+}
+// SCANNER COD BARE
 //    public void BarcodeScanner(){
 //        barcodeDetector = new BarcodeDetector.Builder(this)
 //                .setBarcodeFormats(Barcode.ALL_FORMATS).build();

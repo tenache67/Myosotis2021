@@ -104,9 +104,12 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                    //  preluare intent id utilizator + cod bare urmand sa fie inserat AICI cu cVal!!!!
                     ContentValues contentValue = new ContentValues();
-                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,Priotitate.getSelectedItem().toString());
-                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,Cond_Speciale.getSelectedItem().toString());
+                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
+                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
+                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE,Priotitate.getSelectedItemId());
+                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,Cond_Speciale.getSelectedItemId());
 
                      db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue);
                 Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
