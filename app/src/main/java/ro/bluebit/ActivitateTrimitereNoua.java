@@ -130,7 +130,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //transformarea in long a sirului da caractere din edittext
         long codBareLung = parseLong(sCodBare);
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
-        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, codBareLung);
+        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
 
         if (existInPlajaCoduri)
             Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();

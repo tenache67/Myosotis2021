@@ -114,10 +114,9 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         long codBareScurt = parseLong(codBareFaraZerouri);
         //verificare existenta in plaja de coduri
         boolean existInPlajaCoduri = LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
-        //transformarea in long a sirului da caractere din edittext
-        long codBareLung = parseLong(sCodBare);
+
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
-        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, codBareLung);
+        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
 
         if (!existInPlajaCoduri) {
 //            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
@@ -141,19 +140,22 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             Bundle extras = getIntent().getExtras();
             String preluareIntent = extras.getString("ACTIUNE");
             if (preluareIntent.equals("incarcare")) {
-                metodaIncarca(codBareLung);
+                metodaIncarca( sCodBare);
+                Toast.makeText(this, "Ai realizat o incarcare", Toast.LENGTH_SHORT).show();
             } else
-                metodaDescarca(codBareLung);
+                metodaDescarca(sCodBare);
+            Toast.makeText(this, "Ai realizat o descarcare", Toast.LENGTH_SHORT).show();
             cod_bare.setText("");
 
         }
 
     }
 
-    public void metodaIncarca(long codBareLung) {
+    public void metodaIncarca(String sCodBare) {
             String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(codBareLung);
+
         SQLiteDatabase db = myDb.getWritableDatabase();
+        int abc = LogicaVerificari.getId_Antet_Trimiteri( db,sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
@@ -166,10 +168,11 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         db.endTransaction();
     }
 
-    public void metodaDescarca(long codBareLung) {
+    public void metodaDescarca(String sCodBare) {
         String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(codBareLung);
+
         SQLiteDatabase db = myDb.getWritableDatabase();
+        int abc = LogicaVerificari.getId_Antet_Trimiteri( db,sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
