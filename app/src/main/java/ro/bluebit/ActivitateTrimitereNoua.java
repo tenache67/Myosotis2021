@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,6 +37,9 @@ import java.util.TimerTask;
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
+import ro.bluebit.UTILITARE.LogicaVerificari;
+
+import static java.lang.Long.parseLong;
 
 public class ActivitateTrimitereNoua extends BazaAppCompat {
     EditText EditTextCodQR;
@@ -44,7 +48,6 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
-    DatabaseHelper myDb;
     public static ArrayList<String> StocareCodBare = new ArrayList<String>();
 
     @Override
@@ -61,7 +64,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj,PreiaCodBare,this);
         //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
        // BarcodeScanner(); // Metoda BarcodeScanner
-
+        Toast.makeText(this,getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
         EditTextCodQR.addTextChangedListener(customTextWatcher);
 
                 //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
@@ -71,46 +74,109 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
 
     public void IntroducereCodQR() {
         EditTextCodQR = findViewById(R.id.edittext_scanare_id);
-        EditTextCodQR.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    private Timer timer = new Timer();
-                    private final long DELAY = 1000; // milliseconds
-
-                    @Override
-                    public void afterTextChanged(final Editable s) {
-                        timer.cancel();
-                        timer = new Timer();
-                        timer.schedule(
-                                new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                       Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
-                                        String ag=EditTextCodQR.getText().toString().trim();
-                                        if(ag.length() != 0){
-                                            StocareCodBare.add(ag);
-                                        }
-                                       startActivity(intent);
-                                    }
-                                },
-                                DELAY
-                        );
-                    }
-                }
-        );
+//        EditTextCodQR.addTextChangedListener(
+//                new TextWatcher() {
+//                    @Override
+//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    }
+//
+//                    @Override
+//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                    }
+//
+//                    private Timer timer = new Timer();
+//                    private final long DELAY = 1000; // milliseconds
+//
+//                    @Override
+//                    public void afterTextChanged(final Editable s) {
+//                        timer.cancel();
+//                        timer = new Timer();
+//                        timer.schedule(
+//                                new TimerTask() {
+//                                    @Override
+//                                    public void run() {
+//                                       Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+//                                        String ag=EditTextCodQR.getText().toString().trim();
+//                                        if(ag.length() != 0){
+//                                            StocareCodBare.add(ag);
+//                                        }
+//                                       startActivity(intent);
+//                                    }
+//                                },
+//                                DELAY
+//                        );
+//                    }
+//                }
+//        );
     }
 
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
-        Toast.makeText(this, "Valoarea primita"+sCodBare+ Calendar.getInstance().getTimeInMillis(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Valoarea primita "+sCodBare, Toast.LENGTH_SHORT).show();
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        SQLiteDatabase db = myDb.getWritableDatabase();
+
+
+        //inlaturarea zerourilor din sirul de caractere
+        String codBareFaraZerouri= LogicaVerificari.RemoveZero(sCodBare);
+        //transformarea sirului de caractere in long
+        long codBareScurt = parseLong(codBareFaraZerouri);
+        //verificare existenta in plaja de coduri
+        boolean existInPlajaCoduri = LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
+        //transformarea in long a sirului da caractere din edittext
+        long codBareLung = parseLong(sCodBare);
+        //verificarea existentei inregistrarii in tabela Antet  Trimiteri
+        boolean existInAntetTrimiteri =LogicaVerificari.verificareExistentaInAntetTrimiteri(db,codBareLung);
+
+        if (existInPlajaCoduri)
+            Toast.makeText(this, "Codul de bare "+sCodBare +"exista in plaja de coduri", Toast.LENGTH_SHORT).show();
+        else  {
+            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Corectati codul sau introduceti unul nou", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        if(existInPlajaCoduri && existInAntetTrimiteri){
+            Toast.makeText(this, "Codul de bare "+sCodBare +"exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
+            EditTextCodQR.setText("");}
+        else
+        if (existInPlajaCoduri && !existInAntetTrimiteri)
+
+            Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+        String ag=EditTextCodQR.getText().toString().trim();
+        if(ag.length() != 0){
+            StocareCodBare.add(ag);
+            insertData();
+//            db.beginTransaction();
+//            String SqlSir = "Insert into "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ " ("+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+","+Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR+") " +"Values"
+//                    + " ("+ EditTextCodQR.getText().toString()+","+Intent.getIntent().getExtras().getString("UTILIZATOR")+")";
+//            db.execSQL(SqlSir);
+//            db.endTransaction();
+        }
+        startActivity(intent);
+        EditTextCodQR.setText("");
+    }
+    public boolean insertData() {
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        SQLiteDatabase db = myDb.getWritableDatabase();
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE,EditTextCodQR.getText().toString());
+        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR,getIntent().getExtras().getString("UTILIZATOR"));
+
+        long result = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue);
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+
+        }
+
+//        Intent intent = new Intent(getApplicationContext(),TrimitereNouaDupaCompletareCodQR.class);
+//        startActivity(intent);
+    }
 
     }
     // SCANNER COD BARE
@@ -180,4 +246,4 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
 //    }
 
 
-}
+

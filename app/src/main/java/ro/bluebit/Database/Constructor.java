@@ -20,7 +20,7 @@ public class Constructor {
         public static final String TIMESTAMP = " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ";
         public static final String ACTIV = " integer not null default 1";// unde 1 este activ
         public static final String GPS = " [double latitude, double longitude] ";
-        public static final String COD_BARE=" integer not null default 0000000000000";
+        public static final String COD_BARE="  text not null default \'\' ";
     }
 
     // TABELA UTILIZATORI
@@ -208,6 +208,9 @@ public class Constructor {
             Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG + " , " +
             Tabela_Tipuri.COL_DENUMIRE + Tip.INTREG
             + ")");
+
+    public static  final String SQL_QUERY_OBTI_PLUCRU = (
+            "SELECT "+ Tabela_P_Lucru.COL_DENUMIRE+ " FROM " +Tabela_P_Lucru.NUME_TABEL);
 
 
 }
