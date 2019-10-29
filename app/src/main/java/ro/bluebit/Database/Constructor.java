@@ -169,7 +169,8 @@ public class Constructor {
             public static final String COL_ID_INCARC_DESCARC = "id_incarc_descarc";
             public static final String COL_ID_ANTET_TRIMITERI = "id_antet_trimiteri";
             public static final String COL_ID_UTILIZATOR="id_utilizator";
-            public static final String COL_ID_TIP="id_tip"; // (1 incarcare, 2 descarcare)
+            public static final String COL_ID_TIP="id_tip";// (3 incarcare, 4 descarcare)
+            public static final String COL_ID_P_LUCRU ="id_p_lucru";
         }
     //sql creare tabel
     public static final String SQL_CREAZA_TABEL_INCARC_DESCARC = (" create table if not exists " +
@@ -177,7 +178,8 @@ public class Constructor {
             Tabela_Incarc_Descarc.COL_ID_INCARC_DESCARC + Tip.PRIMARY_AUTO + " , " +
             Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI + Tip.INTREG + " , " +
             Tabela_Incarc_Descarc.COL_ID_UTILIZATOR + Tip.INTREG + " , " +
-            Tabela_Incarc_Descarc.COL_ID_TIP + Tip.INTREG
+            Tabela_Incarc_Descarc.COL_ID_TIP + Tip.INTREG+ " , " +
+            Tabela_Incarc_Descarc.COL_ID_P_LUCRU+ Tip.INTREG
             + ")");
 
 
