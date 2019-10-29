@@ -164,7 +164,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //      }
 
         //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
-        intent.putExtra("CodBare",EditTextCodQR.getText().toString());
+        intent.putExtra("CodBare",sCodBare);
         intent.putExtra("UTILIZATOR",getIntent().getExtras().getString("UTILIZATOR"));
         startActivity(intent);
         EditTextCodQR.setText("");
@@ -190,6 +190,10 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
 //        startActivity(intent);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 }
 // SCANNER COD BARE
 //    public void BarcodeScanner(){

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -111,8 +112,21 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
                     contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE,Priotitate.getSelectedItemId());
                     contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,Cond_Speciale.getSelectedItemId());
 
-                     db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue);
+
+                     long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
+                     contentValue.clear();
+                     String expeditor = Expeditor.getText().toString();
+                     contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
+                     contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,expeditor));
+                     //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
+                     //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
+                     //
+                                db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+
                 Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
+                finish();
+//                Intent intent = new Intent(TrimitereNouaDupaCompletareCodQR.this,ActivitateTrimitereNoua.class);
+//                startActivity(intent);
             }
         });
 

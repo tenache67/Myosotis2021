@@ -78,5 +78,13 @@ public class LogicaVerificari {
                 " where "+ codBare +" = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE));
     }
 
+    public static int getExpDest(SQLiteDatabase db, String denplucru){
+
+        String  denumirestring =(("select "+Constructor.Tabela_P_Lucru.COL_ID+" from "+
+                Constructor.Tabela_P_Lucru.NUME_TABEL+ " where '"+ denplucru+ "'="+ Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(denumirestring,null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
+    }
 }
 
