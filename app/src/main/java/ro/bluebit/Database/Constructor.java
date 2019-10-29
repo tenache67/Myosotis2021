@@ -15,7 +15,7 @@ public class Constructor {
         public static final String PRIMARY = " integer primary key ";
         public static final String PRIMARY_AUTO = " integer primary key autoincrement ";
         public static final String TEXT = " text not null default \'\' ";
-        public static final String DATA = " date not null default current_date_time ";
+        public static final String DATA = " date not null default current_date";
         public static final String VALOARE = " numeric not null default 0.000000 ";
         public static final String TIMESTAMP = " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ";
         public static final String ACTIV = " integer not null default 1";// unde 1 este activ
