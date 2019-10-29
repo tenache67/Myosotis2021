@@ -116,8 +116,12 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
                      long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
                      contentValue.clear();
                      String expeditor = Expeditor.getText().toString();
+                     String destinatar = Destinatar.getText().toString();
                      contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
                      contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,expeditor));
+                     contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Expeditor"));
+
+
                      //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
                      //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
                      //

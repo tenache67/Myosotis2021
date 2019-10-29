@@ -86,5 +86,14 @@ public class LogicaVerificari {
         crs.moveToFirst();
         return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
     }
+    public static int getIdTip(SQLiteDatabase db, String id_expeditor_destinatar) {
+
+        String idtipstring = (("select " + Constructor.Tabela_Tipuri.COL_ID_TIPURI + " from " +
+                Constructor.Tabela_Tipuri.NUME_TABEL + " where '" + id_expeditor_destinatar + "'=" + Constructor.Tabela_Tipuri.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(idtipstring, null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_Tipuri.COL_ID_TIPURI));
+    }
+
 }
 
