@@ -1,49 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbarSimplu"/>
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Logare in Aplicatie"-->
-<!--        android:layout_marginTop="125dp"-->
-<!--        android:textSize="12sp"/>-->
+    <include
+        android:id="@+id/toolbarSimplu"
+        layout="@layout/toolbar" />
 
 
     <AutoCompleteTextView
-        android:layout_marginTop="100dp"
-        android:id="@+id/AC_PunctLucru"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/ACTV"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp"
         android:completionThreshold="1"
-        android:textAlignment="center"
-        android:hint="@string/selecteaza_punct_lucru"
+        android:hint="Punct de Lucru"
+        android:textAlignment="center" />
 
-        />
+
     <EditText
         android:id="@+id/editTextPIN"
-        android:layout_marginTop="25dp"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:hint="@string/pin"
-        android:textAlignment="center"
+        android:inputType="numberDecimal"
         android:maxLength="6"
-        android:inputType="numberDecimal"/>
-
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/button_logare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_logare_foreground"
-        android:padding="15dp"
         android:elegantTextHeight="true"
-        android:elevation="15dp"/>
+        android:elevation="15dp"
+        android:padding="15dp" />
 
+    <TextView
+        android:id="@+id/afisareMesajeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
 </LinearLayout>

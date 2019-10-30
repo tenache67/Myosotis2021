@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 import ro.bluebit.BazaAppCompat;
 
-import static ro.bluebit.Incarca_Descarca_Trimiteri_Activity.StocareCodBare;
+
 
 public class CustomTextWatcher implements TextWatcher {
     EditText codBare;
