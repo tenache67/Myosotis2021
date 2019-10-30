@@ -40,18 +40,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Logare in aplicatie");
-
-//afisare autocomplete si obtinerea id punct de lucru pentru intent
-        PopulareAutocomplete();
-        acceseazaAplicatia();
-
-
-
-
-    }
-
-
-    public void acceseazaAplicatia(){
         acceseaza = findViewById(R.id.button_logare);
         acceseaza.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//afisare autocomplete si obtinerea id punct de lucru pentru intent
+        PopulareAutocomplete();
+
+
+
+
+
     }
+
+
 
 
     public String numeUtilizator() {
@@ -107,10 +105,13 @@ public class MainActivity extends AppCompatActivity {
 
     public int id_Punct_lucru(){
         SQLiteDatabase db=myDb.getReadableDatabase();
-        final String oop=punctLucru.getText().toString();
-        int id_P_Lucru= LogicaVerificari.getPunctLucru(db,oop);
-        parola = findViewById(R.id.editTextPIN);
-        return id_P_Lucru;
+
+        String  denumirestring =(("select "+Constructor.Tabela_P_Lucru.COL_ID+" from "+
+                Constructor.Tabela_P_Lucru.NUME_TABEL+ " where '"+ punctLucru+ "'="+ Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(denumirestring,null);
+        crs.moveToFirst();
+       int id_id=crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID);
+        return id_id;
     }
 
 
