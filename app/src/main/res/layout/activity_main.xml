@@ -14,15 +14,29 @@
 <!--        android:text="Logare in Aplicatie"-->
 <!--        android:layout_marginTop="125dp"-->
 <!--        android:textSize="12sp"/>-->
+
+
+    <AutoCompleteTextView
+        android:layout_marginTop="100dp"
+        android:id="@+id/AC_PunctLucru"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:completionThreshold="1"
+        android:textAlignment="center"
+        android:hint="@string/selecteaza_punct_lucru"
+
+        />
     <EditText
         android:id="@+id/editTextPIN"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="25dp"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:hint="@string/pin"
         android:textAlignment="center"
         android:maxLength="6"
         android:inputType="numberDecimal"/>
+
+
     <Button
         android:id="@+id/button_logare"
         android:layout_width="wrap_content"
