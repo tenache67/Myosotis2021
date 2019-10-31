@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     EditText parola;
     DatabaseHelper myDb;
     AutoCompleteTextView PunctDeLucru;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +61,11 @@ public class MainActivity extends AppCompatActivity {
                         logareUtilizator.putExtra("ID_P_LUCRU", id_pct_lucru);
                         startActivity(logareUtilizator);
 
-                    }else { Toast.makeText(MainActivity.this, " Utilizator neidentificat", Toast.LENGTH_SHORT).show();}
+                    } else {
+                        Toast.makeText(MainActivity.this, " Utilizator neidentificat", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
-                    //          else
                     Toast.makeText(MainActivity.this, " Nu ai selectat nici un punct de lucru", Toast.LENGTH_SHORT).show();
-
-
                 }
             }
 
@@ -76,19 +76,19 @@ public class MainActivity extends AppCompatActivity {
         PopulareAutocomplete();
     }
 
-    public int id_P_Lucru(){
+    public int id_P_Lucru() {
         SQLiteDatabase db = myDb.getReadableDatabase();
-        int rezultatID=LogicaVerificari.getPunctLucru(db,(PunctDeLucru.getText().toString()));
+        int rezultatID = LogicaVerificari.getPunctLucru(db, (PunctDeLucru.getText().toString()));
         return rezultatID;
     }
 
 
-    public String numeUtilizator(){
+    public String numeUtilizator() {
         SQLiteDatabase db = myDb.getReadableDatabase();
-        String result ="";
+        String result = "";
 
-        String queryUtilizator =( "select "+ Constructor.TabelaUtilizatorPin.COL_NUME + " from " + Constructor.TabelaUtilizatorPin.NUME_TABEL +
-                " where " + Constructor.TabelaUtilizatorPin.COL_PIN +" = " + parola.getText().toString().trim() );
+        String queryUtilizator = ("select " + Constructor.TabelaUtilizatorPin.COL_NUME + " from " + Constructor.TabelaUtilizatorPin.NUME_TABEL +
+                " where " + Constructor.TabelaUtilizatorPin.COL_PIN + " = " + parola.getText().toString().trim());
         Cursor cursor = db.rawQuery(queryUtilizator, null);
         if (cursor.moveToFirst()) {
             result = cursor.getString(cursor.getColumnIndex(Constructor.TabelaUtilizatorPin.COL_NUME));
@@ -96,12 +96,13 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return result;
     }
-    public String id_Utilizator(){
-        SQLiteDatabase db = myDb.getReadableDatabase();
-        String result ="";
 
-        String queryUtilizator =( "select "+ Constructor.TabelaUtilizatorPin.COL_ID + " from " + Constructor.TabelaUtilizatorPin.NUME_TABEL +
-                " where " + Constructor.TabelaUtilizatorPin.COL_PIN +" = " + parola.getText().toString().trim() );
+    public String id_Utilizator() {
+        SQLiteDatabase db = myDb.getReadableDatabase();
+        String result = "";
+
+        String queryUtilizator = ("select " + Constructor.TabelaUtilizatorPin.COL_ID + " from " + Constructor.TabelaUtilizatorPin.NUME_TABEL +
+                " where " + Constructor.TabelaUtilizatorPin.COL_PIN + " = " + parola.getText().toString().trim());
         Cursor cursor = db.rawQuery(queryUtilizator, null);
         if (cursor.moveToFirst()) {
             result = cursor.getString(cursor.getColumnIndex(Constructor.TabelaUtilizatorPin.COL_ID));
@@ -111,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void PopulareAutocomplete(){
+    public void PopulareAutocomplete() {
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
-        final String[]Expeditor_Destinatar = LogicaVerificari.getPlucru(db);
+        final String[] Expeditor_Destinatar = LogicaVerificari.getPlucru(db);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,Expeditor_Destinatar);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, Expeditor_Destinatar);
         PunctDeLucru.setAdapter(adapter);
 
     }

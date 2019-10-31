@@ -12,7 +12,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/ACTV"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="35dp"
         android:completionThreshold="1"
