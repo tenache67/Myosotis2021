@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         toolbarSimplu.setSubtitle("Logare in aplicatie");
 
         parola = findViewById(R.id.editTextPIN);
-        afisez=findViewById(R.id.afisareMesajeTV);
-        PunctDeLucru =findViewById(R.id.ACTV);
+        afisez = findViewById(R.id.afisareMesajeTV);
+        PunctDeLucru = findViewById(R.id.ACTV);
         acceseaza = findViewById(R.id.button_logare);
 
         acceseaza.setOnClickListener(new View.OnClickListener() {
@@ -49,28 +49,32 @@ public class MainActivity extends AppCompatActivity {
                 //       String pin=parola.getText().toString().trim();
                 Boolean res = myDb.verificPin(parola.getText().toString());
 
+                try {
+
+                    if (res && id_P_Lucru() != 0) {
+                        Toast.makeText(MainActivity.this, " Bun venit " + numeUtilizator(), Toast.LENGTH_LONG).show();
+                        Intent logareUtilizator = new Intent(MainActivity.this, SelectieInitialaActivity.class);
+                        String idUtilizator = id_Utilizator();
+                        logareUtilizator.putExtra("UTILIZATOR", idUtilizator);
+                        int id_pct_lucru = id_P_Lucru();
+                        logareUtilizator.putExtra("ID_P_LUCRU", id_pct_lucru);
+                        startActivity(logareUtilizator);
+
+                    }else { Toast.makeText(MainActivity.this, " Utilizator neidentificat", Toast.LENGTH_SHORT).show();}
+                } catch (Exception e) {
+                    //          else
+                    Toast.makeText(MainActivity.this, " Nu ai selectat nici un punct de lucru", Toast.LENGTH_SHORT).show();
 
 
-                if (res && id_P_Lucru()!=0 ) {
-                    Toast.makeText(MainActivity.this, " Bun venit "+ numeUtilizator(), Toast.LENGTH_LONG).show();
-                    Intent logareUtilizator = new Intent(MainActivity.this, SelectieInitialaActivity.class);
-                    String idUtilizator=id_Utilizator();
-                    logareUtilizator.putExtra("UTILIZATOR", idUtilizator);
-                    int id_pct_lucru=id_P_Lucru();
-                    logareUtilizator.putExtra("ID_P_LUCRU" , id_pct_lucru);
-                    startActivity(logareUtilizator);
                 }
-                else
-                    Toast.makeText(MainActivity.this, " Utilizator neidentificat sau", Toast.LENGTH_SHORT).show();
-
-
-
             }
+
+            ;
+
+
         });
         PopulareAutocomplete();
     }
-
-
 
     public int id_P_Lucru(){
         SQLiteDatabase db = myDb.getReadableDatabase();
