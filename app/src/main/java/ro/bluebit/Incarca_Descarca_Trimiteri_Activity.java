@@ -37,8 +37,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     String preiaCodBare;
     TextView afisareMesaj;
     public final String TAG = "incarca_descarca";
-    AutoCompleteTextView punctLucru;
-    public static ArrayList<String> StocareCodBare = new ArrayList<String>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
         cod_bare.addTextChangedListener(watchCodBare);
-        punctLucru=findViewById(R.id.autoCompletePunctLucru);
-        PopulareAutocomplete();
+
+
 
     }
 
@@ -168,8 +168,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
-        String oop=punctLucru.getText().toString();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
+//        String oop=punctLucru.getText().toString();
+//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
@@ -187,30 +187,15 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 4);
-        String oop=punctLucru.getText().toString();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
+   //     String oop=punctLucru.getText().toString();
+   //     cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
     }
 
-    public void PopulareAutocomplete() {
-        DatabaseHelper myDb = new DatabaseHelper(this);
-        SQLiteDatabase db = myDb.getWritableDatabase();
-        //<String>ArrayPopulare = LogicaVerificari.getPlucru(db);
 
-        final String[] Punct_Lucru = LogicaVerificari.getPlucru(db);
-//                "Depozit", "Birou", "Farmacie", "Contabilitate", "M1", "M2", "M3","M4", "M5", "M6"
-//
-//
-//        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, Punct_Lucru);
-        punctLucru.setAdapter(adapter);
-
-
-    }
 }
 
 

@@ -22,20 +22,14 @@
 
         android:textAlignment="center"
         android:maxLength="13"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:focusedByDefault="true"/>
     <TextView
         android:id="@+id/reporter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompletePunctLucru"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:completionThreshold="1"
-    android:textAlignment="center"
-        android:hint="@string/selecteaza_punct_lucru"/>
     <!--   <Button-->
 <!--       android:id="@+id/bttn_valid_manual_incarca_trmiteri"-->
 <!--       android:layout_width="wrap_content"-->
