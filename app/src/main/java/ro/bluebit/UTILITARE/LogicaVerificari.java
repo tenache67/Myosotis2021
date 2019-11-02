@@ -43,10 +43,10 @@ public class LogicaVerificari {
     }
 
     //Verificare in Antet Trimiteri
-    public static boolean verificareExistentaInAntetTrimiteri (SQLiteDatabase db, long codBare) {
+    public static boolean verificareExistentaInAntetTrimiteri (SQLiteDatabase db, String codBare) {
         Cursor crs1= db.rawQuery((" select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " from "+
                 Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+
-                " where "+ codBare +" = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE),null);
+                " where '"+ codBare +"' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE),null);
         return crs1.getCount()>0;
     }
 
@@ -72,10 +72,22 @@ public class LogicaVerificari {
 
     }
     //obtinere id din tabela ANTET TRIMITERI
-    public static  int getId_Antet_Trimiteri (long codBare){
-        return Integer.parseInt((" select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " from "+
+    public static  int getId_Antet_Trimiteri (SQLiteDatabase db,String codBare){
+         String selecteazId=(" select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " from "+
                 Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+
-                " where "+ codBare +" = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE));
+                " where '"+ codBare +"' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
+        Cursor cursor = db.rawQuery(selecteazId, null);
+        cursor.moveToFirst();
+
+        return cursor.getInt(cursor.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
+    }
+    public static int getPunctLucru(SQLiteDatabase db, String denplucru){
+
+        String  denumirestring =(("select "+Constructor.Tabela_P_Lucru.COL_ID+" from "+
+                Constructor.Tabela_P_Lucru.NUME_TABEL+ " where '"+ denplucru+ "'="+ Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(denumirestring,null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
     }
 
     public static int getExpDest(SQLiteDatabase db, String denplucru){

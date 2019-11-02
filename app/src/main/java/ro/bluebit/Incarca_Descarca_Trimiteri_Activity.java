@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +37,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     String preiaCodBare;
     TextView afisareMesaj;
     public final String TAG = "incarca_descarca";
-    public static ArrayList<String> StocareCodBare = new ArrayList<String>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
         cod_bare.addTextChangedListener(watchCodBare);
+
 
 
     }
@@ -114,10 +118,9 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         long codBareScurt = parseLong(codBareFaraZerouri);
         //verificare existenta in plaja de coduri
         boolean existInPlajaCoduri = LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
-        //transformarea in long a sirului da caractere din edittext
-        long codBareLung = parseLong(sCodBare);
+
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
-        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, codBareLung);
+        boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
 
         if (!existInPlajaCoduri) {
 //            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
@@ -141,46 +144,57 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             Bundle extras = getIntent().getExtras();
             String preluareIntent = extras.getString("ACTIUNE");
             if (preluareIntent.equals("incarcare")) {
-                metodaIncarca(codBareLung);
-            } else
-                metodaDescarca(codBareLung);
-            cod_bare.setText("");
+                metodaIncarca(sCodBare);
+                Toast.makeText(this, "Ai realizat o incarcare", Toast.LENGTH_SHORT).show();
+            } else {
+                metodaDescarca(sCodBare);
+                Toast.makeText(this, "Ai realizat o descarcare", Toast.LENGTH_SHORT).show();
+                cod_bare.setText("");
 
+            }
         }
 
     }
 
-    public void metodaIncarca(long codBareLung) {
-            String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(codBareLung);
+
+    public void metodaIncarca(String sCodBare) {
+        String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
+
         SQLiteDatabase db = myDb.getWritableDatabase();
+        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
+//        String oop=punctLucru.getText().toString();
+//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
     }
 
-    public void metodaDescarca(long codBareLung) {
+    public void metodaDescarca(String sCodBare) {
         String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(codBareLung);
+
         SQLiteDatabase db = myDb.getWritableDatabase();
+        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 4);
+   //     String oop=punctLucru.getText().toString();
+   //     cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
     }
+
 
 }
 

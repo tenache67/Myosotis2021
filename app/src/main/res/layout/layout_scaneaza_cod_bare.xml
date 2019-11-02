@@ -22,13 +22,15 @@
 
         android:textAlignment="center"
         android:maxLength="13"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:focusedByDefault="true"/>
     <TextView
         android:id="@+id/reporter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>
-<!--   <Button-->
+
+    <!--   <Button-->
 <!--       android:id="@+id/bttn_valid_manual_incarca_trmiteri"-->
 <!--       android:layout_width="wrap_content"-->
 <!--       android:layout_height="wrap_content"-->
