@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -48,7 +50,50 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         MetodaSalvareBtnTest();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.meniu_salvare, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_salvare) {
+            final DatabaseHelper myDb = new DatabaseHelper(this);
+            final SQLiteDatabase db = myDb.getWritableDatabase();
 
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
+            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
+            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE,Priotitate.getSelectedItemId());
+            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,Cond_Speciale.getSelectedItemId());
+
+
+            long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
+            contentValue.clear();
+            String expeditor = Expeditor.getText().toString();
+            String destinatar = Destinatar.getText().toString();
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,expeditor));
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Expeditor"));
+            db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+            contentValue.clear();
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
+            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Destinatar"));
+            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
+
+            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
+            //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
+            //
+            db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+
+            Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void PopulareSpinner(){
         List<String> spinnerArrayConditii =  new ArrayList<String>(); // Spinner pentru conditii speciale
@@ -101,6 +146,7 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         btnsalvare = findViewById(R.id.button);
         final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase db = myDb.getWritableDatabase();
+
         btnsalvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
