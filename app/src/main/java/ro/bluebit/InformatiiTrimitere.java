@@ -4,8 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
-public class InformatiiTrimitere extends AppCompatActivity {
+public class InformatiiTrimitere extends BazaAppCompat {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
