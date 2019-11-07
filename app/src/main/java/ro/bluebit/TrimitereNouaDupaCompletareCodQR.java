@@ -43,6 +43,7 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         Destinatar = findViewById(R.id.ac_destinatar_id);
         Priotitate = findViewById(R.id.spinner_prioritate_id);
         Cond_Speciale = findViewById(R.id.spinner_condspec_id);
+        Expeditor.setText(getIntent().getExtras().getString("UserPL"));
 
 
         PopulareSpinner(); // Metoda de populare a spinnerelor
@@ -98,7 +99,8 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
     public void PopulareSpinner(){
         List<String> spinnerArrayConditii =  new ArrayList<String>(); // Spinner pentru conditii speciale
         spinnerArrayConditii.add("NU");
-        spinnerArrayConditii.add("DA");
+        spinnerArrayConditii.add("FRIG");
+        spinnerArrayConditii.add("SEPA");
 
         ArrayAdapter<String> adapterconditii = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArrayConditii);

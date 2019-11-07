@@ -78,6 +78,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
 
 
                         intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
+                        intent.putExtra("UserPL",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UserPL"));
                         break;
 
                     case 1:

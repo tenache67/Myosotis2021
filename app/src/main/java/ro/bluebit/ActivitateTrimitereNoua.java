@@ -68,6 +68,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //IntroducereCodQR(); // Metoda TextWatcher pentru completare EditText cu codul de bare
         // BarcodeScanner(); // Metoda BarcodeScanner
         Toast.makeText(this, getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
+
         EditTextCodQR.addTextChangedListener(customTextWatcher);
 
         //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
@@ -147,6 +148,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
 
             Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
+        intent.putExtra("UserPL",getIntent().getExtras().getString("UserPL"));
         String ag = EditTextCodQR.getText().toString().trim();
 //        if(ag.length() != 0){
 //            StocareCodBare.add(ag);
