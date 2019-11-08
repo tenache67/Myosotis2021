@@ -144,32 +144,37 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         if (existInPlajaCoduri && existInAntetTrimiteri) {
             Toast.makeText(this, "Codul de bare " + sCodBare + "exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
             EditTextCodQR.setText("");
-        } else if (existInPlajaCoduri && !existInAntetTrimiteri)
+        }
+        if (existInPlajaCoduri && !existInAntetTrimiteri) {
 
             Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
-        intent.putExtra("UserPL",getIntent().getExtras().getString("UserPL"));
-        String ag = EditTextCodQR.getText().toString().trim();
+            Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
+            intent.putExtra("UserPL", getIntent().getExtras().getString("UserPL"));
+            String ag = EditTextCodQR.getText().toString().trim();
 //        if(ag.length() != 0){
 //            StocareCodBare.add(ag);
-        //insertData();
+            //insertData();
 //            db.beginTransaction();
 //        String SqlSir = "Insert into " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " (" + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + "," + Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR + ") " + "Values"
- //               + " (" + EditTextCodQR.getText().toString() + "," + getIntent().getExtras().getString("UTILIZATOR") + ")";
+            //               + " (" + EditTextCodQR.getText().toString() + "," + getIntent().getExtras().getString("UTILIZATOR") + ")";
 
 //                Cursor crs = db.rawQuery(SqlSir,null);
 //                crs.moveToFirst();
- //               int idAT =(crs.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
+            //               int idAT =(crs.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
 
 //            db.execSQL(SqlSir);
 //            db.endTransaction();
-        //      }
+            //      }
 
-        //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
-        intent.putExtra("CodBare",sCodBare);
-        intent.putExtra("UTILIZATOR",getIntent().getExtras().getString("UTILIZATOR"));
-        startActivity(intent);
-        EditTextCodQR.setText("");
+            //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
+            intent.putExtra("CodBare", sCodBare);
+            intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
+            startActivity(intent);
+            EditTextCodQR.setText("");
+        }
+        else {
+            Toast.makeText(this, "Codul este gresit!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public boolean insertData() {
