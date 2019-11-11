@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TextView afisez;
     EditText parola;
     DatabaseHelper myDb;
-    AutoCompleteTextView PunctDeLucru;
+   public AutoCompleteTextView PunctDeLucru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
