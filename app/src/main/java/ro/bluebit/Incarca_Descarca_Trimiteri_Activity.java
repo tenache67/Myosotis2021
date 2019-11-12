@@ -37,13 +37,25 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     String preiaCodBare;
     TextView afisareMesaj;
     public final String TAG = "incarca_descarca";
+    AutoCompleteTextView PunctDeLucru;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_scaneaza_cod_bare);
+        setContentView (R.layout.layout_scan_cod_bare_afisare_pachete_ramase);
+        Bundle extras = getIntent().getExtras();
+        String preluareIntent = extras.getString("ACTIUNE");
+        String id_utilizator = extras.getString("UTILIZATOR");
+        PunctDeLucru = findViewById(R.id.ACTV1);
+//        if (preluareIntent.equals("incarcare")) {
+//            setContentView(R.layout.layout_scaneaza_cod_bare);}
+//        else{
+//            setContentView(R.layout.layout_scan_cod_bare_afisare_pachete_ramase);
+//
+//        }
+
         myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getReadableDatabase();
         cod_bare = findViewById(R.id.cod_bare);
@@ -51,16 +63,15 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         TextWatcher watchCodBare = new CustomTextWatcher(cod_bare, afisareMesaj, preiaCodBare, this);
-        Bundle extras = getIntent().getExtras();
-        String preluareIntent = extras.getString("ACTIUNE");
-        String id_utilizator = extras.getString("UTILIZATOR");
+
         if (preluareIntent.equals("incarcare")) {
             toolbarSimplu.setSubtitle("Incarca trimiteri:");
-        } else
+
+        } else{
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
-        cod_bare.addTextChangedListener(watchCodBare);
-
+        cod_bare.addTextChangedListener(watchCodBare);}
+       PopulareAutocomplete();
 
 
     }
@@ -69,7 +80,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(alert);
         alertDialog.setTitle(title);
-        alertDialog.setCancelable(true);
+        alertDialog.setCancelable(false);
         alertDialog.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -195,7 +206,15 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         db.endTransaction();
     }
 
+    public void PopulareAutocomplete() {
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        SQLiteDatabase db = myDb.getWritableDatabase();
+        final String[] Expeditor_Destinatar = LogicaVerificari.getPlucru(db);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, Expeditor_Destinatar);
+        PunctDeLucru.setAdapter(adapter);
+
+    }
 }
 
 
