@@ -28,7 +28,7 @@
         android:layout_marginTop="25dp"
         android:textSize="12sp"/>
     <EditText
-        android:id="@+id/cod_bare"
+        android:id="@+id/cod_bare1"
         android:layout_marginTop="25dp"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:inputType="numberDecimal"
         android:focusedByDefault="true"/>
     <TextView
-        android:id="@+id/reporter"
+        android:id="@+id/reporter1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>

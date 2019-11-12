@@ -1,41 +1,35 @@
 package ro.bluebit;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
-import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 import static java.lang.Long.parseLong;
 
 public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
-    EditText cod_bare;
+    EditText cod_bare1;
     DatabaseHelper myDb;
     Long[] stocareCodBareDinScanner;
-    String preiaCodBare;
-    TextView afisareMesaj;
+    String preiaCodBare1;
+    TextView afisareMesaj1;
     public final String TAG = "incarca_descarca";
     AutoCompleteTextView PunctDeLucru;
 
@@ -58,19 +52,19 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 
         myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getReadableDatabase();
-        cod_bare = findViewById(R.id.cod_bare);
-        afisareMesaj = findViewById(R.id.reporter);
+        cod_bare1 = findViewById(R.id.cod_bare1);
+        afisareMesaj1 = findViewById(R.id.reporter1);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
-        TextWatcher watchCodBare = new CustomTextWatcher(cod_bare, afisareMesaj, preiaCodBare, this);
-
+        TextWatcher watchCodBare = new CustomTextWatcher(cod_bare1, afisareMesaj1, preiaCodBare1, this);
+        cod_bare1.addTextChangedListener(watchCodBare);
         if (preluareIntent.equals("incarcare")) {
             toolbarSimplu.setSubtitle("Incarca trimiteri:");
 
         } else{
             toolbarSimplu.setSubtitle("Descarca trimiteri:");
 
-        cod_bare.addTextChangedListener(watchCodBare);}
+        }
        PopulareAutocomplete();
 
 
@@ -139,14 +133,14 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             alertMesajValidari("Cod Inexistent", "Nu face parte din codurile noastre");
             vibration();
             alertaSunet();
-            cod_bare.setText("");
+            cod_bare1.setText("");
         }
 
         if (existInPlajaCoduri && !existInAntetTrimiteri) {
             alertMesajValidari("Cod Nou!", "Codul nu a fost folosit pentru o trimitere noua! ");
             vibration();
             alertaSunet();
-            cod_bare.setText("");
+            cod_bare1.setText("");
         }
         //     Toast.makeText(this, "Codul este unul nou, trebuie introdus la Trimitere noua", Toast.LENGTH_LONG).show();
         //   cod_bare.setText("");
@@ -160,7 +154,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             } else {
                 metodaDescarca(sCodBare);
                 Toast.makeText(this, "Ai realizat o descarcare", Toast.LENGTH_SHORT).show();
-                cod_bare.setText("");
+                cod_bare1.setText("");
 
             }
         }
