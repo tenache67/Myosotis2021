@@ -10,6 +10,7 @@
     <include layout="@layout/toolbar"
         android:id="@+id/toolbarSimplu"/>
 <RelativeLayout
+    android:id="@+id/relativelayout_trmnoua_exp_dest"
     android:layout_marginTop="60dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -92,7 +93,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_centerInParent="true"
+        android:layout_marginStart="95dp"
+        android:layout_below="@+id/relativelayout_trmnoua_exp_dest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Salvare" />

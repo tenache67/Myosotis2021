@@ -90,5 +90,29 @@ public class LogicaVerificari {
         return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
     }
 
+    public static int getExpDest(SQLiteDatabase db, String denplucru){
+
+        String  denumirestring =(("select "+Constructor.Tabela_P_Lucru.COL_ID+" from "+
+                Constructor.Tabela_P_Lucru.NUME_TABEL+ " where '"+ denplucru+ "'="+ Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(denumirestring,null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
+    }
+    public static int getIdTip(SQLiteDatabase db, String id_expeditor_destinatar) {
+
+        String idtipstring = (("select " + Constructor.Tabela_Tipuri.COL_ID_TIPURI + " from " +
+                Constructor.Tabela_Tipuri.NUME_TABEL + " where '" + id_expeditor_destinatar + "'=" + Constructor.Tabela_Tipuri.COL_DENUMIRE));
+        Cursor crs = db.rawQuery(idtipstring, null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_Tipuri.COL_ID_TIPURI));
+    }
+//    public String(){
+//        return  String("Select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ "from "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ "as at" +
+//                " inner join "+ Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+  " as pt on"+ "at.id_antet_trimiteri"+ "="+ "pt.id_antet_trimiteri"+
+//                " inner join "+Constructor.Tabela_P_Lucru.NUME_TABEL+ "as pl on pt.id_p_lucru=pl.id_p_lucru where pl.id_p_lucru"+ "="+ "14");
+//
+//    }
+ //id_antet_trimiteri from tabela_antet_trimiteri as at inner join tabela_pozitii_trimiteri as pt on at.id_antet_trimiteri
+    // = pt.id_antet_trimiteri inner join tabela_P_Lucru as pl on pt.id_p_lucru=pl.id_p_lucru where pl.id_p_lucru = 14
 }
 

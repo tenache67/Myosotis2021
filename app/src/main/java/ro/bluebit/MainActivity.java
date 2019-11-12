@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TextView afisez;
     EditText parola;
     DatabaseHelper myDb;
-    AutoCompleteTextView PunctDeLucru;
+   public AutoCompleteTextView PunctDeLucru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent logareUtilizator = new Intent(MainActivity.this, SelectieInitialaActivity.class);
                         String idUtilizator = id_Utilizator();
                         logareUtilizator.putExtra("UTILIZATOR", idUtilizator);
+                        logareUtilizator.putExtra("UserPL",PunctDeLucru.getText().toString());
                         int id_pct_lucru = id_P_Lucru();
                         logareUtilizator.putExtra("ID_P_LUCRU", id_pct_lucru);
                         startActivity(logareUtilizator);
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     public int id_P_Lucru() {
         SQLiteDatabase db = myDb.getReadableDatabase();
-        int rezultatID = LogicaVerificari.getPunctLucru(db, (PunctDeLucru.getText().toString()));
+        int rezultatID = LogicaVerificari.getPunctLucru(db, PunctDeLucru.getText().toString());
         return rezultatID;
     }
 

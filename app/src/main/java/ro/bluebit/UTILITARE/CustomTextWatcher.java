@@ -18,9 +18,6 @@ public class CustomTextWatcher implements TextWatcher {
     TextView afisareMesaj;
     BazaAppCompat Activitate;
     String preiaCodBare;
-//    private Timer timer = new Timer();
-    private final long DELAY = 5000; // milliseconds
-    private boolean lCorect =false ;
     public CustomTextWatcher(EditText codBare, TextView afisareMesaj,String preiaCodBare, BazaAppCompat activitate) {
         this.codBare = codBare;
         this.afisareMesaj = afisareMesaj;
@@ -36,6 +33,8 @@ public class CustomTextWatcher implements TextWatcher {
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
     }
+    private Timer timer = new Timer();
+    private final long DELAY = 5000; // milliseconds
 
 
     @Override
@@ -43,8 +42,8 @@ public class CustomTextWatcher implements TextWatcher {
         if (editable.length()==0)
             afisareMesaj.setText("Nu ai introdus nici o cifra");
         else if (editable.length()<=12)
-            afisareMesaj.setText("Codul introdus are mai putin de 13 caractere");
-
+            afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
+        
         else
         if (editable.length()==13 ) {
             preiaCodBare = codBare.getText().toString();
@@ -52,23 +51,6 @@ public class CustomTextWatcher implements TextWatcher {
             Activitate.executalacodvalid(preiaCodBare);
 
         }
-
-//        timer.cancel();
-//        timer = new Timer();
-//        timer.schedule(
-//                new TimerTask() {
-//                    @Override
-//
-//                    public void run() {
-//                        if (lCorect)
-//                            Activitate.executalacodvalid(preiaCodBare);
-//
-//
-//                            }
-//                },
-//                DELAY
-//        );
-
 
     }
 }
