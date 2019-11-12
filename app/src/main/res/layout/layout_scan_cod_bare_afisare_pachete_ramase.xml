@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarSimplu"/>
+    <AutoCompleteTextView
+        android:id="@+id/ACTV1"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp"
+        android:completionThreshold="1"
+        android:hint="Punct de Lucru"
+        android:textAlignment="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/TVnrObiectedeDescarcat"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scaneaza/Introdu manual codul de bare"
+        android:layout_marginTop="25dp"
+        android:textSize="12sp"/>
+    <EditText
+        android:id="@+id/cod_bare1"
+        android:layout_marginTop="25dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+
+        android:textAlignment="center"
+        android:maxLength="13"
+        android:inputType="numberDecimal"
+        android:focusedByDefault="true"/>
+    <TextView
+        android:id="@+id/reporter1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+
+    <!--   <Button-->
+    <!--       android:id="@+id/bttn_valid_manual_incarca_trmiteri"-->
+    <!--       android:layout_width="wrap_content"-->
+    <!--       android:layout_height="wrap_content"-->
+    <!--       android:text="@string/validare_incarcare_trimiteri"-->
+    <!--       android:elevation="4dp"/>-->
+
+</LinearLayout>
