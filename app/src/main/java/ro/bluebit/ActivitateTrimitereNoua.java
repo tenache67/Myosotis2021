@@ -139,8 +139,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         if (existInPlajaCoduri)
             Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();
         else {
-            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "Corectati codul sau introduceti unul nou", Toast.LENGTH_SHORT).show();
+
         }
 
 
@@ -154,22 +153,6 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
             intent.putExtra("UserPL", getIntent().getExtras().getString("UserPL"));
             String ag = EditTextCodQR.getText().toString().trim();
-//        if(ag.length() != 0){
-//            StocareCodBare.add(ag);
-            //insertData();
-//            db.beginTransaction();
-//        String SqlSir = "Insert into " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " (" + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + "," + Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR + ") " + "Values"
-            //               + " (" + EditTextCodQR.getText().toString() + "," + getIntent().getExtras().getString("UTILIZATOR") + ")";
-
-//                Cursor crs = db.rawQuery(SqlSir,null);
-//                crs.moveToFirst();
-            //               int idAT =(crs.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
-
-//            db.execSQL(SqlSir);
-//            db.endTransaction();
-            //      }
-
-            //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
             intent.putExtra("CodBare", sCodBare);
             intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
             startActivity(intent);
@@ -179,7 +162,6 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             alertMesajValidari("Cod Inexistent", "Nu face parte din codurile noastre");
             alertaSunet();
             vibration();
-            Toast.makeText(this, "Codul este gresit!!", Toast.LENGTH_SHORT).show();
         }
     }
     public void alertMesajValidari(String title, String alert) {
