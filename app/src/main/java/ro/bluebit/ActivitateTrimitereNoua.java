@@ -1,5 +1,6 @@
 package ro.bluebit;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -7,11 +8,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -136,8 +139,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         if (existInPlajaCoduri)
             Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();
         else {
-            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "Corectati codul sau introduceti unul nou", Toast.LENGTH_SHORT).show();
+
         }
 
 
@@ -151,30 +153,55 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
             intent.putExtra("UserPL", getIntent().getExtras().getString("UserPL"));
             String ag = EditTextCodQR.getText().toString().trim();
-//        if(ag.length() != 0){
-//            StocareCodBare.add(ag);
-            //insertData();
-//            db.beginTransaction();
-//        String SqlSir = "Insert into " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " (" + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + "," + Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR + ") " + "Values"
-            //               + " (" + EditTextCodQR.getText().toString() + "," + getIntent().getExtras().getString("UTILIZATOR") + ")";
-
-//                Cursor crs = db.rawQuery(SqlSir,null);
-//                crs.moveToFirst();
-            //               int idAT =(crs.getColumnIndexOrThrow(Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI));
-
-//            db.execSQL(SqlSir);
-//            db.endTransaction();
-            //      }
-
-            //intent.putExtra(EditTextCodQR.getText().toString(),"CodBare");
             intent.putExtra("CodBare", sCodBare);
             intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
             startActivity(intent);
             EditTextCodQR.setText("");
         }
         else {
-            Toast.makeText(this, "Codul este gresit!!", Toast.LENGTH_SHORT).show();
+            alertMesajValidari("Cod Inexistent", "Nu face parte din codurile noastre");
+            alertaSunet();
+            vibration();
         }
+    }
+    public void alertMesajValidari(String title, String alert) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(alert);
+        alertDialog.setTitle(title);
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+    public void alertaSunet() {
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.alarma);
+        mp.start();
+    }
+
+    public Vibrator vibration() {
+        final Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        final long[] pattern = {800, 300};
+        new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < pattern.length; i++) {
+                    v.vibrate(pattern, -1);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+        v.vibrate(pattern, -1);
+        return v;
+
     }
 
     public boolean insertData() {

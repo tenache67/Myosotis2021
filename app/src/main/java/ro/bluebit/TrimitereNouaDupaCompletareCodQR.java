@@ -1,13 +1,17 @@
 package ro.bluebit;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,6 +124,18 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         Spinner sItemsConditii = findViewById(R.id.spinner_condspec_id);
         sItemsConditii.setAdapter(adapterconditii);
 
+        List<String> spinnerArrayTipTrimitere =  new ArrayList<String>(); // Spinner pentru conditii speciale
+        spinnerArrayTipTrimitere.add("OBISNUIT");
+        spinnerArrayTipTrimitere.add("BANI");
+        spinnerArrayTipTrimitere.add("ACTE");
+
+        ArrayAdapter<String> adaptertiptrimitere = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArrayTipTrimitere);
+
+        adapterconditii.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner sItemsTipTrimitere = findViewById(R.id.spinner_tip_trimitere_id);
+        sItemsTipTrimitere.setAdapter(adaptertiptrimitere);
+
         List<String> spinnerArray =  new ArrayList<String>(); // Spinner pentru prioritate
         spinnerArray.add("NORMAL");
         spinnerArray.add("PRIORITAR");
@@ -139,6 +155,7 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
 //
 //        return CR;
 //    }
+
 
     public void PopulareAutocomplete(){
         DatabaseHelper myDb = new DatabaseHelper(this);
