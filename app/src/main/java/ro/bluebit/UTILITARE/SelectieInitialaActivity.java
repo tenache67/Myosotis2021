@@ -1,17 +1,17 @@
 package ro.bluebit.UTILITARE;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -38,6 +38,7 @@ public class SelectieInitialaActivity extends AppCompatActivity {
         listaIteme.add(new ClasaIteme(R.drawable.ic_scanare,"Informatii trimitere"));
         listaIteme.add(new ClasaIteme(R.drawable.ic_email,"Incarca trimiteri"));
         listaIteme.add(new ClasaIteme(R.drawable.ic_download,"Descarca trimiteri"));
+        listaIteme.add(new ClasaIteme(R.drawable.ic_download,"Test MYSQL"));
 
 
         mRecyclerView = findViewById(R.id.recycler_activitate1_id);

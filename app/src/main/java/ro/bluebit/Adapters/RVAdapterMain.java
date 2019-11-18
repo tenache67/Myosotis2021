@@ -2,7 +2,6 @@ package ro.bluebit.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import ro.bluebit.ActivitateQRInformatiiTrimitere;
 import ro.bluebit.ActivitateTrimitereNoua;
 import ro.bluebit.Incarca_Descarca_Trimiteri_Activity;
+import ro.bluebit.MysqlActivity;
 import ro.bluebit.R;
 import ro.bluebit.UTILITARE.ClasaIteme;
 import ro.bluebit.UTILITARE.SelectieInitialaActivity;
@@ -74,9 +74,6 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                     case 0:
 
                         intent =  new Intent(view.getContext(), ActivitateTrimitereNoua.class);
-
-
-
                         intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         intent.putExtra("UserPL",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UserPL"));
                         break;
@@ -94,6 +91,10 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
                         intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         intent.putExtra("ACTIUNE","descarcare");
+                        break;
+                    case 4:
+                        intent =  new Intent(view.getContext(), MysqlActivity.class);
+                        intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
                         break;
                     default:
                         intent =  new Intent(view.getContext(), SelectieInitialaActivity.class);
