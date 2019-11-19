@@ -7,12 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -22,6 +26,7 @@ import okhttp3.Response;
 public class MysqlActivity extends AppCompatActivity {
     private EditText usernameField, passwordField;
     private TextView status, role, method;
+    TextView afisareIdSesiune;
 
     OkHttpClient client = new OkHttpClient();
     public String url = "https://reqres.in/api/users/2";
@@ -38,6 +43,7 @@ public class MysqlActivity extends AppCompatActivity {
         passwordField = (EditText) findViewById(R.id.textViewUserPassword);
         loadApi = (Button) findViewById(R.id.loadApi);
         postReq = (Button) findViewById(R.id.postReq);
+        afisareIdSesiune=findViewById(R.id.afisare_sesiune_id);
 
         loadApi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +108,7 @@ public class MysqlActivity extends AppCompatActivity {
         postDataAuth.add("p","myotest");
         Request.Builder builder = new Request.Builder().url(url);
         builder.post(postDataAuth.build());
-        Request request = builder.build();
+        final Request request = builder.build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -112,14 +118,36 @@ public class MysqlActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
 
-                String mMessage = response.body().string();
+
+                final String mMessage = response.body().string();
+
+
+
+                if (response.isSuccessful()) {
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            Cookie cCookie=Cookie.parse(request.url(), response.headers("set-cookie").toString());
+////                            for (int i=0; i<response.headers().size()  ; i++){
+////                                   List<String> mHeadrs =new ArrayList<>();
+//                                String a= response.headers().value(i);
+//                                if (a.contains("PHPSESSID")){
+//                                    afisareIdSesiune.setText(a);
+//                                }
+//                       // }
+
+                    };
+                });
+
                 Log.e(TAG, mMessage);
             }
-        });
+        };
 
-    }
+
 
 
     public void postRequestForQuery() throws IOException {
@@ -198,4 +226,4 @@ public class MysqlActivity extends AppCompatActivity {
 //            }
 //        });
 
-}
+});}}
