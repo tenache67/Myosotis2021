@@ -132,6 +132,7 @@ public class MysqlActivity extends AppCompatActivity {
                         public void run() {
 
                             Cookie cCookie=Cookie.parse(request.url(), response.headers("set-cookie").toString());
+                            afisareIdSesiune.setText(cCookie.toString());
 ////                            for (int i=0; i<response.headers().size()  ; i++){
 ////                                   List<String> mHeadrs =new ArrayList<>();
 //                                String a= response.headers().value(i);
