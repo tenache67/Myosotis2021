@@ -141,7 +141,6 @@ public class MysqlActivity extends AppCompatActivity {
 
                             Cookie cCookie=Cookie.parse(request.url(), response.headers("set-cookie").toString());
                             RecieveResponse(cCookie.value());
-                           String valoarecookie = cCookie.value();
 
 
 ////                            for (int i=0; i<response.headers().size()  ; i++){
@@ -247,4 +246,7 @@ public class MysqlActivity extends AppCompatActivity {
 //            }
 //        });
 
-});}}
+            }
+        );
+    }
+}
