@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.beans.PropertyChangeListenerProxy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class MysqlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    getHttpResponse();
+                    getHttpResponse(afisareIdSesiune.getText().toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -68,7 +69,7 @@ public class MysqlActivity extends AppCompatActivity {
         });
     }
 
-        public void getHttpResponse() throws IOException   {
+        public void getHttpResponse(String idsesiune) throws IOException   {
 
             String url = "https://www.farmaciilemyosotis.ro/propriu/transport_marfa/transport_marfa.php";
 
@@ -76,8 +77,15 @@ public class MysqlActivity extends AppCompatActivity {
 
             Request request = new Request.Builder()
                     .url(url)
-                    .header("Content-Type", "text/html; charset=utf-8")
+                    .addHeader("Cookie","PHPSESSID="+idsesiune)
+                    //.get()
+                    //.addHeader("type","text")
+                    //.addHeader("content-type","text/html; charset=utf-8")
+                   // .header("Content-Type", "text/html; charset=utf-8")
                     .build();
+
+            //header seteaza valoarea unui header existent
+            //addheader adauga un header nou
 
 //        Response response = client.newCall(request).execute();
 //        Log.e(TAG, response.body().string());
@@ -132,7 +140,10 @@ public class MysqlActivity extends AppCompatActivity {
                         public void run() {
 
                             Cookie cCookie=Cookie.parse(request.url(), response.headers("set-cookie").toString());
-                            afisareIdSesiune.setText(cCookie.toString());
+                            RecieveResponse(cCookie.value());
+                           String valoarecookie = cCookie.value();
+
+
 ////                            for (int i=0; i<response.headers().size()  ; i++){
 ////                                   List<String> mHeadrs =new ArrayList<>();
 //                                String a= response.headers().value(i);
@@ -148,7 +159,16 @@ public class MysqlActivity extends AppCompatActivity {
             }
         };
 
+    public void RecieveResponse(String cCookie){
 
+       String valoarecookie=cCookie;
+        //afisareIdSesiune.setText(cCookie);
+        try {
+            getHttpResponse(valoarecookie);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void postRequestForQuery() throws IOException {

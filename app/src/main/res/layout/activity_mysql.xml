@@ -44,6 +44,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvtestare"
+        android:layout_width="50dp"
+
+        android:layout_height="50dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="220dp"
+        android:text="testare"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.075"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
     <Button
         android:id="@+id/loadApi"
         android:layout_width="157dp"
