@@ -7,18 +7,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.beans.PropertyChangeListenerProxy;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Cookie;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,6 +30,7 @@ public class MysqlActivity extends AppCompatActivity {
     public String url = "https://reqres.in/api/users/2";
     private static final String TAG = "Raspuns";
     Button loadApi, postReq;
+    String sQuery = "SELECT nume_salariat, prenume_salariat FROM salariati";
 
 
     @Override
@@ -50,7 +48,7 @@ public class MysqlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    getHttpResponse(afisareIdSesiune.getText().toString());
+                    getHttpResponse(afisareIdSesiune.getText().toString(),sQuery);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -69,33 +67,33 @@ public class MysqlActivity extends AppCompatActivity {
         });
     }
 
-        public void getHttpResponse(String idsesiune) throws IOException   {
+        public void getHttpResponse(String idsesiune, String sQuery) throws IOException   {
+            HttpUrl httpUrl = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("www.farmaciilemyosotis.ro")
+                    .addPathSegment("propriu")
+                    .addPathSegment("transport_marfa")
+                    .addPathSegment("test_mysql.php")
+                    .addQueryParameter("query",sQuery)
+                    .build();
 
-            String url = "https://www.farmaciilemyosotis.ro/propriu/transport_marfa/transport_marfa.php";
 
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url(url)
+                    .addHeader("accept","application/json")
+                    .url(httpUrl)
                     .addHeader("Cookie","PHPSESSID="+idsesiune)
-                    //.get()
-                    //.addHeader("type","text")
-                    //.addHeader("content-type","text/html; charset=utf-8")
-                   // .header("Content-Type", "text/html; charset=utf-8")
                     .build();
 
             //header seteaza valoarea unui header existent
             //addheader adauga un header nou
-
-//        Response response = client.newCall(request).execute();
-//        Log.e(TAG, response.body().string());
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     String mMessage = e.getMessage().toString();
                     Log.w("failure Response", mMessage);
-                    //call.cancel();
                 }
 
                 @Override
@@ -163,7 +161,7 @@ public class MysqlActivity extends AppCompatActivity {
        String valoarecookie=cCookie;
         //afisareIdSesiune.setText(cCookie);
         try {
-            getHttpResponse(valoarecookie);
+            getHttpResponse(valoarecookie,sQuery);
         } catch (IOException e) {
             e.printStackTrace();
         }
