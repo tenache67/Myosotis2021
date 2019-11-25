@@ -44,6 +44,7 @@ public class MysqlActivity extends AppCompatActivity {
         postReq = (Button) findViewById(R.id.postReq);
         afisareIdSesiune=findViewById(R.id.afisare_sesiune_id);
 
+
         loadApi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,6 +212,7 @@ public class MysqlActivity extends AppCompatActivity {
             }
         });
     }
+
 
 //    public void registerUser(String username, String password) {
 //        RequestBody body = new FormEncodingBuilder()
