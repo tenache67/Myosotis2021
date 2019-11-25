@@ -129,6 +129,7 @@ public class Constructor {
         public static final String COL_COD_BARE = "cod_bare";
         public static final String COL_ID_PRIORITATE="id_prioritate_transport";
         public static final String COL_ID_CONDITII="id_condtitii_transport";
+        public static final String COL_ID_TIP_TRIMITERE="id_tip_trimitere";
         public static final String COL_DATA="data";
     }
     //sql creare tabel
@@ -139,6 +140,7 @@ public class Constructor {
             Tabela_Antet_Trimiteri.COL_COD_BARE + Tip.COD_BARE + " , " +
             Tabela_Antet_Trimiteri.COL_ID_PRIORITATE + Tip.INTREG + " , " +
             Tabela_Antet_Trimiteri.COL_ID_CONDITII + Tip.INTREG + " , " +
+            Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE + Tip.INTREG + " , " +
             Tabela_Antet_Trimiteri.COL_DATA + Tip.DATA
             + ")");
 
