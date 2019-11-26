@@ -114,12 +114,16 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
             contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
             contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
             contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Destinatar"));
+
             //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
 
             //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
             //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
             //
             db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+
+            metodaIncarca(getIntent().getExtras().getString("CodBare"));
+
 
             Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
             finish();
@@ -194,6 +198,25 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
           ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,Expeditor_Destinatar);
          Expeditor.setAdapter(adapter);
          Destinatar.setAdapter(adapter);
+    }
+    public void metodaIncarca(String sCodBare) {
+        String id_utilizator = (TrimitereNouaDupaCompletareCodQR.this).getIntent().getExtras().getString("UTILIZATOR");
+
+        final DatabaseHelper myDb = new DatabaseHelper(this);
+        final SQLiteDatabase db = myDb.getWritableDatabase();
+        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
+        db.beginTransaction();
+
+        ContentValues cval = new ContentValues();
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
+//        String oop=punctLucru.getText().toString();
+//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
+
+        db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
     public void MetodaSalvareBtnTest(){
         btnsalvare = findViewById(R.id.button);

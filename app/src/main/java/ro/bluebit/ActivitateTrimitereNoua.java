@@ -136,20 +136,20 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
         boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
 
-        if (existInPlajaCoduri)
-            Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();
-        else {
-
-        }
+//        if (existInPlajaCoduri)
+//            Toast.makeText(this, "Codul de bare " + sCodBare + "exista in plaja de coduri", Toast.LENGTH_SHORT).show();
+//        else {
+//
+//        }
 
 
         if (existInPlajaCoduri && existInAntetTrimiteri) {
-            Toast.makeText(this, "Codul de bare " + sCodBare + "exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Codul de bare " + sCodBare + "exista in Antet Trimiteri si a fost adaugat in lista de trimiteri", Toast.LENGTH_SHORT).show();
             EditTextCodQR.setText("");
         }
         if (existInPlajaCoduri && !existInAntetTrimiteri) {
 
-            Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Codul este unul nou, completeaza campurile", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getApplicationContext(), TrimitereNouaDupaCompletareCodQR.class);
             intent.putExtra("UserPL", getIntent().getExtras().getString("UserPL"));
             String ag = EditTextCodQR.getText().toString().trim();
@@ -159,7 +159,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             EditTextCodQR.setText("");
         }
         else {
-            alertMesajValidari("Cod Inexistent", "Nu face parte din codurile noastre");
+            alertMesajValidari("Cod Incorect", "A fost deja scanat!");
             alertaSunet();
             vibration();
         }
