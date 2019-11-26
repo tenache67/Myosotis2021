@@ -1,11 +1,13 @@
 package ro.bluebit;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,8 +22,9 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import ro.bluebit.Database.MySQLHelper;
 
-public class MysqlActivity extends AppCompatActivity {
+public class MysqlActivity extends BazaAppCompat  {
     private EditText usernameField, passwordField;
     private TextView status, role, method;
     TextView afisareIdSesiune;
@@ -32,9 +35,14 @@ public class MysqlActivity extends AppCompatActivity {
     Button loadApi, postReq;
     String sQuery = "SELECT nume_salariat, prenume_salariat FROM salariati";
 
+    @Override
+    public void executalaHttpResponse(String sRaspuns) {
+        super.executalaHttpResponse(sRaspuns);
+        Toast.makeText(this, this.sHttpResponse, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mysql);
 
@@ -59,7 +67,7 @@ public class MysqlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    postRequest();
+                    MySQLHelper.postRequest("test_mysql.php", sQuery, MysqlActivity.this);
                     // getHttpResponse();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -155,7 +163,7 @@ public class MysqlActivity extends AppCompatActivity {
 
                 Log.e(TAG, mMessage);
             }
-        };
+        }
 
     public void RecieveResponse(String cCookie){
 
