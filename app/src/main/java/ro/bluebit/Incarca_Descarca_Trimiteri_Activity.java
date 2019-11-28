@@ -170,11 +170,13 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
-//        String oop=punctLucru.getText().toString();
-//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
+
+//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU,PunctDeLucru.getText().toString());
+        String oop=PunctDeLucru.getText().toString();
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();

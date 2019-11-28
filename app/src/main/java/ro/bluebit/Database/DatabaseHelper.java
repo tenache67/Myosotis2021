@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =22;
+    public final static int VERSIUNE_BAZA_DE_DATE =23;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
@@ -225,6 +225,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,4);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Descarcare");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,5);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Obisnuit");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,6);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Bani");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,7);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Acte");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,8);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Nu");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,9);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Frig");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,10);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Sepa");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,11);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Normal");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,12);
+        cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Prioritar");
+        insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
+
+
+
+
+
 
         db.close();
     }

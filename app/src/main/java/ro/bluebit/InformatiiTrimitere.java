@@ -29,8 +29,8 @@ public class InformatiiTrimitere extends BazaAppCompat {
     public void selectieexp() {
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
-        String selectiestring = "Select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as "+ " at " +
-                " inner join " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL + " as "+  " pt "+ " on " + "at"+"."+"id_antet_trimiteri " + " = " + " pt"+"."+"id_antet_trimiteri " +
+        String selectiestring = "Select " + "at"+"."+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as "+ " at " +
+                " inner join " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL + " as "+  "pt"+ " on " + "at"+"."+"id_antet_trimiteri" + " = " + " pt"+"."+"id_antet_trimiteri " +
                 " inner join " + Constructor.Tabela_P_Lucru.NUME_TABEL + " as "+ " pl "+ " on "+ "pt"+"."+"id_p_lucru=pl"+"."+"id_p_lucru"+ " where "+ " pl"+"."+"id_p_lucru " + " = " +  14;
 //        String selectiestring = "Select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " from "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ " where "+
 //                Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE+ " = "+ "0000000000021";

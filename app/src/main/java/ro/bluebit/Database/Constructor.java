@@ -12,6 +12,7 @@ public class Constructor {
 
     public static abstract class Tip {
         public static final String INTREG = " integer not null default 0 ";
+        public static final String DOUBLE = " double not null default 0 ";
         public static final String PRIMARY = " integer primary key ";
         public static final String PRIMARY_AUTO = " integer primary key autoincrement ";
         public static final String TEXT = " text not null default \'\' ";
@@ -55,7 +56,8 @@ public class Constructor {
         public static final String COL_ADRESA = "adresa";
         public static final String COL_TELEFON = "telefon";
         public static final String COL_ACTIV = "activ";
-        public static final String COL_COORDONATE = "coordonate";
+        public static final String COL_LATITUDINE = "latitudine";
+        public static final String COL_LONGITUDINE = "longitudine";
     }
     //sql creare tabel
     public static final String SQL_CREAZA_TABEL_P_LUCRU = (" create table if not exists " +
@@ -65,7 +67,8 @@ public class Constructor {
             Tabela_P_Lucru.COL_ADRESA + Tip.TEXT + " , " +
             Tabela_P_Lucru.COL_TELEFON + Tip.INTREG + " , " +
             Tabela_P_Lucru.COL_ACTIV + Tip.ACTIV + " , " +
-            Tabela_P_Lucru.COL_COORDONATE + Tip.GPS
+            Tabela_P_Lucru.COL_LATITUDINE + Tip.DOUBLE + " , " +
+            Tabela_P_Lucru.COL_LONGITUDINE + Tip.DOUBLE
             + ")");
 
 
@@ -129,6 +132,7 @@ public class Constructor {
         public static final String COL_COD_BARE = "cod_bare";
         public static final String COL_ID_PRIORITATE="id_prioritate_transport";
         public static final String COL_ID_CONDITII="id_condtitii_transport";
+        public static final String COL_ID_TIP_TRIMITERE="id_tip_trimitere";
         public static final String COL_DATA="data";
     }
     //sql creare tabel
@@ -139,6 +143,7 @@ public class Constructor {
             Tabela_Antet_Trimiteri.COL_COD_BARE + Tip.COD_BARE + " , " +
             Tabela_Antet_Trimiteri.COL_ID_PRIORITATE + Tip.INTREG + " , " +
             Tabela_Antet_Trimiteri.COL_ID_CONDITII + Tip.INTREG + " , " +
+            Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE + Tip.INTREG + " , " +
             Tabela_Antet_Trimiteri.COL_DATA + Tip.DATA
             + ")");
 
@@ -208,7 +213,7 @@ public class Constructor {
     public static final String SQL_CREAZA_TABEL_TIPURI = (" create table if not exists " +
             Tabela_Tipuri.NUME_TABEL + " ( " +
             Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG + " , " +
-            Tabela_Tipuri.COL_DENUMIRE + Tip.INTREG
+            Tabela_Tipuri.COL_DENUMIRE + Tip.TEXT
             + ")");
 
     public static  final String SQL_QUERY_OBTI_PLUCRU = (
