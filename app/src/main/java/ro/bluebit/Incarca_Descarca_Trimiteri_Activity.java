@@ -17,6 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import ro.bluebit.Database.Constructor;
@@ -118,18 +124,30 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     public void executalaHttpResponse(String sRaspuns) {
         super.executalaHttpResponse(sRaspuns);
 
-        verificareConexiuneReusita(sRaspuns);
+        try {
+            verificareConexiuneReusita(sRaspuns);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void verificareConexiuneReusita(String sVerificare) {
-        //   sVerificare="";
+    public void verificareConexiuneReusita(String sVerificare) throws JSONException {
+           //sVerificare="";
 
         Bundle extras = getIntent().getExtras();
         String preluareIntent = extras.getString("ACTIUNE");
         if (preluareIntent.equals("incarcare")) {
             if (sVerificare != null) {
-                Toast.makeText(this, sVerificare + "daaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
+//                JSONArray mArray = null;
+//                try {
+//                    mArray = new JSONArray(sVerificare);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                for (int i = 0; i < mArray.length(); i++) {
+//                    JSONObject mJsonObject = mArray.getJSONObject(i);
+                Toast.makeText(this,  "da", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "Incarcare cod", Toast.LENGTH_SHORT).show();
                 cod_bare1.getText().clear();
             } else
@@ -137,8 +155,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             // din raspuns se extrage ce ne intereseaza pentru a continua
             //       metodaIncarca(sCodBare);
 
-
-        } else {
+        }
+        else {
             if (sVerificare != null) {
                 Toast.makeText(this, sVerificare + "daaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "descarcare cod", Toast.LENGTH_SHORT).show();
@@ -169,10 +187,11 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 //        boolean existInDescarcare = LogicaVerificari.getExistentaDesc(db, sCodBare);
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
         //   boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
+        String sQueryExistinAntet="select id_antet_trimiteri from v_verifica_in_trimiteri where " + sCodBare +"=cod_bare ";
 
-        String sQueryExInAntet = (" select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " +
-                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +
-                " where '" + sCodBare + "' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
+//        String sQueryExInAntet = (" select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " +
+//                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +
+//                " where '" + sCodBare + "' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
 
 
         if (!existInPlajaCoduri) {
@@ -186,7 +205,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         if (existInPlajaCoduri) {
             try {
                  this.sHttpResponse=null;
-                MySQLHelper.postRequest("test_mysql.php", sQueryExInAntet, this);
+                MySQLHelper.postRequest("test_mysql.php", sQueryExistinAntet, this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
