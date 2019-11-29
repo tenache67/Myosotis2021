@@ -6,7 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -14,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
@@ -75,7 +80,33 @@ public class MainActivity extends AppCompatActivity {
 
         });
         PopulareAutocomplete();
+        actualizareinBackground.execute();
     }
+
+    AsyncTask actualizareinBackground = new AsyncTask() {
+        @Override
+        protected String doInBackground(Object[] objects) {
+            Timer timerr = new Timer();
+            final long DELAY = 10000; // milliseconds
+            timerr.schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+
+                            Log.d("async","Mesajjjjjjjjjjjj");
+
+                        }
+
+
+                    },
+                    DELAY,10000
+
+            );
+
+
+            return null;
+        }
+    };
 
     public int id_P_Lucru() {
         SQLiteDatabase db = myDb.getReadableDatabase();
