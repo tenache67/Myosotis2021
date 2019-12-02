@@ -1,8 +1,5 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,12 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -33,6 +30,8 @@ import ro.bluebit.UTILITARE.LogicaVerificari;
 import ro.bluebit.phpmysql.RaspunsRamuraIncDesc;
 
 import static java.lang.Long.parseLong;
+
+// import com.google.
 
 public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     EditText cod_bare1;

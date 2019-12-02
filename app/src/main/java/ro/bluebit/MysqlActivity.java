@@ -1,6 +1,5 @@
 package ro.bluebit;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,8 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
@@ -34,6 +31,7 @@ public class MysqlActivity extends BazaAppCompat  {
     private static final String TAG = "Raspuns";
     Button loadApi, postReq;
     String sQuery = "SELECT nume_salariat, prenume_salariat FROM salariati";
+
 
     @Override
     public void executalaHttpResponse(String sRaspuns) {
@@ -67,6 +65,7 @@ public class MysqlActivity extends BazaAppCompat  {
             @Override
             public void onClick(View v) {
                 try {
+                    sQuery="CALL get_new ('')";
                     MySQLHelper.postRequest("test_mysql.php", sQuery, MysqlActivity.this);
                     // getHttpResponse();
                 } catch (IOException e) {

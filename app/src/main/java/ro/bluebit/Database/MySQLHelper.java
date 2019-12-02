@@ -14,9 +14,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import ro.bluebit.BazaAppCompat;
-import ro.bluebit.BazaInterfataAppCompat;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class MySQLHelper  {
     public static void postRequest(final String sPhp, final String sQuery,final Context context) throws IOException {
@@ -94,6 +91,8 @@ public class MySQLHelper  {
                             act.executalaHttpResponse(response.body().string());
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } catch ( Exception e ) {
+
                         }
                     }
                 });
