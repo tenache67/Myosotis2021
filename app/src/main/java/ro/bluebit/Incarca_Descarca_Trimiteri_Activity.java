@@ -1,8 +1,5 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.gson.Gson;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -24,8 +27,11 @@ import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.Database.MySQLHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
+import ro.bluebit.phpmysql.RaspunsRamuraIncDesc;
 
 import static java.lang.Long.parseLong;
+
+// import com.google.
 
 public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     EditText cod_bare1;
@@ -118,38 +124,81 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     public void executalaHttpResponse(String sRaspuns) {
         super.executalaHttpResponse(sRaspuns);
 
-        verificareConexiuneReusita(sRaspuns);
+        try {
+            verificareConexiuneReusita(sRaspuns);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void verificareConexiuneReusita(String sVerificare) {
-        //   sVerificare="";
+    public void verificareConexiuneReusita(String sVerificare) throws JSONException {
+        //sVerificare="";
+        Gson gson = new Gson();
+        SQLiteDatabase db = myDb.getWritableDatabase();
+        //  RaspunsRamuraIncDesc raspunsRamuraIncDesc=new RaspunsRamuraIncDesc(sVerificare,null,null, null, null,null);
+        RaspunsRamuraIncDesc[] raspunsRamuraIncDescs = gson.fromJson(sVerificare, RaspunsRamuraIncDesc[].class);
+        for (int i = 0; i < raspunsRamuraIncDescs.length; i++) {
+            String a = raspunsRamuraIncDescs[i].getDataora();
+            String b = raspunsRamuraIncDescs[i].getId_antet_trimiteri();
+            String c = raspunsRamuraIncDescs[i].getId_destinatar();
+            String d = raspunsRamuraIncDescs[i].getId_expeditor();
+            int e = Integer.parseInt(raspunsRamuraIncDescs[i].getId_p_lucru());
+            String f = raspunsRamuraIncDescs[i].getId_tip();
+            Bundle extras = getIntent().getExtras();
+            String preluareIntent = extras.getString("ACTIUNE");
 
-        Bundle extras = getIntent().getExtras();
-        String preluareIntent = extras.getString("ACTIUNE");
-        if (preluareIntent.equals("incarcare")) {
-            if (sVerificare != null) {
-                Toast.makeText(this, sVerificare + "daaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "Incarcare cod", Toast.LENGTH_SHORT).show();
-                cod_bare1.getText().clear();
-            } else
-                Toast.makeText(this, "nuuuuuuuuuuuuuuuuu", Toast.LENGTH_SHORT).show();
-            // din raspuns se extrage ce ne intereseaza pentru a continua
-            //       metodaIncarca(sCodBare);
+            if (preluareIntent.equals("incarcare")) {
+
+                if (sVerificare == null || sVerificare.equals("[]")) {
+
+                    vibration();
+                    alertaSunet();
+                    alertMesajValidari("Eroare", "Codul nu apartine niciunei descarcari");
+                    cod_bare1.getText().clear();
+                } else if (sVerificare != "[]") {
+                    if (f == "3") {
+                        Toast.makeText(this, "Codul nu a fost Incarcat deoarece :", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "a mai fort incarcat o data de  :" + LogicaVerificari.getDenumirePunctLucru(db, e), Toast.LENGTH_SHORT).show();
+                        cod_bare1.getText().clear();
+
+                    } else if (f == "4" ) {
 
 
-        } else {
-            if (sVerificare != null) {
-                Toast.makeText(this, sVerificare + "daaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "descarcare cod", Toast.LENGTH_SHORT).show();
-                cod_bare1.getText().clear();
-            } else
-                Toast.makeText(this, "nuuuuuuuuuuuuuuuuu", Toast.LENGTH_SHORT).show();
-            // din raspuns se extrage ce ne intereseaza pentru a continua
-            //  metodaDescarca(sMarian);
+                        metodaIncarca(cod_bare1.getText().toString());
+                        Toast.makeText(this, "Codul  a fost incarcat " + d, Toast.LENGTH_SHORT).show();
+                        cod_bare1.setText("");
+                    }
 
+                    Toast.makeText(this, "Codul a fost incarcat", Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+
+                if (sVerificare == null || sVerificare.equals("[]")) {
+                    vibration();
+                    alertaSunet();
+                    alertMesajValidari("Eroare", "Codul nu apartine niciunei incarcari");
+                    cod_bare1.getText().clear();
+                } else if (sVerificare != "[]") {
+                    if (f == "4") {
+                        Toast.makeText(this, "Codul nu a fost descarcat deoarece :", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "a mai fort descarcat  o data de  :" + LogicaVerificari.getDenumirePunctLucru(db, e), Toast.LENGTH_SHORT).show();
+                        cod_bare1.getText().clear();
+
+                    } else if (f == "3") {
+
+
+                        metodaDescarca(cod_bare1.getText().toString());
+                        Toast.makeText(this, "Codul  a fost incarcat " + d, Toast.LENGTH_SHORT).show();
+                        cod_bare1.setText("");
+                    }
+
+                    Toast.makeText(this, "Codul a fost incarcat", Toast.LENGTH_SHORT).show();
+                }
+
+            }
         }
-
     }
 
     @Override
@@ -169,10 +218,11 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 //        boolean existInDescarcare = LogicaVerificari.getExistentaDesc(db, sCodBare);
         //verificarea existentei inregistrarii in tabela Antet  Trimiteri
         //   boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
+        String sQueryExistinAntet = ("select *  from v_verifica_in_trimiteri where '" + sCodBare + "'=cod_bare");
 
-        String sQueryExInAntet = (" select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " +
-                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +
-                " where '" + sCodBare + "' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
+//        String sQueryExInAntet = (" select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " +
+//                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +
+//                " where '" + sCodBare + "' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
 
 
         if (!existInPlajaCoduri) {
@@ -185,91 +235,14 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         }
         if (existInPlajaCoduri) {
             try {
-                 this.sHttpResponse=null;
-                MySQLHelper.postRequest("test_mysql.php", sQueryExInAntet, this);
+                //      this.sHttpResponse = null;
+                MySQLHelper.postRequest("test_mysql.php", sQueryExistinAntet, this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
-//      public void executalacodvalid(String sCodBare) {
-//
-//        super.executalacodvalid(sCodBare);
-//
-//        SQLiteDatabase db = myDb.getReadableDatabase();
-//        //inlaturarea zerourilor din sirul de caractere
-//        String codBareFaraZerouri = LogicaVerificari.RemoveZero(sCodBare);
-//        //transformarea sirului de caractere in long
-//        long codBareScurt = parseLong(codBareFaraZerouri);
-//        //verificare existenta in plaja de coduri
-//        boolean existInPlajaCoduri = LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
-//        boolean existInIncarcare = LogicaVerificari.getExistentaInc(db,sCodBare);
-//        boolean existInDescarcare = LogicaVerificari.getExistentaDesc(db,sCodBare);
-//        //verificarea existentei inregistrarii in tabela Antet  Trimiteri
-//     //   boolean existInAntetTrimiteri = LogicaVerificari.verificareExistentaInAntetTrimiteri(db, sCodBare);
-//
-//        String sQueryExInAntet=(" select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " +
-//                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +
-//                " where '" + sCodBare + "' = " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE);
-//
-//        try {
-//            this.sHttpResponse=null;
-//            MySQLHelper.postRequest("test_mysql.php",sQueryExInAntet,this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (!existInPlajaCoduri) {
-////            Toast.makeText(this, "Codul de bare " + sCodBare + "nu exista in lotul de coduri", Toast.LENGTH_SHORT).show();
-////            Toast.makeText(this, "Corectati codul sau introduceti unul nou", Toast.LENGTH_SHORT).show();
-//            alertMesajValidari("Cod Inexistent", "Nu face parte din codurile noastre");
-//            vibration();
-//            alertaSunet();
-//            cod_bare1.setText("");
-//        }
-//
-//        if (existInPlajaCoduri && !existInAntetTrimiteri) {
-//            alertMesajValidari("Cod Nou!", "Codul nu a fost folosit pentru o trimitere noua! ");
-//            vibration();
-//            alertaSunet();
-//            cod_bare1.setText("");
-//        }
-//        //     Toast.makeText(this, "Codul este unul nou, trebuie introdus la Trimitere noua", Toast.LENGTH_LONG).show();
-//        //   cod_bare.setText("");
-//
-//        if (existInPlajaCoduri && existInAntetTrimiteri) {
-//            Bundle extras = getIntent().getExtras();
-//            String preluareIntent = extras.getString("ACTIUNE");
-//            if (preluareIntent.equals("incarcare")) {
-//                if (!existInIncarcare&&!existInDescarcare){
-//                    Toast.makeText(this, "codul a fost  deja incarcat fara a fi descarcat", Toast.LENGTH_SHORT).show();
-//                    cod_bare1.getText().clear();
-//                }else if (!existInIncarcare&&existInDescarcare){
-//                    metodaIncarca(sCodBare);
-//                    Toast.makeText(this, "codul a fost  incarcat dupa o descarcare", Toast.LENGTH_SHORT).show();
-//                    cod_bare1.getText().clear();
-//                }else
-//                    {
-//                metodaIncarca(sCodBare);
-//                Toast.makeText(this, "Ai realizat o incarcare noua", Toast.LENGTH_SHORT).show();
-//                cod_bare1.getText().clear();}
-//            } else {
-//                if (!existInIncarcare&&existInDescarcare){
-//                    Toast.makeText(this, "codul a mai fost decarcat fara a fi incarcat", Toast.LENGTH_SHORT).show();
-//                    cod_bare1.getText().clear();}
-//                else if (existInIncarcare&&!existInDescarcare){
-//                    metodaIncarca(sCodBare);
-//                    Toast.makeText(this, "codul a fost  descarcat dupa o incarcare", Toast.LENGTH_SHORT).show();
-//                    cod_bare1.getText().clear();}
-//               else{ metodaDescarca(sCodBare);
-//                Toast.makeText(this, "Ai realizat o descarcare", Toast.LENGTH_SHORT).show();
-//                cod_bare1.getText().clear();}
-//
-//            }
-//        }
-//
-//    }
 
     public void metodaIncarca(String sCodBare) {
         String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
@@ -283,10 +256,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
 
-//        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU,PunctDeLucru.getText().toString());
-        String oop = PunctDeLucru.getText().toString();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db, oop));
-
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, get_id_P_Lucru());
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -303,8 +273,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 4);
-        //     String oop=punctLucru.getText().toString();
-        //     cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getPunctLucru(db,oop));
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, get_id_P_Lucru());
 
         db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
@@ -320,6 +289,13 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         PunctDeLucru.setAdapter(adapter);
 
     }
+
+    public int get_id_P_Lucru() {
+        SQLiteDatabase db = myDb.getReadableDatabase();
+        int rezultatID = LogicaVerificari.getPunctLucru(db, PunctDeLucru.getText().toString());
+        return rezultatID;
+    }
+
 }
 
 

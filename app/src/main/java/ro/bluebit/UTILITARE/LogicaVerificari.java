@@ -92,6 +92,14 @@ public class LogicaVerificari {
         crs.moveToFirst();
         return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_ID));
     }
+    public static int getDenumirePunctLucru(SQLiteDatabase db, int id_lucru) {
+
+        String denumirestring = (("select " + Constructor.Tabela_P_Lucru.COL_DENUMIRE + " from " +
+                Constructor.Tabela_P_Lucru.NUME_TABEL + " where '" + id_lucru + "'=" + Constructor.Tabela_P_Lucru.COL_ID));
+        Cursor crs = db.rawQuery(denumirestring, null);
+        crs.moveToFirst();
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+    }
 
     public static int getExpDest(SQLiteDatabase db, String denplucru) {
 
@@ -170,12 +178,3 @@ public class LogicaVerificari {
     }
 }
 
-//select
-// id_antet_trimiteri from
-// tabela_incarc_descarc as tid
-// inner join
-// tabela_antet_trimiteri as tat
-// on
-// tid.id_antet_trimiteri = tat.id_antet_trimiteri
-//where tat.cod_bare=0000000000100 and tid.id_tip=3
-//2
