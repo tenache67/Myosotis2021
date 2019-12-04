@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -34,9 +33,9 @@ public class MysqlActivity extends BazaAppCompat  {
 
 
     @Override
-    public void executalaHttpResponse(String sRaspuns) {
-        super.executalaHttpResponse(sRaspuns);
-        Toast.makeText(this, this.sHttpResponse, Toast.LENGTH_SHORT).show();
+    public void executalaHttpResponse(String sScop,String sRaspuns) {
+        super.executalaHttpResponse(sScop,sRaspuns);
+
     }
 
     @Override

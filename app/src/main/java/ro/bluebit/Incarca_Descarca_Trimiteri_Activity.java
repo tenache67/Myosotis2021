@@ -120,17 +120,6 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 
     }
 
-    @Override
-    public void executalaHttpResponse(String sRaspuns) {
-        super.executalaHttpResponse(sRaspuns);
-
-        try {
-            verificareConexiuneReusita(sRaspuns);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void verificareConexiuneReusita(String sVerificare) throws JSONException {
         //sVerificare="";

@@ -16,6 +16,8 @@ import okhttp3.Response;
 import ro.bluebit.BazaAppCompat;
 
 public class MySQLHelper  {
+
+
     public static void postRequest(final String sPhp, final String sQuery,final Context context) throws IOException {
         String url = "https://www.farmaciilemyosotis.ro:443/s/deschidere_sesiune.php";
         OkHttpClient client = new OkHttpClient();
@@ -88,7 +90,7 @@ public class MySQLHelper  {
                     @Override
                     public void run() {
                         try {
-                            act.executalaHttpResponse(response.body().string());
+                            act.executalaHttpResponse("QUERY",response.body().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch ( Exception e ) {

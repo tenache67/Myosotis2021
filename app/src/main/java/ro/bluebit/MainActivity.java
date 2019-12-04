@@ -1,8 +1,5 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,20 +14,34 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.Database.MySQLHelper;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BazaAppCompat {
     Button acceseaza;
     TextView afisez;
     EditText parola;
     DatabaseHelper myDb;
    public AutoCompleteTextView PunctDeLucru;
+
+    @Override
+    public void executalaHttpResponse(String sScop,String sRaspuns) {
+        super.executalaHttpResponse(sScop,sRaspuns);
+        if (sScop.equals("SINCRONIZARE")) {
+            Log.d(sScop,sRaspuns);
+        }
+        stergeRaspuns(sScop);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +103,20 @@ public class MainActivity extends AppCompatActivity {
                     new TimerTask() {
                         @Override
                         public void run() {
+                            String sQuery="CALL get_new ('')";
+                            String sScop="SINCRONIZARE";
+                            try {
+                                BazaAppCompat cAct = (BazaAppCompat) MainActivity.this;
+                                if (!cAct.existaCerere("SINCRONIZARE"))  {
+                                    MySQLHelper.postRequest("test_mysql_new.php", sQuery, MainActivity.this);
+                                }
+                            } catch (IOException e) {
+                                Log.d("SINCRO","Eroare "+e.getMessage());
+                                e.printStackTrace();
+                            }
 
-                            Log.d("async","Mesajjjjjjjjjjjj");
+
+                           // Log.d("async","Mesajjjjjjjjjjjj");
 
                         }
 
