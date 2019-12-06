@@ -16,7 +16,7 @@ public class Constructor {
         public static final String PRIMARY = " integer primary key ";
         public static final String PRIMARY_AUTO = " integer primary key autoincrement ";
         public static final String TEXT = " text not null default \'\' ";
-        public static final String DATA = " date not null default current_date";
+        public static final String DATA = "data";
         public static final String VALOARE = " numeric not null default 0.000000 ";
         public static final String TIMESTAMP = " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ";
         public static final String ACTIV = " integer not null default 0";// unde 1 este activ
@@ -43,6 +43,13 @@ public class Constructor {
             TabelaUtilizatorPin.COL_ID_DEPARTAMENT + Tip.INTREG
             + ")");
 
+    public static final String[][] STR_TABEL_UTILIZATORI= {
+
+            {TabelaUtilizatorPin.COL_ID,Tip.PRIMARY,Tip.INTREG},
+            {TabelaUtilizatorPin.COL_NUME,Tip.TEXT,Tip.TEXT},
+            {TabelaUtilizatorPin.COL_PIN,Tip.INTREG,Tip.INTREG},
+            {TabelaUtilizatorPin.COL_NIV_ACCES,Tip.INTREG,Tip.INTREG},
+            {TabelaUtilizatorPin.COL_ID_DEPARTAMENT,Tip.INTREG,Tip.INTREG}};
 
 
 
@@ -82,11 +89,11 @@ public class Constructor {
             " ) VALUES (?,?,?,?,?,?,?) " ;
 
     public static final String[][] STR_TABELA_P_LUCRU ={
-            {Tabela_P_Lucru.COL_ID ,Tip.PRIMARY ,Tip.INTREG},
-            {Tabela_P_Lucru.COL_DENUMIRE , Tip.TEXT ,Tip.TEXT},
+            {Tabela_P_Lucru.COL_ID ,Tip.PRIMARY,Tip.INTREG},
+            {Tabela_P_Lucru.COL_DENUMIRE ,Tip.TEXT,Tip.TEXT},
             {Tabela_P_Lucru.COL_ADRESA,Tip.TEXT,Tip.TEXT},
-            {Tabela_P_Lucru.COL_TELEFON ,Tip.INTREG,Tip.INTREG},
-            {Tabela_P_Lucru.COL_ACTIV,Tip.ACTIV ,Tip.INTREG},
+            {Tabela_P_Lucru.COL_TELEFON,Tip.INTREG,Tip.INTREG},
+            {Tabela_P_Lucru.COL_ACTIV,Tip.ACTIV,Tip.INTREG},
             {Tabela_P_Lucru.COL_LATITUDINE,Tip.DOUBLE,Tip.DOUBLE},
             {Tabela_P_Lucru.COL_LONGITUDINE,Tip.DOUBLE,Tip.DOUBLE}};
 
@@ -103,10 +110,12 @@ public class Constructor {
     //sql creare tabel
     public static final String SQL_CREAZA_TABEL_RUTE = (" create table if not exists " +
             Tabela_Rute.NUME_TABEL + " ( " +
-            Tabela_Rute.COL_ID + Constructor.Tip.PRIMARY + " , " +
-            Tabela_Rute.COL_DENUMIRE + Constructor.Tip.TEXT
+            Tabela_Rute.COL_ID + Tip.PRIMARY + " , " +
+            Tabela_Rute.COL_DENUMIRE + Tip.TEXT
             + ")");
-
+    public static final String[][] STR_TABELA_RUTE ={
+            {Tabela_Rute.COL_ID,Tip.PRIMARY,Tip.INTREG},
+            {Tabela_Rute.COL_DENUMIRE,Tip.TEXT,Tip.TEXT}};
 
 
 
@@ -124,6 +133,9 @@ public class Constructor {
             Tabela_Rute_P_Lucru.COL_ID_P_LUCRU + Tip.INTREG + " , " +
             "PRIMARY KEY ("+Tabela_Rute_P_Lucru.COL_ID_RUTA + " , " +Tabela_Rute_P_Lucru.COL_ID_P_LUCRU+")"
             + ")");
+    public static final String[][] STR_TABELA_RUTE_P_LUCRU ={
+            {Tabela_Rute_P_Lucru.COL_ID_RUTA,Tip.INTREG,Tip.INTREG},
+            {Tabela_Rute_P_Lucru.COL_ID_P_LUCRU,Tip.INTREG,Tip.INTREG}};
 
 
 
@@ -142,7 +154,10 @@ public class Constructor {
             Tabela_Plaja_Cod.COL_MINIM + Tip.INTREG + " , " +
             Tabela_Plaja_Cod.COL_MAXIM + Tip.INTREG
             + ")");
-
+    public static final String[][] STR_TABELA_PLAJA_COD={
+            {Tabela_Plaja_Cod.COL_ID_LOT,Tip.PRIMARY,Tip.INTREG},
+            {Tabela_Plaja_Cod.COL_MINIM,Tip.INTREG,Tip.INTREG},
+            {Tabela_Plaja_Cod.COL_MAXIM,Tip.INTREG,Tip.INTREG}};
 
 
     // TABELA ANTET TRIMITERI
@@ -167,7 +182,14 @@ public class Constructor {
             Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE + Tip.INTREG + " , " +
             Tabela_Antet_Trimiteri.COL_DATA + Tip.DATA
             + ")");
-
+    public static final String[][] STR_TABELA_ANTET_TRIMITERI={
+            {Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI,Tip.PRIMARY_AUTO,Tip.INTREG},
+            {Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR,Tip.INTREG,Tip.INTREG},
+            {Tabela_Antet_Trimiteri.COL_COD_BARE,Tip.COD_BARE,Tip.TEXT},
+            {Tabela_Antet_Trimiteri.COL_ID_PRIORITATE,Tip.INTREG,Tip.INTREG},
+            {Tabela_Antet_Trimiteri.COL_ID_CONDITII,Tip.INTREG,Tip.INTREG},
+            {Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,Tip.INTREG,Tip.INTREG},
+            {Tabela_Antet_Trimiteri.COL_DATA + Tip.DATA,Tip.TEXT}};
 
 
 
@@ -186,7 +208,10 @@ public class Constructor {
             Tabela_Pozitii_Trimiteri.COL_ID_TIP + Tip.INTREG + " , " +
             Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU + Tip.INTREG
             + ")");
-
+    public static final String[][] STR_TABELA_POZITII_TRIMITERI={
+            {Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,Tip.INTREG,Tip.INTREG},
+            {Tabela_Pozitii_Trimiteri.COL_ID_TIP,Tip.INTREG,Tip.INTREG},
+            {Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,Tip.INTREG,Tip.INTREG}};
 
 
 // TABELA INCARCARI-DESCARCARI
@@ -207,7 +232,12 @@ public class Constructor {
             Tabela_Incarc_Descarc.COL_ID_TIP + Tip.INTREG+ " , " +
             Tabela_Incarc_Descarc.COL_ID_P_LUCRU+ Tip.INTREG
             + ")");
-
+    public static final String[][] STR_TABELA_INCARC_DESCARC ={
+            {Tabela_Incarc_Descarc.COL_ID_INCARC_DESCARC,Tip.PRIMARY_AUTO,Tip.INTREG},
+            {Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI,Tip.INTREG,Tip.INTREG},
+            {Tabela_Incarc_Descarc.COL_ID_UTILIZATOR,Tip.INTREG,Tip.INTREG},
+            {Tabela_Incarc_Descarc.COL_ID_TIP,Tip.INTREG,Tip.INTREG},
+            {Tabela_Incarc_Descarc.COL_ID_P_LUCRU,Tip.INTREG,Tip.INTREG}};
 
 
 // TABELA PACHETE
@@ -222,6 +252,12 @@ public class Constructor {
             Tabela_Pachete.COL_ID_TRIMITERI_VECHI + Tip.INTREG + " , " +
             Tabela_Pachete.COL_ID_TRIMITERI_NOU + Tip.INTREG
             + ")");
+    public static final String[][] STR_TABELA_PACHETE ={
+            {Tabela_Pachete.COL_ID_TRIMITERI_VECHI,Tip.INTREG,Tip.INTREG},
+            {Tabela_Pachete.COL_ID_TRIMITERI_NOU,Tip.INTREG,Tip.INTREG}};
+
+
+
 
 // TABELA TIPURI PENTRU OPERATII        (am numit tabela tipuri pentru a nu fi confundata cu clasa Tip
     public static final class Tabela_Tipuri implements BaseColumns {
@@ -236,6 +272,10 @@ public class Constructor {
             Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG + " , " +
             Tabela_Tipuri.COL_DENUMIRE + Tip.TEXT
             + ")");
+    public static final String[][] STR_TABELA_TIPURI ={
+            {Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG,Tip.INTREG},
+            {Tabela_Tipuri.COL_DENUMIRE + Tip.TEXT,Tip.TEXT}};
+
 
     public static  final String SQL_QUERY_OBTI_PLUCRU = (
             "SELECT "+ Tabela_P_Lucru.COL_DENUMIRE+ " FROM " +Tabela_P_Lucru.NUME_TABEL);

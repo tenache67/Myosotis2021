@@ -176,5 +176,7 @@ public class LogicaVerificari {
 
         return cursor.getCount() > 0;
     }
+
+
 }
 
