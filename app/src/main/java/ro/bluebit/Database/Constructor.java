@@ -262,18 +262,18 @@ public class Constructor {
 // TABELA TIPURI PENTRU OPERATII        (am numit tabela tipuri pentru a nu fi confundata cu clasa Tip
     public static final class Tabela_Tipuri implements BaseColumns {
         public static final String NUME_TABEL = "tabela_tipuri";
-        public static final String COL_ID_TIPURI= "id_tipuri";
+        public static final String COL_ID_TIP= "id_tip";
         public static final String COL_DENUMIRE = "denumire" ;
     }
 
     //sql creare tabel
     public static final String SQL_CREAZA_TABEL_TIPURI = (" create table if not exists " +
             Tabela_Tipuri.NUME_TABEL + " ( " +
-            Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG + " , " +
+            Tabela_Tipuri.COL_ID_TIP + Tip.INTREG + " , " +
             Tabela_Tipuri.COL_DENUMIRE + Tip.TEXT
             + ")");
     public static final String[][] STR_TABELA_TIPURI ={
-            {Tabela_Tipuri.COL_ID_TIPURI + Tip.INTREG,Tip.INTREG},
+            {Tabela_Tipuri.COL_ID_TIP + Tip.INTREG,Tip.INTREG},
             {Tabela_Tipuri.COL_DENUMIRE + Tip.TEXT,Tip.TEXT}};
 
 
