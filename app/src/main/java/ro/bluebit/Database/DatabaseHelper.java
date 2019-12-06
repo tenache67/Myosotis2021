@@ -5,10 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -264,6 +270,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         db.close();
+    }
+    // in sRaspuns sunt toate inregistrarile din tabelele din server pentru care timestamp este mai mare decat timestamp de la sincronizarea anterioara
+    // inainte de inregistrarile dintr-o tabela se transmite numele tabelei
+    public void sincronizare_receptie (String sRaspuns ) {
+        SQLiteDatabase db= this.getWritableDatabase();
+        Gson g =new Gson();
+
+        List<Object> lLista; //=new ArrayList<HashMap<String, String>>();
+        Type tipLista = new TypeToken<List<Object>>(){}.getType();
+
+//        List<String[]> lLista;
+//        Type tipLista = new TypeToken<List<String[]>>(){}.getType();
+        try {
+            lLista = g.fromJson(sRaspuns, tipLista);
+            int nSize= lLista.size();
+            SQLiteStatement sqlCmd = db.compileStatement(Constructor.SQL_INSERT_TABELA_P_LUCRU) ;
+            //sqlCmd.bindLong(1,lLista.get(1).);
+
+        } catch ( ExceptionInInitializerError e ) {
+            String sMes=e.getMessage();
+        } catch (Exception e ) {
+            String sMes=e.getMessage();
+        }
+
+
     }
 
 }

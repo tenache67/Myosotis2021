@@ -19,7 +19,7 @@ public class Constructor {
         public static final String DATA = " date not null default current_date";
         public static final String VALOARE = " numeric not null default 0.000000 ";
         public static final String TIMESTAMP = " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ";
-        public static final String ACTIV = " integer not null default 1";// unde 1 este activ
+        public static final String ACTIV = " integer not null default 0";// unde 1 este activ
         public static final String GPS = " [double latitude, double longitude] ";
         public static final String COD_BARE="  text not null default \'\' ";
     }
@@ -70,6 +70,26 @@ public class Constructor {
             Tabela_P_Lucru.COL_LATITUDINE + Tip.DOUBLE + " , " +
             Tabela_P_Lucru.COL_LONGITUDINE + Tip.DOUBLE
             + ")");
+    // sql insert
+    public static final String SQL_INSERT_TABELA_P_LUCRU="INSERT OR REPLACE INTO "+Tabela_P_Lucru.NUME_TABEL+" ("+
+            Tabela_P_Lucru.COL_ID + " , " +
+            Tabela_P_Lucru.COL_DENUMIRE + " , " +
+            Tabela_P_Lucru.COL_ADRESA + " , " +
+            Tabela_P_Lucru.COL_TELEFON + " , " +
+            Tabela_P_Lucru.COL_ACTIV +  " , " +
+            Tabela_P_Lucru.COL_LATITUDINE +" , " +
+            Tabela_P_Lucru.COL_LONGITUDINE +
+            " ) VALUES (?,?,?,?,?,?,?) " ;
+
+    public static final String[][] STR_TABELA_P_LUCRU ={
+            {Tabela_P_Lucru.COL_ID ,Tip.PRIMARY ,Tip.INTREG},
+            {Tabela_P_Lucru.COL_DENUMIRE , Tip.TEXT ,Tip.TEXT},
+            {Tabela_P_Lucru.COL_ADRESA,Tip.TEXT,Tip.TEXT},
+            {Tabela_P_Lucru.COL_TELEFON ,Tip.INTREG,Tip.INTREG},
+            {Tabela_P_Lucru.COL_ACTIV,Tip.ACTIV ,Tip.INTREG},
+            {Tabela_P_Lucru.COL_LATITUDINE,Tip.DOUBLE,Tip.DOUBLE},
+            {Tabela_P_Lucru.COL_LONGITUDINE,Tip.DOUBLE,Tip.DOUBLE}};
+
 
 
 
@@ -83,9 +103,10 @@ public class Constructor {
     //sql creare tabel
     public static final String SQL_CREAZA_TABEL_RUTE = (" create table if not exists " +
             Tabela_Rute.NUME_TABEL + " ( " +
-            Tabela_Rute.COL_ID + Tip.PRIMARY + " , " +
-            Tabela_Rute.COL_DENUMIRE + Tip.TEXT
+            Tabela_Rute.COL_ID + Constructor.Tip.PRIMARY + " , " +
+            Tabela_Rute.COL_DENUMIRE + Constructor.Tip.TEXT
             + ")");
+
 
 
 

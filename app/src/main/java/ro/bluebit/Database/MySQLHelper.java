@@ -17,8 +17,12 @@ import ro.bluebit.BazaAppCompat;
 
 public class MySQLHelper  {
 
+        public static void postRequest(final String sPhp, final String sQuery,final Context context) throws IOException {
+            postRequest(sPhp,sQuery,context,"QUERY");
+        }
 
-    public static void postRequest(final String sPhp, final String sQuery,final Context context) throws IOException {
+
+        public static void postRequest(final String sPhp, final String sQuery, final Context context, final String sScop) throws IOException {
         String url = "https://www.farmaciilemyosotis.ro:443/s/deschidere_sesiune.php";
         OkHttpClient client = new OkHttpClient();
         FormBody.Builder postDataAuth = new FormBody.Builder();
@@ -45,13 +49,13 @@ public class MySQLHelper  {
                 if (response.isSuccessful()) {
                     Cookie cCookie = Cookie.parse(request.url(), response.headers("set-cookie").toString());
 
-                    getHttpResponse(cCookie.value(), sQuery , sPhp, context);
+                    getHttpResponse(cCookie.value(), sQuery , sPhp, context,sScop);
                 }
 
             }
         });
     }
-    public static void getHttpResponse(String idsesiune, String sQuery,String sPhp, final Context context) throws IOException   {
+    public static void getHttpResponse(String idsesiune, String sQuery, String sPhp, final Context context, final String sScop) throws IOException   {
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("https")
                 .host("www.farmaciilemyosotis.ro")
@@ -90,11 +94,11 @@ public class MySQLHelper  {
                     @Override
                     public void run() {
                         try {
-                            act.executalaHttpResponse("QUERY",response.body().string());
+                            act.executalaHttpResponse(sScop,response.body().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch ( Exception e ) {
-
+                            e.getMessage();
                         }
                     }
                 });

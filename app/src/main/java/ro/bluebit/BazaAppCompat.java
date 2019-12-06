@@ -14,6 +14,7 @@ public class BazaAppCompat extends AppCompatActivity implements BazaInterfataApp
     @Override
     public void executalaHttpResponse(String sScop,String sRaspuns)
     {
+        if (bHttpResponse != null)
         bHttpResponse.putString(sScop,sRaspuns);
     }
 
