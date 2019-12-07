@@ -216,51 +216,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertOnConflictIgnore(db, Constructor.Tabela_Plaja_Cod.NUME_TABEL,cVal);
 
         // tabela_tipuri
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,1);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,1);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Expeditor");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,2);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,2);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Destinatar");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,3);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,3);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Incarcare");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,4);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,4);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Descarcare");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,5);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,5);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Obisnuit");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,6);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,6);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Bani");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,7);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,7);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Acte");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,8);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,8);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Nu");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,9);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,9);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Frig");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,10);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,10);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Sepa");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,11);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,11);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Normal");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,12);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,12);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Prioritar");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 

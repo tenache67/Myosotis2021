@@ -262,7 +262,7 @@ public class Constructor {
 // TABELA TIPURI PENTRU OPERATII        (am numit tabela tipuri pentru a nu fi confundata cu clasa Tip
     public static final class Tabela_Tipuri implements BaseColumns {
         public static final String NUME_TABEL = "tabela_tipuri";
-        public static final String COL_ID_TIP= "id_tip";
+        public static final String COL_ID_TIP= "id_tipuri";
         public static final String COL_DENUMIRE = "denumire" ;
     }
 

@@ -2,21 +2,8 @@ package ro.bluebit.UTILITARE;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
-
-import static java.lang.Long.parseLong;
 
 public class LogicaVerificari {
 
@@ -112,11 +99,11 @@ public class LogicaVerificari {
 
     public static int getIdTip(SQLiteDatabase db, String id_expeditor_destinatar) {
 
-        String idtipstring = (("select " + Constructor.Tabela_Tipuri.COL_ID_TIPURI + " from " +
+        String idtipstring = (("select " + Constructor.Tabela_Tipuri.COL_ID_TIP + " from " +
                 Constructor.Tabela_Tipuri.NUME_TABEL + " where '" + id_expeditor_destinatar + "'=" + Constructor.Tabela_Tipuri.COL_DENUMIRE));
         Cursor crs = db.rawQuery(idtipstring, null);
         crs.moveToFirst();
-        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_Tipuri.COL_ID_TIPURI));
+        return crs.getInt(crs.getColumnIndexOrThrow(Constructor.Tabela_Tipuri.COL_ID_TIP));
     }
 //    public String(){
 //        return  String("Select "+ Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ "from "+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+ "as at" +
