@@ -21,7 +21,6 @@ public class MySQLHelper  {
             postRequest(sPhp,sQuery,context,"QUERY");
         }
 
-
         public static void postRequest(final String sPhp, final String sQuery, final Context context, final String sScop) throws IOException {
         String url = "https://www.farmaciilemyosotis.ro:443/s/deschidere_sesiune.php";
         OkHttpClient client = new OkHttpClient();
@@ -56,6 +55,7 @@ public class MySQLHelper  {
         });
     }
     public static void getHttpResponse(String idsesiune, String sQuery, String sPhp, final Context context, final String sScop) throws IOException   {
+        String sRez="";
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("https")
                 .host("www.farmaciilemyosotis.ro")
@@ -64,7 +64,6 @@ public class MySQLHelper  {
                 .addPathSegment(sPhp)
                 .addQueryParameter("query",sQuery)
                 .build();
-
 
         OkHttpClient client = new OkHttpClient();
 
@@ -76,9 +75,6 @@ public class MySQLHelper  {
 
         //header seteaza valoarea unui header existent
         //addheader adauga un header nou
-
-
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -5,25 +5,32 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
+
+import ro.bluebit.UTILITARE.LogicaVerificari;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =23;
+    public final static int VERSIUNE_BAZA_DE_DATE =69;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
         Log.e("Baza de date", "Baza de date " + getDatabaseName() + " a fost creata");
+
     }
+// trimiterile se stocheaza in tabelele cu _ALT la urma si se trimit catre server prin operatie speciala de sincronizare
+    // nu se baga in tabela de timestamp
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -32,38 +39,134 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Constructor.SQL_CREAZA_TABEL_ANTET_TRIMITERI);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_POZITII_TRIMITERI);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_INCARC_DESCARC);
-        db.execSQL(Constructor.SQL_CREAZA_TABEL_P_LUCRU);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_PACHETE);
+
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_ANTET_TRIMITERI_ALT);
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_POZITII_TRIMITERI_ALT);
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_INCARC_DESCARC_ALT);
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_PACHETE_ALT);
+
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_P_LUCRU);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_PLAJA_COD);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_RUTE);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_RUTE_P_LUCRU);
         db.execSQL(Constructor.SQL_CREAZA_TABEL_TIPURI);
+        db.execSQL(Constructor.SQL_CREAZA_TABEL_TIMESTAMP);
 
 
-        Log.e("Baza de date", "Tabela " + Constructor.TabelaUtilizatorPin.NUME_TABEL + " a fost creata");
-        String sqlSir="";
-        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (1, 'Marian', 111111, 1, 1)";
-        db.execSQL(sqlSir);
-        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (2, 'Adrian', 222222, 2, 2)";
-        db.execSQL(sqlSir);
-        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (3, 'Vasile', 333333, 4, 2)";
-        db.execSQL(sqlSir);
+//        Log.e("Baza de date", "Tabela " + Constructor.TabelaUtilizatorPin.NUME_TABEL + " a fost creata");
+//        String sqlSir="";
+//        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (1, 'Marian', 111111, 1, 1)";
+//        db.execSQL(sqlSir);
+//        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (2, 'Adrian', 222222, 2, 2)";
+//        db.execSQL(sqlSir);
+//        sqlSir="INSERT INTO Tabela_utilizatori (id_utilizator, nume, pin, nivel_acces,id_departament) VALUES   (3, 'Vasile', 333333, 4, 2)";
+//        db.execSQL(sqlSir);
 //        sqlSir="INSERT INTO Tabela_plaja_cod (id_lot, val_minima, val_maxima) VALUES   (10, 1000000000000, 9999999999999)";
 //        db.execSQL(sqlSir);
+        // se creeaza inreg in tabela pt timestamp
+        // puncte de lucru
+        ContentValues cVal = new ContentValues();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_P_Lucru.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_P_Lucru.COL_ID);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,0); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        //utilizatori
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.TabelaUtilizatorPin.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.TabelaUtilizatorPin.COL_ID);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,0); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        // plaje cod
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_Plaja_Cod.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_Plaja_Cod.COL_ID_LOT);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,0); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        // tabela tipuri
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_Tipuri.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_Tipuri.COL_ID_TIPURI);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,0); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        // tabela antet trimiteri
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_Antet_Trimiteri.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,1); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_Pozitii_Trimiteri.COL_ID_POZITII_TRIMITERI);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,1); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+        cVal.clear();
+        cVal.put(Constructor.Tabela_Timestamp.COL_TABELA,Constructor.Tabela_Incarc_Descarc.NUME_TABEL);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIME,"0");
+        cVal.put(Constructor.Tabela_Timestamp.COL_NUME_PRIMARY,Constructor.Tabela_Incarc_Descarc.COL_ID_INCARC_DESCARC);
+        cVal.put(Constructor.Tabela_Timestamp.COL_TIPSINC,1); // 0 - aduce din server 1 - trimite in server
+        try {
+            long nId = db.insertOrThrow (Constructor.Tabela_Timestamp.NUME_TABEL, null, cVal);
+        } catch (Exception e) {
+            String smsg=e.getMessage();
+        }
+
+
+
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.TabelaUtilizatorPin.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_P_Lucru.NUME_TABEL);
+
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Incarc_Descarc.NUME_TABEL);
-        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_P_Lucru.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pachete.NUME_TABEL);
+
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Pachete_Alt.NUME_TABEL);
+
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Plaja_Cod.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Rute.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Rute_P_Lucru.NUME_TABEL);
         db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Tipuri.NUME_TABEL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constructor.Tabela_Timestamp.NUME_TABEL);
 
 
         onCreate(db);
@@ -140,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertOnConflictIgnore(db, Constructor.Tabela_Rute_P_Lucru.NUME_TABEL,cVal);
     }
 
-    public void dateProba () {
+    public void dateProba1 () {
         ContentValues cVal = new ContentValues();
         SQLiteDatabase db= this.getWritableDatabase();
         // tabela_utilizatori
@@ -216,51 +319,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertOnConflictIgnore(db, Constructor.Tabela_Plaja_Cod.NUME_TABEL,cVal);
 
         // tabela_tipuri
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,1);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,1);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Expeditor");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,2);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,2);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Destinatar");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,3);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,3);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Incarcare");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,4);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,4);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Descarcare");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,5);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,5);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Obisnuit");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,6);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,6);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Bani");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,7);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,7);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Acte");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,8);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,8);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Nu");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,9);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,9);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Frig");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,10);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,10);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Sepa");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,11);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,11);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Normal");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
-        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIP,12);
+        cVal.put(Constructor.Tabela_Tipuri.COL_ID_TIPURI,12);
         cVal.put(Constructor.Tabela_Tipuri.COL_DENUMIRE,"Prioritar");
         insertOnConflictIgnore(db, Constructor.Tabela_Tipuri.NUME_TABEL,cVal);
 
@@ -272,29 +375,128 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
     // in sRaspuns sunt toate inregistrarile din tabelele din server pentru care timestamp este mai mare decat timestamp de la sincronizarea anterioara
-    // inainte de inregistrarile dintr-o tabela se transmite numele tabelei
+    // primul camp este adaugat in plus se numeste _numetab si contine numele tabelei din sqlite in care ajunge
     public void sincronizare_receptie (String sRaspuns ) {
-        SQLiteDatabase db= this.getWritableDatabase();
-        Gson g =new Gson();
-
+        Gson g = new Gson();
+        //int sver = db.getVersion();
         List<Object> lLista; //=new ArrayList<HashMap<String, String>>();
-        Type tipLista = new TypeToken<List<Object>>(){}.getType();
+        Type tipLista = new TypeToken<List<Object>>() {
+        }.getType();
 
 //        List<String[]> lLista;
 //        Type tipLista = new TypeToken<List<String[]>>(){}.getType();
         try {
             lLista = g.fromJson(sRaspuns, tipLista);
-            int nSize= lLista.size();
-            SQLiteStatement sqlCmd = db.compileStatement(Constructor.SQL_INSERT_TABELA_P_LUCRU) ;
-            //sqlCmd.bindLong(1,lLista.get(1).);
+            if (lLista.size() != 0) {
+                SQLiteDatabase db = this.getWritableDatabase();
+                try {
+                    LinkedTreeMap tRow;
+                    // SQLiteStatement sqlCmd =null; //= db.compileStatement(Constructor.SQL_INSERT_TABELA_P_LUCRU) ;
+                    String sqlCmd = "";
+                    String sTabela;
+                    String sqlVal = "";
+                    String sCampId = "";
+                    String sValId = "";
+                    Boolean lGasit = false;
+                    int i = 0;
+                    sTabela = ((LinkedTreeMap) lLista.get(0)).get("_numetab").toString();
+                    // se cauta numele campului pt cheia primara din tabela
+                    Cursor crs = db.rawQuery("SELECT " + Constructor.Tabela_Timestamp.COL_NUME_PRIMARY + " as cheie FROM " +
+                            Constructor.Tabela_Timestamp.NUME_TABEL + " WHERE " + Constructor.Tabela_Timestamp.COL_TABELA +
+                            "='" + sTabela + "'", null);
+                    try {
+                        crs.moveToFirst();
+                        sCampId = crs.getString(0);
+                    } catch (Exception e) {
+                    }
+                    crs.close();
+//            sqlCmd = "INSERT INTO "+sTabela+" "+
+//                    LogicaVerificari.getSqlInsert(sTabela, (LinkedTreeMap) lLista.get(0), false,1)
+//            +" VALUES ";
+                    Date dLastTime = LogicaVerificari.getDataDinString("0");
+                    db.beginTransaction();
+                    while (i < lLista.size()) {
+                        tRow = (LinkedTreeMap) lLista.get(i);
+                        // campul timestamp
+                        String sTime = ((LinkedTreeMap) lLista.get(i)).get("timestamp").toString();
+                        Date dTime = LogicaVerificari.getDataDinString(sTime);
+                        dLastTime = (dLastTime.before(dTime) ? dTime : dLastTime);
+                        // se extrage val din campul de cheie primara
+                        sValId = ((LinkedTreeMap) lLista.get(i)).get(sCampId).toString();
+                        // se cauta valoarea in tabela de sincronizat
+                        crs = db.rawQuery(
+                                "SELECT " + sCampId + " FROM " + sTabela + " WHERE " + sCampId + " = '" + sValId + "'", null
+                        );
+                        // daca nu exista inregistrare se face mai departe
+                        if (crs.getCount() == 0) {
+                            lGasit = true;
+                            // se ia doar lista de valori
+//                        sqlCmd = sqlCmd + (i>0 ? ",":"")
+//                                + LogicaVerificari.getSqlInsert(sTabela, tRow, false, 2);
+                            sqlCmd = LogicaVerificari.getSqlInsertDinTabela(sTabela, tRow, false, 0);
+                            db.execSQL(sqlCmd);
+                        }
+                        crs.close();
+                        i++;
+                    }
+                    sqlCmd = "UPDATE " + Constructor.Tabela_Timestamp.NUME_TABEL + " SET " + Constructor.Tabela_Timestamp.COL_TIME + " = " +
+                            "'" + LogicaVerificari.getStringDinData(dLastTime) + "'" +
+                            " WHERE " + Constructor.Tabela_Timestamp.COL_TABELA + " = " + "'" + sTabela + "'";
+                    db.execSQL(sqlCmd);
+                    db.setTransactionSuccessful();
+                    //sqlCmd.bindLong(1,lLista.get(1).);
+                    //((LinkedTreeMap) lLista.get(0)).get("denumire")
+                } catch (Exception e) {
+                    String sMes = e.getMessage();
+                    Log.d("Eroare", sMes);
 
-        } catch ( ExceptionInInitializerError e ) {
-            String sMes=e.getMessage();
-        } catch (Exception e ) {
-            String sMes=e.getMessage();
+                } finally {
+                    db.endTransaction();
+                }
+                db.close();
+            }
+        }catch ( Exception e ) {
+            e.getMessage();
         }
-
 
     }
 
+    public void sincronizare_trimiteri (String sRaspuns) {
+        // daca sraspuns = OK se sterg tabelele _alt
+        Gson g = new Gson();
+        //int sver = db.getVersion();
+        List<Object> lLista; //=new ArrayList<HashMap<String, String>>();
+        Type tipLista = new TypeToken<List<Object>>() {
+        }.getType();
+        try {
+            lLista = g.fromJson(sRaspuns, tipLista);
+            if (lLista.size() != 0) {
+                String sRez = ((LinkedTreeMap) lLista.get(0)).get("rez").toString();
+                if (sRez.equals("OK")) {
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    db.beginTransaction();
+                    String sCmd="";
+                    sCmd="DELETE FROM "+Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL +" WHERE 1=1 " ;
+                    db.execSQL(sCmd);
+                    sCmd="DELETE FROM "+Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL +" WHERE 1=1 " ;
+                    db.execSQL(sCmd);
+                    sCmd="DELETE FROM "+Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL +" WHERE 1=1 " ;
+                    db.execSQL(sCmd);
+                    sCmd="DELETE FROM "+Constructor.Tabela_Pachete_Alt.NUME_TABEL +" WHERE 1=1 " ;
+                    db.execSQL(sCmd);
+//                    db.delete(Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL, "1=1", null);
+//                    db.delete(Constructor.Tabela_Pachete_Alt.NUME_TABEL, "1=1", null);
+//                    db.delete(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, "1=1", null);
+//                    db.delete(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, "1=1", null);
+
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    db.close();
+
+                }
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 }

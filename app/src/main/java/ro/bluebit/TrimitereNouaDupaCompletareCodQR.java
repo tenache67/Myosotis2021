@@ -1,19 +1,11 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,20 +18,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.data.DataBuffer;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.Diverse.Siruri;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 
-public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
-        Spinner Priotitate,Cond_Speciale,Tip_Trimitere;
-        AutoCompleteTextView Expeditor,Destinatar;
-        Button btnsalvare;
-        DatabaseHelper myDb;
+public class TrimitereNouaDupaCompletareCodQR extends BazaAppCompat {
+    Spinner Priotitate,Cond_Speciale,Tip_Trimitere;
+    AutoCompleteTextView Expeditor,Destinatar;
+    Button btnsalvare;
+    DatabaseHelper myDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +57,23 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
     }
 
     @Override
+    public void executalaHttpResponse(String sScop,String sRaspuns) {
+        super.executalaHttpResponse(sScop,sRaspuns);
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        SQLiteDatabase db = myDb.getWritableDatabase();
+        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
+            // sincrinizare date ce vin din din server
+            Log.d(sScop,"start");
+            myDb.sincronizare_trimiteri(sRaspuns);
+        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
+            // sincronizare date create in aparat
+            myDb.sincronizare_receptie(sRaspuns);
+        }
+        //      stergeRaspuns(sScop);
+        myDb.close();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.meniu_salvare, menu);
         return super.onCreateOptionsMenu(menu);
@@ -74,65 +84,76 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         if (id == R.id.action_salvare) {
             final DatabaseHelper myDb = new DatabaseHelper(this);
             final SQLiteDatabase db = myDb.getWritableDatabase();
-            try {
+            if (Expeditor.getText().toString().equals(Destinatar.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "DESTINATAR SI EXPEDITOR IDENTICI!!!", Toast.LENGTH_SHORT).show();
 
-                if (id_P_Lucru() != 0) {
-                    id_P_Lucru();
+            }else
+                try {
 
-                    ContentValues contentValue = new ContentValues();
-                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
-                    contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
-                    if (Priotitate.getSelectedItemId() == 0) {
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 11);
-                    } else
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 12);
-                    if(Cond_Speciale.getSelectedItemId() == 0)
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,8);
-                    if(Cond_Speciale.getSelectedItemId() == 1)
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,9);
-                    else
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,10);
-                    if(Tip_Trimitere.getSelectedItemId() == 0)
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,5);
-                    if(Tip_Trimitere.getSelectedItemId() == 1)
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,6);
-                    else
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,7);
+                    if (id_P_Lucru() != 0) {
+                        id_P_Lucru();
 
-
-
-
-            long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
-            contentValue.clear();
-            String expeditor = Expeditor.getText().toString();
-            String destinatar = Destinatar.getText().toString();
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,expeditor));
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Expeditor"));
-            db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
-            contentValue.clear();
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
-            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Destinatar"));
-
-            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
-
-            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
-            //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
-            //
-            db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
-
-            metodaIncarca(getIntent().getExtras().getString("CodBare"));
+                        ContentValues contentValue = new ContentValues();
+                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
+                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
+                        if (Priotitate.getSelectedItemId() == 0) {
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 11);
+                        } else
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 12);
+                        if (Cond_Speciale.getSelectedItemId() == 0)
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 8);
+                        if (Cond_Speciale.getSelectedItemId() == 1)
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 9);
+                        else
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 10);
+                        if (Tip_Trimitere.getSelectedItemId() == 0)
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 5);
+                        if (Tip_Trimitere.getSelectedItemId() == 1)
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 6);
+                        else {
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 7);
+                        }
 
 
-            Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
-            finish();
-                } else {
+                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
 
+
+
+
+                        long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
+                        contentValue.clear();
+                        String expeditor = Expeditor.getText().toString();
+                        String destinatar = Destinatar.getText().toString();
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,expeditor));
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Expeditor"));
+                        db.insert(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null, contentValue);
+                        contentValue.clear();
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI,idAT);
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
+                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,LogicaVerificari.getIdTip(db,"Destinatar"));
+
+                        //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
+
+                        //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
+                        //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
+                        //
+                        db.insert(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null, contentValue);
+
+                        metodaIncarca(getIntent().getExtras().getString("CodBare"));
+
+                        // salvare in baza de date
+                        // suntem la selectia din meniu
+                        executaSincroTrimiteri();
+
+                        Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), " SELECTEAZA UN DESTINATAR!!", Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), " SELECTEAZA UN DESTINATAR!!", Toast.LENGTH_SHORT).show();
-            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -189,22 +210,22 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         SQLiteDatabase db = myDb.getWritableDatabase();
         //<String>ArrayPopulare = LogicaVerificari.getPlucru(db);
 
-          final String[]Expeditor_Destinatar = LogicaVerificari.getPlucru(db);
+        final String[]Expeditor_Destinatar = LogicaVerificari.getPlucru(db);
 //                "Depozit", "Birou", "Farmacie", "Contabilitate", "M1", "M2", "M3","M4", "M5", "M6"
 //
 //
 //        };
 
-          ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,Expeditor_Destinatar);
-         Expeditor.setAdapter(adapter);
-         Destinatar.setAdapter(adapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,Expeditor_Destinatar);
+        Expeditor.setAdapter(adapter);
+        Destinatar.setAdapter(adapter);
     }
     public void metodaIncarca(String sCodBare) {
         String id_utilizator = (TrimitereNouaDupaCompletareCodQR.this).getIntent().getExtras().getString("UTILIZATOR");
 
         final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase db = myDb.getWritableDatabase();
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
+        int abc = LogicaVerificari.getId_Antet_Trimiteri_alt(db, sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
@@ -213,8 +234,8 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
         String expeditor = Expeditor.getText().toString();
         cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, LogicaVerificari.getExpDest(db,expeditor));
-
-        db.insert(Constructor.Tabela_Incarc_Descarc.NUME_TABEL, null, cval);
+        cval.put(Constructor.Tabela_Incarc_Descarc.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
+        db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
     }
@@ -226,65 +247,73 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         btnsalvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
+                if (Expeditor.getText().toString().equals(Destinatar.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), "DESTINATAR SI EXPEDITOR IDENTICI!!!", Toast.LENGTH_SHORT).show();
 
-                    if (id_P_Lucru() != 0) {
+                }else
+                    try {
 
-
-
-                        //  preluare intent id utilizator + cod bare urmand sa fie inserat AICI cu cVal!!!!
-                        ContentValues contentValue = new ContentValues();
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
-                        contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
-                        if (Priotitate.getSelectedItemId() == 0) {
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 11);
-                        } else
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 12);
-                        if(Cond_Speciale.getSelectedItemId() == 0)
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,8);
-                        if(Cond_Speciale.getSelectedItemId() == 1)
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,9);
-                        else
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII,10);
-                        if(Tip_Trimitere.getSelectedItemId() == 0)
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,5);
-                        if(Tip_Trimitere.getSelectedItemId() == 1)
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,6);
-                        else
-                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE,7);
+                        if (id_P_Lucru() != 0) {
 
 
+                            //  preluare intent id utilizator + cod bare urmand sa fie inserat AICI cu cVal!!!!
+                            ContentValues contentValue = new ContentValues();
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE, getIntent().getExtras().getString("CodBare"));
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_UTILIZATOR, getIntent().getExtras().getString("UTILIZATOR"));
+                            if (Priotitate.getSelectedItemId() == 0) {
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 11);
+                            } else
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_PRIORITATE, 12);
+                            if (Cond_Speciale.getSelectedItemId() == 0)
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 8);
+                            if (Cond_Speciale.getSelectedItemId() == 1)
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 9);
+                            else
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_CONDITII, 10);
+                            if (Tip_Trimitere.getSelectedItemId() == 0)
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 5);
+                            if (Tip_Trimitere.getSelectedItemId() == 1)
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 6);
+                            else {
+                                contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_ID_TIP_TRIMITERE, 7);
+                            }
+                            contentValue.put(Constructor.Tabela_Antet_Trimiteri.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
 
-                        long idAT = db.insert(Constructor.Tabela_Antet_Trimiteri.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
-                        contentValue.clear();
-                        String expeditor = Expeditor.getText().toString();
-                        String destinatar = Destinatar.getText().toString();
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI, idAT);
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU, LogicaVerificari.getExpDest(db, expeditor));
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP, LogicaVerificari.getIdTip(db, "Expeditor"));
-                        db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
-                        contentValue.clear();
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI, idAT);
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU, LogicaVerificari.getExpDest(db, destinatar));
-                        contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP, LogicaVerificari.getIdTip(db, "Destinatar"));
-                        //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
 
-                        //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
-                        //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
-                        //
-                        db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+                            long idAT = db.insertOrThrow(Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL, null, contentValue); // returneaza id-ul antet trimiteri
+                            contentValue.clear();
+                            String expeditor = Expeditor.getText().toString();
+                            String destinatar = Destinatar.getText().toString();
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI, idAT);
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU, LogicaVerificari.getExpDest(db, expeditor));
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP, LogicaVerificari.getIdTip(db, "Expeditor"));
+                            db.insert(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null, contentValue);
+                            contentValue.clear();
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI, idAT);
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU, LogicaVerificari.getExpDest(db, destinatar));
+                            contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP, LogicaVerificari.getIdTip(db, "Destinatar"));
+                            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU,LogicaVerificari.getExpDest(db,destinatar));
 
-                        Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
-                        finish();
+                            //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
+                            //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
+                            //
+                            db.insert(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null, contentValue);
+
+                            metodaIncarca(getIntent().getExtras().getString("CodBare"));
+
+                            Toast.makeText(TrimitereNouaDupaCompletareCodQR.this, "Ai inserat in baza de date", Toast.LENGTH_SHORT).show();
+                            finish();
 //                Intent intent = new Intent(TrimitereNouaDupaCompletareCodQR.this,ActivitateTrimitereNoua.class);
 //                startActivity(intent);
 
-                    } else {
+                        } else {
 
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "SELECTEAZA UN DESTINATAR!!", Toast.LENGTH_SHORT).show();
                     }
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "SELECTEAZA UN DESTINATAR!!", Toast.LENGTH_SHORT).show();
-                }
+
+
             }
         });
 
@@ -323,4 +352,22 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         int rezultatID = LogicaVerificari.getPunctLucru(db, Destinatar.getText().toString().trim());
         return rezultatID;
     }
+    // aici se fac toate sincronizarile necesare
+    private void executaSincroTrimiteri () {
+        // sincronizare incarcari descarcari
+        String sQuery = LogicaVerificari.sincronizare_incarcare(myDb.getReadableDatabase());
+        executaSincro("test_multiquery.php", sQuery, "SINCRONIZARE_TRIMITERI");
+    }
+    private void executaSincro(String sPhp,String sQuery, String sScope) {
+        SincroDate sincro =  new SincroDate(this);
+        try {
+            sincro.execute(sPhp, sQuery, sScope);
+        } catch ( Exception e ) {
+            String sMes=e.getMessage();
+        }
+        //      ("test_multiquery.php",sQuery,"SINCRONIZARE_TRIMITERI");
+
+    }
+
+
 }

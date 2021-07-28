@@ -2,6 +2,7 @@ package ro.bluebit.UTILITARE;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,10 +56,27 @@ public class SelectieInitialaActivity extends AppCompatActivity {
 
     }
 
+    // iesire din program cu apsare dubla pe back
+    boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Pentru iesire foloseste butonul de logout", Toast.LENGTH_SHORT).show();
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Apasa BACK din nou pentru a iesi", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater= getMenuInflater();

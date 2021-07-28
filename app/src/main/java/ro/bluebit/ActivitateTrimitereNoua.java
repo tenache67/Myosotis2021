@@ -1,49 +1,31 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.widget.Toolbar;
-
-import android.Manifest;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-import java.io.IOException;
-import java.security.Timestamp;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
-import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 import static java.lang.Long.parseLong;
 
@@ -59,6 +41,10 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogicaVerificari.executaSincroNomenc(this) ;
+        LogicaVerificari.executaSincroTrimiteri(this);
+        LogicaVerificari.executaSincroRecTrimiteri(this);
+
         setContentView(R.layout.layout_scaneaza_cod_bare);
         EditTextCodQR = findViewById(R.id.cod_bare);
         afisareMesaj = findViewById(R.id.reporter);
@@ -77,6 +63,21 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
         //                " WHERE " + Constructor.TabAntetLegaturi.COL_3 + " = " + codTV.getText().toString();
 
+    }
+
+    @Override
+    public void executalaHttpResponse(String sScop,String sRaspuns) {
+        super.executalaHttpResponse(sScop,sRaspuns);
+        DatabaseHelper myDb= new DatabaseHelper(this);
+        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
+            // sincrinizare date ce vin din din server
+            Log.d(sScop,"start");
+            myDb.sincronizare_trimiteri(sRaspuns);
+        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
+            // sincronizare date create in aparat
+            myDb.sincronizare_receptie(sRaspuns);
+        }
+        //      stergeRaspuns(sScop);
     }
 
     public void IntroducereCodQR() {
@@ -155,7 +156,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             String ag = EditTextCodQR.getText().toString().trim();
             intent.putExtra("CodBare", sCodBare);
             intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
-            startActivity(intent);
+            startActivityForResult(intent,0);
             EditTextCodQR.setText("");
         }
         else {
@@ -227,6 +228,14 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     protected void onRestart() {
         super.onRestart();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogicaVerificari.executaSincroNomenc(this) ;
+        LogicaVerificari.executaSincroTrimiteri(this);
+        LogicaVerificari.executaSincroRecTrimiteri(this);
     }
 }
 // SCANNER COD BARE

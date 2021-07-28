@@ -1,13 +1,11 @@
 package ro.bluebit.UTILITARE;
 
-import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import ro.bluebit.BazaAppCompat;
 
@@ -31,7 +29,7 @@ public class CustomTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        String yes="";
     }
     private Timer timer = new Timer();
     private final long DELAY = 5000; // milliseconds
@@ -41,11 +39,11 @@ public class CustomTextWatcher implements TextWatcher {
     public void afterTextChanged(final Editable editable) {
         if (editable.length()==0)
             afisareMesaj.setText("Nu ai introdus nici o cifra");
-        else if (editable.length()<=12)
-            afisareMesaj.setText("Codul introdus are mai putin de 13 caractere ");
+        else if (editable.length()<=9)
+            afisareMesaj.setText("Codul introdus are mai putin de 10 caractere ");
         
         else
-        if (editable.length()==13 ) {
+        if (editable.length()==10 ) {
             preiaCodBare = codBare.getText().toString();
             afisareMesaj.setText(preiaCodBare);
             Activitate.executalacodvalid(preiaCodBare);
