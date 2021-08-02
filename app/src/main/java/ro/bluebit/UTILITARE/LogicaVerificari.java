@@ -498,5 +498,60 @@ public class LogicaVerificari {
             executaSincro("test_multiquery.php", sQuery, sScop,activity);
         }
     }
+    public static int getExistentaIncDesc(SQLiteDatabase db, String codBare) {
+        String selecteazId = (" select " +
+
+                "tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + ", " +
+
+                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI + ", " +
+                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_TIP + ", " +
+                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_DATA +
+
+                " from " +
+                Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as " + "tat" +
+                " inner join " +
+                Constructor.Tabela_Incarc_Descarc.NUME_TABEL + " as " + "tid" +
+                " on " +
+                "tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + "=" + "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI +
+                " where " +
+                "tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + "='" + codBare +
+                //         "' and " +
+                //     "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_TIP + "=" + operatie +
+                "' group by " +
+                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_TIP +
+                " order by  " +
+                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_DATA + " desc");
+
+
+        Cursor cursor = db.rawQuery(selecteazId, null);
+        if (cursor==null || cursor.getCount()<=0) {
+            return cursor.getColumnCount()+5;
+        }
+
+        if (cursor != null && cursor.getCount() > 0)
+            cursor.moveToFirst();
+
+        return cursor.getInt(cursor.getColumnIndexOrThrow(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP));
+
+    }
+    public static int iGetNumarDeCoduriBare(SQLiteDatabase db, int id_p_lucru){
+
+        String selecteaza_id_p_lucru=
+                "select  count ("+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+")"+ " as coloana"+
+                        " from " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+
+                        " where "+
+                        Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+"='"+id_p_lucru+"'"
+                ;
+        Cursor cursor =db.rawQuery(selecteaza_id_p_lucru,null);
+        if(cursor==null){
+            return cursor.getColumnCount()+8;
+        }
+        if (cursor!=null && cursor.getCount()>0)
+            cursor.moveToFirst();
+
+        //return cursor.getInt(cursor.getColumnIndexOrThrow(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU));
+        return cursor.getInt(cursor.getColumnIndexOrThrow("coloana"));
+        //  return cursor.getCount();
+    }
 
 }
