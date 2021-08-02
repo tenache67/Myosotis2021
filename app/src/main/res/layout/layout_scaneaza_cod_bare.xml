@@ -30,6 +30,24 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>
 
+    <Button
+        android:id="@+id/btn_cod_manual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="ClickManual"
+        android:text="Introduc manual codul" />
+
+    <EditText
+        android:id="@+id/edittext_codbare_manual"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+
+        android:focusedByDefault="true"
+        android:inputType="numberDecimal"
+        android:maxLength="13"
+        android:textAlignment="center" />
+
     <!--   <Button-->
 <!--       android:id="@+id/bttn_valid_manual_incarca_trmiteri"-->
 <!--       android:layout_width="wrap_content"-->
