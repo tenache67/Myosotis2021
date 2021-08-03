@@ -39,11 +39,14 @@ import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 import ro.bluebit.Diverse.Siruri;
 
-public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
+public class TrimitereNouaDupaCompletareCodQR extends BazaAppCompat {
         Spinner Priotitate,Cond_Speciale,Tip_Trimitere;
         AutoCompleteTextView Expeditor,Destinatar;
         Button btnsalvare;
         DatabaseHelper myDb;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,10 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
         PopulareSpinner(); // Metoda de populare a spinnerelor
         PopulareAutocomplete();
         MetodaSalvareBtnTest();
+
+        LogicaVerificari.executaSincroNomenc(this) ;
+        LogicaVerificari.executaSincroTrimiteri(this);
+        LogicaVerificari.executaSincroRecTrimiteri(this);
 
     }
 
@@ -132,7 +139,14 @@ public class TrimitereNouaDupaCompletareCodQR extends AppCompatActivity {
             //contentValue.put(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP,);
             //SELECT id_p_lucru from tabela_P_Lucru where "Depozit" = denumire
             //
-            db.insert(Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL, null, contentValue);
+            db.insert(Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null, contentValue);
+            db.setTransactionSuccessful();
+            db.endTransaction();
+
+            // sincronizare
+            LogicaVerificari.executaSincroNomenc(this) ;
+            LogicaVerificari.executaSincroTrimiteri(this);
+            LogicaVerificari.executaSincroRecTrimiteri(this);
 
             metodaIncarca(getIntent().getExtras().getString("CodBare"));
 
