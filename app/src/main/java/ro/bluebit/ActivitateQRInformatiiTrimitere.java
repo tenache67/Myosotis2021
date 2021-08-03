@@ -1,35 +1,26 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
-import ro.bluebit.UTILITARE.LogicaVerificari;
 
 import static java.lang.Long.parseLong;
 
 public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
 
-    EditText EditTextCodQR, EditTextCodQRManual;
+    EditText cod_bare1, cod_bare2;
     TextView afisareMesaj;
     String PreiaCodBare;
     Button BtnManual;
@@ -38,26 +29,26 @@ public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_scaneaza_cod_bare);
-        EditTextCodQR = findViewById(R.id.cod_bare);
-        EditTextCodQRManual = findViewById(R.id.edittext_codbare_manual);
+        cod_bare1 = findViewById(R.id.cod_bare);
+        cod_bare2 = findViewById(R.id.edittext_codbare_manual);
         afisareMesaj = findViewById(R.id.reporter);
         BtnManual = findViewById(R.id.btn_cod_manual);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
         toolbarSimplu.setSubtitle("Scaneaza codul de bare:");
-        CustomTextWatcher customTextWatcher = new CustomTextWatcher(EditTextCodQR,afisareMesaj, PreiaCodBare, this);
-        EditTextCodQR.addTextChangedListener(customTextWatcher);
-        EditTextCodQRManual.addTextChangedListener(customTextWatcher);
+        CustomTextWatcher customTextWatcher = new CustomTextWatcher(cod_bare1,afisareMesaj, PreiaCodBare, this);
+        cod_bare1.addTextChangedListener(customTextWatcher);
+        cod_bare2.addTextChangedListener(customTextWatcher);
 
     }
 
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
-        if( EditTextCodQR.isEnabled()==true) {
-            sCodBare = EditTextCodQR.getText().toString();
+        if( cod_bare1.isEnabled()==true) {
+            sCodBare = cod_bare1.getText().toString();
         }else {
-            sCodBare = EditTextCodQRManual.getText().toString();
+            sCodBare = cod_bare2.getText().toString();
         }
             Toast.makeText(this, "Valoarea primita " + sCodBare, Toast.LENGTH_SHORT).show();
             DatabaseHelper myDb = new DatabaseHelper(this);
@@ -81,18 +72,23 @@ public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
     }
 
     public void ClickManual(View view) {
-        switch (BtnManual.getText().toString()) {
+        switch (BtnManual.getText().toString()){
             case "Introduc manual codul":
-                EditTextCodQR.setEnabled(false);
-                EditTextCodQRManual.setEnabled(true);
-                EditTextCodQRManual.requestFocus();
-                BtnManual.setText("Scaneaza codul");
+                cod_bare2.setEnabled(true);
+                cod_bare2.requestFocus();
+                BtnManual.setText("Adauga codul");
                 break;
-            case "Scaneaza codul":
-                EditTextCodQRManual.setEnabled(true);
-                EditTextCodQR.setEnabled(true);
-                EditTextCodQR.requestFocus();
-                BtnManual.setText("Introduc manual codul");
+            case "Adauga codul":
+                if(cod_bare2.length()<1){
+                    cod_bare2.getText().clear();
+
+                }
+                else{
+                    cod_bare1.setText(cod_bare2.getText().toString());
+                    cod_bare2.setText("");
+                    BtnManual.setText("Introduc manual codul");
+                    cod_bare1.requestFocus();
+                }
                 break;
         }
     }
