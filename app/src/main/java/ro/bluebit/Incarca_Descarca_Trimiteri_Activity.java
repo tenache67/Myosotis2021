@@ -94,7 +94,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cod_bare2= findViewById(R.id.cod_bare2);
         cod_bare2.setEnabled(false);
         cod_bare1 = findViewById(R.id.cod_bare1);
-        cod_bare1.setEnabled(false);
+        cod_bare1.setEnabled(true);
         afisareMesaj1 = findViewById(R.id.reporter1);
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
         setSupportActionBar(toolbarSimplu);
@@ -301,7 +301,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-
+        AdauganrColete();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
     }
 
     public void metodaDescarca(String sCodBare) {
@@ -325,7 +325,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-
+        AdauganrColete();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
     }
 
     public void PopulareAutocomplete() {
@@ -346,34 +346,11 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
                     cod_bare1.setEnabled(true);
                     cod_bare1.requestFocus();
                     AdauganrColete();
-                    //  alertMesajValidari("oooooo", "nuuuuu");
+
 
                 }
             }
         });
-//        PunctDeLucru.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//               // numarPacheteDeDescarcat();
-//                Object item = adapterView.getItemAtPosition(i);
-//                if (item != null) {
-//                    alertMesajValidari("1", "2" );
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//           alertMesajValidari("5","5");
-//            }
-//        });
-
-        //  afisezNrColete();
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//spinner.setAdapter(adapter);
-
-//        cod_bare1.setEnabled(true);
-//        cod_bare1.requestFocus();
-
     }
 
     public int get_id_P_Lucru() {
