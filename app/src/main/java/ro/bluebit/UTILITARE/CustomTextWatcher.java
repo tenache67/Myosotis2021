@@ -18,6 +18,7 @@ public class CustomTextWatcher implements TextWatcher {
     TextView afisareMesaj;
     BazaAppCompat Activitate;
     String preiaCodBare;
+
     public CustomTextWatcher(EditText codBare, TextView afisareMesaj,String preiaCodBare, BazaAppCompat activitate) {
         this.codBare = codBare;
         this.afisareMesaj = afisareMesaj;
@@ -39,19 +40,25 @@ public class CustomTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(final Editable editable) {
-        if (editable.length()==0)
+        if (editable.length()==0){
+            editable.clear();
             afisareMesaj.setText("Nu ai introdus nici o cifra");
-        else if (editable.length()<=7)
-            afisareMesaj.setText("Codul introdus are mai putin de 8 caractere ");
-        
+        }
+        else if (editable.length()<=9){
+            editable.clear();
+            afisareMesaj.setText("Codul introdus are mai putin de 10 caractere ");
+        }
         else
-        if (editable.length()>=8 ) {
+        if (editable.length()==10 ) {
             preiaCodBare = codBare.getText().toString();
             afisareMesaj.setText(preiaCodBare);
             Activitate.executalacodvalid(preiaCodBare);
 
         }
 
+        else if (editable.length()>10){
+            editable.clear();
+            afisareMesaj.setText("Codul introdus are mai mult de 10 caractere ");
+        }
     }
 }
-
