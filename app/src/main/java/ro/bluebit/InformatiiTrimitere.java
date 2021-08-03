@@ -1,11 +1,13 @@
 package ro.bluebit;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;

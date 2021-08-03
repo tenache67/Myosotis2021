@@ -1,38 +1,59 @@
 package ro.bluebit;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.Toolbar;
+
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.SparseArray;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import java.io.IOException;
+import java.security.Timestamp;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
+import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
 import static java.lang.Long.parseLong;
 
 public class ActivitateTrimitereNoua extends BazaAppCompat {
-    EditText EditTextCodQR;
+    EditText EditTextCodQR,EditTextCodQRManual;
     TextView afisareMesaj;
     String PreiaCodBare;
+    Button BtnManual;
     CameraSource cameraSource;
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
@@ -41,13 +62,12 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogicaVerificari.executaSincroNomenc(this) ;
-        LogicaVerificari.executaSincroTrimiteri(this);
-        LogicaVerificari.executaSincroRecTrimiteri(this);
-
         setContentView(R.layout.layout_scaneaza_cod_bare);
         EditTextCodQR = findViewById(R.id.cod_bare);
+        EditTextCodQRManual = findViewById(R.id.edittext_codbare_manual);
+        BtnManual = findViewById(R.id.btn_cod_manual);
         afisareMesaj = findViewById(R.id.reporter);
+        EditTextCodQRManual.setEnabled(false);
         //surfaceView=findViewById(R.id.camerapreview);
 
         Toolbar toolbarSimplu = findViewById(R.id.toolbarSimplu);
@@ -59,25 +79,27 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         Toast.makeText(this, getIntent().getExtras().getString("UTILIZATOR"), Toast.LENGTH_SHORT).show();
 
         EditTextCodQR.addTextChangedListener(customTextWatcher);
-
+        EditTextCodQRManual.addTextChangedListener(customTextWatcher);
         //String sSqlCmd = "SELECT " + Constructor.TabAntetLegaturi.COL_2 + " FROM " + Constructor.TabAntetLegaturi.NUME_TABEL +
         //                " WHERE " + Constructor.TabAntetLegaturi.COL_3 + " = " + codTV.getText().toString();
 
     }
-
-    @Override
-    public void executalaHttpResponse(String sScop,String sRaspuns) {
-        super.executalaHttpResponse(sScop,sRaspuns);
-        DatabaseHelper myDb= new DatabaseHelper(this);
-        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
-            // sincrinizare date ce vin din din server
-            Log.d(sScop,"start");
-            myDb.sincronizare_trimiteri(sRaspuns);
-        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
-            // sincronizare date create in aparat
-            myDb.sincronizare_receptie(sRaspuns);
+    public void ClickManual(View view){
+        switch (BtnManual.getText().toString()){
+            case"Introduc manual codul":
+                EditTextCodQR.setEnabled(false);
+                EditTextCodQRManual.setEnabled(true);
+                EditTextCodQRManual.requestFocus();
+                BtnManual.setText("Scaneaza codul");
+                break;
+            case"Scaneaza codul":
+                EditTextCodQRManual.setEnabled(true);
+                EditTextCodQR.setEnabled(true);
+                EditTextCodQR.requestFocus();
+                BtnManual.setText("Introduc manual codul");
+                break;
         }
-        //      stergeRaspuns(sScop);
+
     }
 
     public void IntroducereCodQR() {
@@ -121,15 +143,22 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     public void executalacodvalid(String sCodBare) {
         super.executalacodvalid(sCodBare);
+        if( EditTextCodQR.isEnabled()==true) {
+            sCodBare = EditTextCodQR.getText().toString();
+        }else {
+            sCodBare = EditTextCodQRManual.getText().toString();
+        }
         Toast.makeText(this, "Valoarea primita " + sCodBare, Toast.LENGTH_SHORT).show();
         DatabaseHelper myDb = new DatabaseHelper(this);
         SQLiteDatabase db = myDb.getWritableDatabase();
 
 
         //inlaturarea zerourilor din sirul de caractere
-        String codBareFaraZerouri = LogicaVerificari.RemoveZero(sCodBare);
+        //String codBareFaraZerouri = LogicaVerificari.RemoveZero(sCodBare);
+        String codBareFaraZerouri = sCodBare;
         //transformarea sirului de caractere in long
-        long codBareScurt = parseLong(codBareFaraZerouri);
+        //long codBareScurt = parseLong(codBareFaraZerouri);
+        long codBareScurt = parseLong(sCodBare);
         //verificare existenta in plaja de coduri
         boolean existInPlajaCoduri = LogicaVerificari.verificareExistentaInPlajaDeCoduri(db, codBareScurt);
         //transformarea in long a sirului da caractere din edittext
@@ -156,7 +185,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             String ag = EditTextCodQR.getText().toString().trim();
             intent.putExtra("CodBare", sCodBare);
             intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
-            startActivityForResult(intent,0);
+            startActivity(intent);
             EditTextCodQR.setText("");
         }
         else {
@@ -228,14 +257,6 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
     @Override
     protected void onRestart() {
         super.onRestart();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        LogicaVerificari.executaSincroNomenc(this) ;
-        LogicaVerificari.executaSincroTrimiteri(this);
-        LogicaVerificari.executaSincroRecTrimiteri(this);
     }
 }
 // SCANNER COD BARE
