@@ -89,7 +89,7 @@ public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
                 BtnManual.setText("Scaneaza codul");
                 break;
             case "Scaneaza codul":
-                EditTextCodQRManual.setEnabled(false);
+                EditTextCodQRManual.setEnabled(true);
                 EditTextCodQR.setEnabled(true);
                 EditTextCodQR.requestFocus();
                 BtnManual.setText("Introduc manual codul");
