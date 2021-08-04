@@ -1,13 +1,11 @@
 package ro.bluebit;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +21,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 
-import org.json.JSONException;
-
-import java.io.IOException;
-
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
-import ro.bluebit.Database.MySQLHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 import ro.bluebit.Diverse.Siruri;
-import ro.bluebit.phpmysql.RaspunsRamuraIncDesc;
 
 import static java.lang.Long.parseLong;
 
@@ -115,13 +105,13 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     public void AdauganrColete(){
         if (cod_bare1.isEnabled()){
             numarpachete.setText("Noooo");
-            numarPacheteDeDescarcat();
+            NumarPacheteDeDescarcat();
         }
         else  alertMesajValidari("oooooo", "nuuuuu, eroare de numarare");
 
     }
 
-    public void numarPacheteDeDescarcat(){
+    public void NumarPacheteDeDescarcat(){
         myDb = new DatabaseHelper(Incarca_Descarca_Trimiteri_Activity.this);
         SQLiteDatabase db = myDb.getReadableDatabase();
         int numar=get_id_P_Lucru();
@@ -153,6 +143,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
                         }
                         break;
                 }
+                NumarPacheteDeDescarcat();
             }
         });
     }
@@ -290,18 +281,18 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 3);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, get_id_P_Lucru());
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI, abc);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_UTILIZATOR, id_utilizator);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_TIP, 3);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, get_id_P_Lucru());
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
         db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
         db.endTransaction();
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-        AdauganrColete();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
+        NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
     }
 
     public void metodaDescarca(String sCodBare) {
@@ -312,11 +303,11 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR, id_utilizator);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI, abc);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP, 4);
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU, get_id_P_Lucru());
-        cval.put(Constructor.Tabela_Incarc_Descarc.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_UTILIZATOR, id_utilizator);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI, abc);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_TIP, 4);
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, get_id_P_Lucru());
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
 
         db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
@@ -325,7 +316,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-        AdauganrColete();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
+        NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
     }
 
     public void PopulareAutocomplete() {
@@ -345,7 +336,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
                 if (item==selectedItem){
                     cod_bare1.setEnabled(true);
                     cod_bare1.requestFocus();
-                    AdauganrColete();
+                    NumarPacheteDeDescarcat();
 
 
                 }
