@@ -1,7 +1,5 @@
 package ro.bluebit;
 
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,11 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
-
-import static java.lang.Long.parseLong;
 
 public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
 
@@ -38,7 +36,7 @@ public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
         toolbarSimplu.setSubtitle("Scaneaza codul de bare:");
         CustomTextWatcher customTextWatcher = new CustomTextWatcher(cod_bare1,afisareMesaj, PreiaCodBare, this);
         cod_bare1.addTextChangedListener(customTextWatcher);
-        cod_bare2.addTextChangedListener(customTextWatcher);
+//        cod_bare2.addTextChangedListener(customTextWatcher);
 
     }
 

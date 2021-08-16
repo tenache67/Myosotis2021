@@ -1,8 +1,5 @@
 package ro.bluebit;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -192,7 +193,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             String ag = cod_bare1.getText().toString().trim();
             intent.putExtra("CodBare", sCodBare);
             intent.putExtra("UTILIZATOR", getIntent().getExtras().getString("UTILIZATOR"));
-            startActivity(intent);
+            startActivityForResult(intent,1);
             cod_bare1.setText("");
         }
         else {
@@ -201,6 +202,17 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
             vibration();
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // sincronizare
+//            LogicaVerificari.executaSincroNomenc(this) ;
+        LogicaVerificari.executaSincroTrimiteri(this);
+        LogicaVerificari.executaSincroRecTrimiteri(this);
+
+    }
+
     public void alertMesajValidari(String title, String alert) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage(alert);

@@ -330,8 +330,25 @@ public class LogicaVerificari {
         return format.format(data);
     }
 
+    public static String sincronizare_miscari(SQLiteDatabase db) {
+        String sExport="";
+        try {
+            // se selecteaza doar poz din miscari care nu au corespondent in timiteri_alt adica sunt miscari la antete mai vechi
+            String sCmd="SELECT tid.* FROM " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL + " tid "+
+                    " where  tid." +Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI+
+                    " not in (select "+Constructor.Tabela_Antet_Trimiteri_Alt.COL_ID_ANTET_TRIMITERI+" from "+
+                    Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL+ " ) " ;
+            Cursor crs = db.rawQuery(sCmd, null);
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+        }catch (Exception e) {
+            String sMes = e.getMessage();
+        }
+        return sExport;
+    }
+
     // sincronizare tabele ce compun o incarcare
-    public static String sincronizare_incarcare (SQLiteDatabase db) {
+    public static String sincronizare_trimiteri(SQLiteDatabase db) {
         // se extrag cursoarele pt tabele
         String sExport="";
         sExport=sExport+"DROP TEMPORARY TABLE IF EXISTS tmp_"+Constructor.Tabela_Antet_Trimiteri.NUME_TABEL +" ;"+ Siruri.CR+Siruri.LF;
@@ -361,7 +378,12 @@ public class LogicaVerificari {
             String sMes = e.getMessage();
         }
         try {
-            Cursor crs = db.rawQuery("SELECT * FROM " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null);
+            // se selecteaza doar pozitiile din miscari care apartin unui antet ( sunt legate de trimiterile nou create )
+            String sCmd="SELECT tid.* FROM " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL + " tid "+" inner join " +
+                    Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL+ " tat  on tid."+
+                    Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI +"="+" tat."+
+                    Constructor.Tabela_Antet_Trimiteri_Alt.COL_ID_ANTET_TRIMITERI ;
+            Cursor crs = db.rawQuery(sCmd, null);
             sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
@@ -472,9 +494,13 @@ public class LogicaVerificari {
     //
     // aici se fac toate sincronizarile necesare
     public static void executaSincroTrimiteri (BazaAppCompat activity) {
-        // sincronizare incarcari descarcari
+        // sincronizare   trimiteri noi
         DatabaseHelper myDb = new DatabaseHelper(activity);
-        String sQuery = LogicaVerificari.sincronizare_incarcare(myDb.getReadableDatabase());
+        String sQuery = LogicaVerificari.sincronizare_trimiteri(myDb.getReadableDatabase());
+        executaSincro("test_multiquery.php", sQuery, "SINCRONIZARE_TRIMITERI",activity);
+        // sincronizare miscari ( inc desc )
+        sQuery = LogicaVerificari.sincronizare_miscari(myDb.getReadableDatabase());
+        myDb.close();
         executaSincro("test_multiquery.php", sQuery, "SINCRONIZARE_TRIMITERI",activity);
 
     }
@@ -497,6 +523,7 @@ public class LogicaVerificari {
             sQuery = "CALL get_new('" + Constructor.Tabela_Incarc_Descarc.NUME_TABEL + "','" + sLastTime + "')";
             executaSincro("test_multiquery.php", sQuery, sScop,activity);
         }
+        myDb.close();
     }
     public static int getExistentaIncDesc(SQLiteDatabase db, String codBare) {
         String selecteazId = (" select " +
