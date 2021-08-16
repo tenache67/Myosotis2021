@@ -208,7 +208,7 @@ public class TrimitereNouaDupaCompletareCodQR extends BazaAppCompat {
 
         final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase db = myDb.getWritableDatabase();
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
+        int abc = LogicaVerificari.getId_Antet_Trimiteri_alt(db, sCodBare);
         db.beginTransaction();
 
         ContentValues cval = new ContentValues();

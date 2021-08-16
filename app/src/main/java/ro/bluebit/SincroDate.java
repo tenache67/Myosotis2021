@@ -1,6 +1,7 @@
 package ro.bluebit;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import ro.bluebit.Database.MySQLHelperAlt;
@@ -33,6 +34,9 @@ public  class SincroDate extends AsyncTask <String, Integer,String>
         Log.d("SINCRO","Ininte de sincro");
         try {
             sRez= MySQLHelperAlt.postRequest(sPhp, sQuery,sScop);
+            String filePath = Environment.DIRECTORY_DOWNLOADS + "/logcat.txt";
+
+            Runtime.getRuntime().exec(new String[]{"logcat", "-f", filePath, sScop+" "+sPhp+"  "+sQuery, "*:S"});
         } catch (Exception e) {
             Log.d("SINCRO","Eroare "+e.getMessage());
             sRez="FAIL";
@@ -47,7 +51,12 @@ public  class SincroDate extends AsyncTask <String, Integer,String>
     protected void onPostExecute(String result) {
         activity.executalaHttpResponse(sScop,result);
     }
- }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+    }
+}
 //
 //
 //public  class DownloadFilesTask extends AsyncTask<URL, Integer, Long> {

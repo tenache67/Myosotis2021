@@ -21,7 +21,7 @@ import ro.bluebit.UTILITARE.LogicaVerificari;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static int VERSIUNE_BAZA_DE_DATE =71;
+    public final static int VERSIUNE_BAZA_DE_DATE =74;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, Constructor.DATABASE_NAME, null, VERSIUNE_BAZA_DE_DATE);
@@ -470,8 +470,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }.getType();
         try {
             lLista = g.fromJson(sRaspuns, tipLista);
-            if (lLista.size() != 0) {
-                String sRez = ((LinkedTreeMap) lLista.get(0)).get("rez").toString();
+            // am scos conditia de stergere din alt
+            if ( true || (lLista.size() != 0)) {
+ //               String sRez = ((LinkedTreeMap) lLista.get(0)).get("rez").toString();
+                String sRez="OK";
                 if (sRez.equals("OK")) {
                     SQLiteDatabase db = this.getWritableDatabase();
                     db.beginTransaction();
