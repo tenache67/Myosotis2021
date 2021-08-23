@@ -475,6 +475,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
  //               String sRez = ((LinkedTreeMap) lLista.get(0)).get("rez").toString();
                 String sRez="OK";
                 if (sRez.equals("OK")) {
+
                     SQLiteDatabase db = this.getWritableDatabase();
                     db.beginTransaction();
                     String sCmd="";

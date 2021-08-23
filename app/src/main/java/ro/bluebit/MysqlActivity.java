@@ -32,11 +32,11 @@ public class MysqlActivity extends BazaAppCompat  {
     String sQuery = "SELECT nume_salariat, prenume_salariat FROM salariati";
 
 
-    @Override
-    public void executalaHttpResponse(String sScop,String sRaspuns) {
-        super.executalaHttpResponse(sScop,sRaspuns);
-
-    }
+//    @Override
+//    public void executalaHttpResponse(String sScop,String sRaspuns) {
+//        super.executalaHttpResponse(sScop,sRaspuns);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {

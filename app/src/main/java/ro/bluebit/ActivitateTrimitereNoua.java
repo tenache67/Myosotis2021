@@ -1,5 +1,7 @@
 package ro.bluebit;
 
+import static java.lang.Long.parseLong;
+
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,10 +27,9 @@ import java.util.ArrayList;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.Diverse.Siruri;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
-
-import static java.lang.Long.parseLong;
 
 public class ActivitateTrimitereNoua extends BazaAppCompat {
     EditText cod_bare1, cod_bare2;
@@ -208,6 +209,7 @@ public class ActivitateTrimitereNoua extends BazaAppCompat {
         super.onActivityResult(requestCode, resultCode, data);
         // sincronizare
 //            LogicaVerificari.executaSincroNomenc(this) ;
+        Siruri.scrieFisLog("logSincroDate.txt","EXECUTA SINRO DUPA TRIMITERE NOUA",this);
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
 

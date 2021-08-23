@@ -449,14 +449,15 @@ public class LogicaVerificari {
     }
 
     public static void executaSincro(String sPhp, String sQuery, String sScope, BazaAppCompat activity) {
-        SincroDate sincro =  new SincroDate(activity);
-        try {
-            sincro.execute(sPhp, sQuery, sScope);
-        } catch ( Exception e ) {
-            String sMes=e.getMessage();
+        if (!sQuery.isEmpty()) {
+            SincroDate sincro = new SincroDate(activity);
+            try {
+                sincro.execute(sPhp, sQuery, sScope, Integer.toString(activity.getnRand()));
+            } catch (Exception e) {
+                String sMes = e.getMessage();
+            }
+            //      ("test_multiquery.php",sQuery,"SINCRONIZARE_TRIMITERI");
         }
-        //      ("test_multiquery.php",sQuery,"SINCRONIZARE_TRIMITERI");
-
     }
     public static void executaSincroNomenc (BazaAppCompat activity) {
         // sincronizare date de nomenclator

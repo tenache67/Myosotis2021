@@ -10,13 +10,19 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import ro.bluebit.BazaAppCompat;
+import ro.bluebit.Diverse.Siruri;
 
 public class MySQLHelperAlt {
 
         public static String postRequest(final String sPhp, final String sQuery)  {
-            return postRequest(sPhp,sQuery,"QUERY");
+            return postRequest(sPhp,sQuery,"QUERY","",null);
         }
         public static String postRequest(final String sPhp, final String sQuery, final String sScop)  {
+            return postRequest(sPhp,sQuery,"QUERY","",null);
+        }
+        public static String postRequest(final String sPhp, final String sQuery, final String sScop,
+                                         final String sIndex, final BazaAppCompat activity)  {
             String sRez="";
         String url = "https://www.farmaciilemyosotis.ro:443/s/deschidere_sesiune.php";
         OkHttpClient client = new OkHttpClient();
@@ -29,7 +35,9 @@ public class MySQLHelperAlt {
         try {
             Response response = client.newCall(request).execute();
             Cookie cCookie = Cookie.parse(request.url(), response.headers("set-cookie").toString());
+            Siruri.scrieFisLog("logSincroDate.txt","    TRIMITE QUERY :"+sIndex,activity);
             sRez=getHttpResponse(cCookie.value(), sQuery , sPhp,sScop);
+            Siruri.scrieFisLog("logSincroDate.txt","    DUPA QUERY :"+sIndex,activity);
         } catch ( Exception e) {
             Log.d("Eroare post http:",e.getMessage());
             sRez="[{\"rez\":\"FAIL\"}]";

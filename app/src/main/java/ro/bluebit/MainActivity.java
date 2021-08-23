@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -17,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.Diverse.Siruri;
 import ro.bluebit.UTILITARE.LogicaVerificari;
 import ro.bluebit.UTILITARE.SelectieInitialaActivity;
 
@@ -27,25 +27,29 @@ public class MainActivity extends BazaAppCompat {
     DatabaseHelper myDb;
    public AutoCompleteTextView PunctDeLucru;
 
-    @Override
-    public void executalaHttpResponse(String sScop,String sRaspuns) {
-        super.executalaHttpResponse(sScop,sRaspuns);
-        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
-            // sincrinizare date ce vin din din server
-            Log.d(sScop,"start");
-            myDb.sincronizare_trimiteri(sRaspuns);
-        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
-            // sincronizare date create in aparat
-            myDb.sincronizare_receptie(sRaspuns);
-        }
-  //      stergeRaspuns(sScop);
-    }
+
+ //   @Override
+//    public void executalaHttpResponse(String sScop,String sRaspuns) {
+//        super.executalaHttpResponse(sScop,sRaspuns);
+//        DatabaseHelper Db = new DatabaseHelper(this);
+//        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
+//            // sincrinizare date ce vin din din server
+//            Log.d(sScop,"start");
+//            Db.sincronizare_trimiteri(sRaspuns);
+//        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
+//            // sincronizare date create in aparat
+//            Db.sincronizare_receptie(sRaspuns);
+//        }
+//  //      stergeRaspuns(sScop);
+//    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Siruri.scrieFisLog("logSincroDate.txt","START PROGRAM",this);
         myDb = new DatabaseHelper(this);
+
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);

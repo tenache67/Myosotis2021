@@ -1,5 +1,6 @@
 package ro.bluebit.Diverse;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -7,6 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -16,6 +21,9 @@ public class Siruri {
     public final static char CR  = (char) 0x0D;
     public final static char LF  = (char) 0x0A;
 
+    public static String getCRLF() {
+        return "\r\n";
+    }
     // genereaza un sir pt folosit la functii
     public static String pad(){
         return "          "+"          "+"          "+"          "+"          "+"          "+
@@ -175,6 +183,31 @@ public class Siruri {
         }
         crs.close(); // close the cursor
         return arr.toString();
+    }
+
+    // creeaza sau adauga la un fis text
+    public static void scrieFisLog(String sFisier, String sText, Context context) {
+        if (context!=null) {
+            String sInsert =
+                    Siruri.ttos(Siruri.getDateTime()) + " " +
+                            sText + Siruri.getCRLF();
+
+            try {
+                FileOutputStream fdi = context.openFileOutput(sFisier, Context.MODE_APPEND);
+                //FileOutputStream fdi=openFileOutput(fisier,MODE_PRIVATE );
+                fdi.write(sInsert.getBytes());
+                fdi.close();
+                File fileDir = new File(context.getFilesDir(), sFisier);
+                fileDir.toString();
+                // Toast.makeText( this,"Fisier salvat in :" +fileDir , Toast.LENGTH_LONG);
+                //afisezLoculSalvarii.setText("Fisier salvat in :" +fileDir );
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package ro.bluebit;
 
+import static java.lang.Long.parseLong;
+
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,7 +9,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,14 +21,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-
 import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
+import ro.bluebit.Diverse.Siruri;
 import ro.bluebit.UTILITARE.CustomTextWatcher;
 import ro.bluebit.UTILITARE.LogicaVerificari;
-import ro.bluebit.Diverse.Siruri;
-
-import static java.lang.Long.parseLong;
 
 // import com.google.
 // actualizat activitatea de logare
@@ -41,19 +39,19 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     AutoCompleteTextView PunctDeLucru;
     Button btn_adaug_manual;
     EditText cod_bare2;
-    @Override
-    public void executalaHttpResponse(String sScop,String sRaspuns) {
-        super.executalaHttpResponse(sScop,sRaspuns);
-        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
-            // sincrinizare date ce vin din din server
-            Log.d(sScop,"start");
-            myDb.sincronizare_trimiteri(sRaspuns);
-        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
-            // sincronizare date create in aparat
-            myDb.sincronizare_receptie(sRaspuns);
-        }
-        //      stergeRaspuns(sScop);
-    }
+//    @Override
+//    public void executalaHttpResponse(String sScop,String sRaspuns) {
+//        super.executalaHttpResponse(sScop,sRaspuns);
+//        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
+//            // sincrinizare date ce vin din din server
+//            Log.d(sScop,"start");
+//            myDb.sincronizare_trimiteri(sRaspuns);
+//        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
+//            // sincronizare date create in aparat
+//            myDb.sincronizare_receptie(sRaspuns);
+//        }
+//        //      stergeRaspuns(sScop);
+//    }
 
 
     @Override

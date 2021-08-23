@@ -1,10 +1,10 @@
 package ro.bluebit;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
 import ro.bluebit.Database.MySQLHelperAlt;
+import ro.bluebit.Diverse.Siruri;
 
 public  class SincroDate extends AsyncTask <String, Integer,String>
 //    implements BazaInterfataAppCompat
@@ -14,6 +14,7 @@ public  class SincroDate extends AsyncTask <String, Integer,String>
     // pe 1 - sirul de query
 //     pe 2 - scop
     String sScop="";
+    String sIdSesiune ;
     private BazaAppCompat activity ;
     public SincroDate (BazaAppCompat activity) {
         this.activity=activity ;
@@ -30,15 +31,20 @@ public  class SincroDate extends AsyncTask <String, Integer,String>
         String sPhp =params[0];
         String sQuery=params[1];
         sScop=params[2];
+        sIdSesiune=params[3];
         String sRez="";
+        String sText=sPhp+Siruri.getCRLF()+sQuery;
         Log.d("SINCRO","Ininte de sincro");
         try {
-            sRez= MySQLHelperAlt.postRequest(sPhp, sQuery,sScop);
-            String filePath = Environment.DIRECTORY_DOWNLOADS + "/logcat.txt";
+            Siruri.scrieFisLog("logSincroDate.txt","SINCRO START "+sIdSesiune,activity);
+            Siruri.scrieFisLog("logSincroDate.txt","    "+sScop+Siruri.getCRLF()+sText,activity);
+            sRez= MySQLHelperAlt.postRequest(sPhp, sQuery,sScop,sIdSesiune,activity);
+            Siruri.scrieFisLog("logSincroDate.txt","    DUPA POSTREUEST "+sIdSesiune,activity);
 
-            Runtime.getRuntime().exec(new String[]{"logcat", "-f", filePath, sScop+" "+sPhp+"  "+sQuery, "*:S"});
         } catch (Exception e) {
             Log.d("SINCRO","Eroare "+e.getMessage());
+            Siruri.scrieFisLog("logSincroDate.txt","    EROARE "+sIdSesiune+" "+sScop+Siruri.getCRLF()+e.getMessage()+Siruri.getCRLF()+
+                    sText,activity);
             sRez="FAIL";
             e.printStackTrace();
         }
@@ -49,12 +55,16 @@ public  class SincroDate extends AsyncTask <String, Integer,String>
 
     @Override
     protected void onPostExecute(String result) {
+        Siruri.scrieFisLog("logSincroDate.txt","    RASPUNS "+sIdSesiune+Siruri.getCRLF()+result,activity);
+        Siruri.scrieFisLog("logSincroDate.txt","FINAL "+sIdSesiune,activity);
         activity.executalaHttpResponse(sScop,result);
     }
 
     @Override
     protected void onCancelled() {
+
         super.onCancelled();
+        Siruri.scrieFisLog("logSincroDate.txt","    EXECUTIE OPRITA "+sIdSesiune,activity);
     }
 }
 //
