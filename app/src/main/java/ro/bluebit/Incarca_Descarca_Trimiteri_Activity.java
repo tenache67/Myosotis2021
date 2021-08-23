@@ -39,19 +39,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     AutoCompleteTextView PunctDeLucru;
     Button btn_adaug_manual;
     EditText cod_bare2;
-//    @Override
-//    public void executalaHttpResponse(String sScop,String sRaspuns) {
-//        super.executalaHttpResponse(sScop,sRaspuns);
-//        if (sScop.equals("SINCRONIZARE_TRIMITERI")) {
-//            // sincrinizare date ce vin din din server
-//            Log.d(sScop,"start");
-//            myDb.sincronizare_trimiteri(sRaspuns);
-//        } else if (sScop.equals("SINCRONIZARE_RECEPTIE")) {
-//            // sincronizare date create in aparat
-//            myDb.sincronizare_receptie(sRaspuns);
-//        }
-//        //      stergeRaspuns(sScop);
-//    }
+
 
 
     @Override
@@ -102,8 +90,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 
     public void AdauganrColete(){
         if (cod_bare1.isEnabled()){
-            numarpachete.setText("Noooo");
-            NumarPacheteDeDescarcat();
+            numarpachete.setText("momentan in lucru");
+
         }
         else  alertMesajValidari("oooooo", "nuuuuu, eroare de numarare");
 
@@ -290,7 +278,8 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-        NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
+       // NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
+        AdauganrColete();
     }
 
     public void metodaDescarca(String sCodBare) {

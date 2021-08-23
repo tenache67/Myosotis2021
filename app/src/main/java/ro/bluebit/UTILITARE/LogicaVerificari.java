@@ -340,7 +340,7 @@ public class LogicaVerificari {
                     Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL+ " ) " ;
             Cursor crs = db.rawQuery(sCmd, null);
             if (crs.getCount()>0)
-                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+                sExport =sExport+ getSqlInsertDinCursor(Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
@@ -529,11 +529,8 @@ public class LogicaVerificari {
     public static int getExistentaIncDesc(SQLiteDatabase db, String codBare) {
         String selecteazId = (" select " +
 
-                "tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + ", " +
-
-                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI + ", " +
                 "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_TIP + ", " +
-                "tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_DATA +
+                "max("+"tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_DATA +") as dataora "+
 
                 " from " +
                 Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as " + "tat" +
