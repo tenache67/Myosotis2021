@@ -334,7 +334,13 @@ public class LogicaVerificari {
         String sExport="";
         try {
             // se selecteaza doar poz din miscari care nu au corespondent in timiteri_alt adica sunt miscari la antete mai vechi
-            String sCmd="SELECT tid.* FROM " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL + " tid "+
+            String sCmd="SELECT "+
+                    "tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+","+
+                    "tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_TIP+","+
+                    "tid."+Constructor.Tabela_Incarc_Descarc.COL_DATA+","+
+                    "tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU+","+
+                    "tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_UTILIZATOR+
+                " FROM " + Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL + " tid "+
                     " where  tid." +Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI+
                     " not in (select "+Constructor.Tabela_Antet_Trimiteri_Alt.COL_ID_ANTET_TRIMITERI+" from "+
                     Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL+ " ) " ;
