@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
             mImageView = itemView.findViewById(R.id.imageview_id);
             mLinieTextView = itemView.findViewById(R.id.TextViewRecycler_id);
             ChenarLayout = itemView.findViewById(R.id.chenarlayout_id);
+
 
         }
     }

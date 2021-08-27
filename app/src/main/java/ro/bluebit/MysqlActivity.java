@@ -1,11 +1,14 @@
 package ro.bluebit;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 
@@ -24,6 +27,8 @@ public class MysqlActivity extends BazaAppCompat  {
     private EditText usernameField, passwordField;
     private TextView status, role, method;
     TextView afisareIdSesiune;
+    EditText ParolaActivity;
+    Button btnOK;
 
     OkHttpClient client = new OkHttpClient();
     public String url = "https://reqres.in/api/users/2";
@@ -48,7 +53,33 @@ public class MysqlActivity extends BazaAppCompat  {
         loadApi = (Button) findViewById(R.id.loadApi);
         postReq = (Button) findViewById(R.id.postReq);
         afisareIdSesiune=findViewById(R.id.afisare_sesiune_id);
+        ParolaActivity = findViewById(R.id.ParolaActivity);
+        btnOK = findViewById(R.id.button2);
+        usernameField.setEnabled(false);
+        passwordField.setEnabled(false);
+        loadApi.setEnabled(false);
+        postReq.setEnabled(false);
+        afisareIdSesiune.setEnabled(false);
 
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ParolaActivity.getText().toString().equals("Blue1234Bit")){
+                    usernameField.setEnabled(true);
+                    passwordField.setEnabled(true);
+                    loadApi.setEnabled(true);
+                    postReq.setEnabled(true);
+                    afisareIdSesiune.setEnabled(true);
+                    ParolaActivity.setVisibility(View.GONE);
+                    btnOK.setVisibility(View.GONE);
+                    /*ParolaActivity.setVisibility(View.INVISIBLE);
+                    btnOK.setVisibility(View.INVISIBLE);*/
+                }else{
+
+                }
+
+            }
+        });
 
         loadApi.setOnClickListener(new View.OnClickListener() {
             @Override
