@@ -13,7 +13,7 @@ import ro.bluebit.Database.Constructor;
 import ro.bluebit.Database.DatabaseHelper;
 
 public class InformatiiTrimitere extends BazaAppCompat {
-    TextView Expeditor,Destinatar,Prioritate,Condspec;
+    TextView Expeditor,Destinatar,Prioritate,Condspec,LocatieActualaTV;
 
 
     @Override
@@ -27,6 +27,7 @@ public class InformatiiTrimitere extends BazaAppCompat {
         Destinatar = findViewById(R.id.Info_destinatar_id);
         Prioritate = findViewById(R.id.Info_prioritate_id);
         Condspec = findViewById(R.id.Info_conditii_id);
+        LocatieActualaTV=findViewById(R.id.TVLocatieActuala);
         selectieexp();
     }
     public void selectieexp() {
@@ -129,6 +130,23 @@ public class InformatiiTrimitere extends BazaAppCompat {
         Condspec.setText(DenumireConditii);
         crs9.close();
 
+        String selectLocatiePLUCRUActuala = "Select "+ Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU+","+Constructor.Tabela_Incarc_Descarc.COL_DATA +" from "+ Constructor.Tabela_Incarc_Descarc.NUME_TABEL+ " where " + Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+"="+id_antet_preluat+ " order by dataora limit 1";
+        Cursor crs10 = db.rawQuery(selectLocatiePLUCRUActuala, null);
+        crs10.moveToFirst();
+        //String LocatieActuala = crs10.getString(crs10.getColumnIndex(Constructor.Tabela_Tipuri.COL_DENUMIRE));
+        String idPLucruLocatieActuala = crs10.getString(crs10.getColumnIndex(Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU));
+        //LocatieActualaTV.setText(LocatieActuala);
+        crs10.close();
+        //select id_p_lucru,dataora from tabela_incarc_descarc where id_antet_trimiteri=170 order by dataora desc limit 1
+        //
+        //select denumire from tabela_P_Lucru where id_p_lucru = 1001
+
+        String selectLocatieActuala = "Select denumire from tabela_P_Lucru where id_p_lucru="+idPLucruLocatieActuala;
+        Cursor crs11 = db.rawQuery(selectLocatieActuala,null);
+        crs11.moveToFirst();
+        String LocatieActuala = crs11.getString(crs11.getColumnIndex(Constructor.Tabela_P_Lucru.COL_DENUMIRE));
+        LocatieActualaTV.setText(LocatieActuala);
+        crs11.close();
     }
 }
 
