@@ -85,6 +85,7 @@ public class RVAdapterMain extends RecyclerView.Adapter<RVAdapterMain.ItemeViewH
                     case 2:
                         intent =  new Intent(view.getContext(), Incarca_Descarca_Trimiteri_Activity.class);
                         intent.putExtra("UTILIZATOR",((SelectieInitialaActivity) context).getIntent().getExtras().getString("UTILIZATOR"));
+                        intent.putExtra("ID_P_LUCRU",((SelectieInitialaActivity) context).getIntent().getExtras().getInt("ID_P_LUCRU"));// marian - adaugat pentru inserare in tab incarc-descarc
                         intent.putExtra("ACTIUNE","incarcare");
                         break;
                     case 3:

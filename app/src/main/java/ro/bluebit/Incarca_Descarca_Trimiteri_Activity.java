@@ -39,7 +39,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
     AutoCompleteTextView PunctDeLucru;
     Button btn_adaug_manual;
     EditText cod_bare2;
-
+    String preluareIntent;
 
 
     @Override
@@ -51,12 +51,15 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
 
         setContentView(R.layout.layout_scan_cod_bare_afisare_pachete_ramase);
         Bundle extras = getIntent().getExtras();
-        String preluareIntent = extras.getString("ACTIUNE");
+        preluareIntent = extras.getString("ACTIUNE");
         String id_utilizator = extras.getString("UTILIZATOR");
+        int id_pct_lucru_initial = extras.getInt("ID_P_LUCRU");// marian - adaugat pt inserare in tab incarc-descarc
         PunctDeLucru = findViewById(R.id.ACTV1);
         numarpachete = findViewById(R.id.TVnrObiectedeDescarcat);
         btn_adaug_manual=findViewById(R.id.BTN_introduc_manual_codul);
         adaug_manual_cod_bare();
+
+
 
 //        if (preluareIntent.equals("incarcare")) {
 //            setContentView(R.layout.layout_scaneaza_cod_bare);}
@@ -85,24 +88,32 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         }
         PopulareAutocomplete();
 
-        //     int testez=LogicaVerificari.iGetNumarDeCoduriBare(db,10);
     }
 
-    public void AdauganrColete(){
-        if (cod_bare1.isEnabled()){
-            numarpachete.setText("momentan in lucru");
-
+    //numararea pachetelor incarcate
+    public void NumarPacheteIncarcate(){
+        myDb = new DatabaseHelper(Incarca_Descarca_Trimiteri_Activity.this);
+        SQLiteDatabase db = myDb.getReadableDatabase();
+        int numar=get_id_P_Lucru();
+        int nrCodurideIncarcat= LogicaVerificari.iGetNumarDeCoduriBareDeIncarcat(db,numar);
+        if (nrCodurideIncarcat==-1 ){
+            numarpachete.setText("nu sunt colete de ridicat la punctul de lucru selectat");
         }
-        else  alertMesajValidari("oooooo", "nuuuuu, eroare de numarare");
-
+        else
+        numarpachete.setText(Integer.toString( nrCodurideIncarcat));
     }
-
+    //numararea pachetelor de descarcat
     public void NumarPacheteDeDescarcat(){
         myDb = new DatabaseHelper(Incarca_Descarca_Trimiteri_Activity.this);
         SQLiteDatabase db = myDb.getReadableDatabase();
         int numar=get_id_P_Lucru();
-        numarpachete.setText(Integer.toString( LogicaVerificari.iGetNumarDeCoduriBare(db,numar)));
-        // alertMesajValidari("oooooo", "nuuuuu");
+        int nrCodurideDescarcat=LogicaVerificari.iGetNumarDeCoduriBareDeDescarcat(db,numar);
+        if (nrCodurideDescarcat==-1){
+            numarpachete.setText("Nu sunt Colete de descarcat la punctul de lucru selectat");
+        }
+        else
+        numarpachete.setText(Integer.toString(nrCodurideDescarcat ));
+
     }
 
     public void adaug_manual_cod_bare(){
@@ -129,7 +140,17 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
                         }
                         break;
                 }
-                NumarPacheteDeDescarcat();
+                switch (preluareIntent)
+                {
+                    case "incarcare":
+                        NumarPacheteIncarcate();
+                        break;
+                    case "descarcare"  :
+                        NumarPacheteDeDescarcat();
+                        break;
+
+
+                }
             }
         });
     }
@@ -228,40 +249,53 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
             cod_bare1.setText("");
         }
         if (existInPlajaCoduri && existInAntetTrimiteri && preluareIntent.equals("incarcare")) {
-            if (existInIncarcDescarc==4) {
-                Toast.makeText(this, "Ai realizat o incarcare noua", Toast.LENGTH_LONG).show();
+            if (existInIncarcDescarc==4 ||existInIncarcDescarc==-1) {
+                Toast.makeText(this, "CODUL A FOST INCARCAT  ", Toast.LENGTH_LONG).show();
                 metodaIncarca(sCodBare);
                 cod_bare1.getText().clear();
             }
             else {
 
-                Toast.makeText(this, "Codul a mai fost incarcat", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "CODUL NU POATE FI INCARCAT/ ESTE DEJA INCARCAT", Toast.LENGTH_LONG).show();
                 cod_bare1.getText().clear();
 
             }
         }
+        //verific daca acest cod apartine puntului de lucru ca destinatar
+        boolean apartinePuntuluiDeLucru= LogicaVerificari.verificCodBareLaPUNCTULdeDescarcare(db,id_P_Lucru() );
 
         if (existInPlajaCoduri && existInAntetTrimiteri && preluareIntent.equals("descarcare")) {
-            if (existInIncarcDescarc==3) {
-                // alertMesajValidari("Cod", "Codul a  fost descarcat");
 
-                Toast.makeText(this, "codul a  fost descarcat ", Toast.LENGTH_LONG).show();
-                metodaDescarca(sCodBare);
+            if (apartinePuntuluiDeLucru || id_P_Lucru() == 9999) {
+                if (existInIncarcDescarc == 3) {
+
+                    // alertMesajValidari("Cod", "Codul a  fost descarcat");
+
+
+                    metodaDescarca(sCodBare);
+                    Toast.makeText(this, "CODUL A FOST DESCARCAT ", Toast.LENGTH_LONG).show();
+                    cod_bare1.getText().clear();
+                }
+                else
+                    alertMesajValidari("Codul nu poate fi descarcat", "Nu are ca destinatar punctul de lucru selectat, sau a fost deja descarcat");
                 cod_bare1.getText().clear();
-            }else {
-                alertMesajValidari("Atentie!", "Codul a mai fost descarcat");
-                // Toast.makeText(this, "codul a mai fost  descarcat ", Toast.LENGTH_SHORT).show();
-                cod_bare1.getText().clear();
+
             }
-
+            else   alertMesajValidari("CODUL A FOST DEJA DESCARCAT", "NU POATE FI DESCARCAT DE MAI MULTE ORI");
+            cod_bare1.getText().clear();
         }
+
+
+
+
+
 
     }
 
 
     public void metodaIncarca(String sCodBare) {
         String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-
+        int id_pct_lucru_initial =(Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getInt("ID_P_LUCRU");
         SQLiteDatabase db = myDb.getWritableDatabase();
         int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
         db.beginTransaction();
@@ -270,7 +304,7 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI, abc);
         cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_UTILIZATOR, id_utilizator);
         cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_TIP, 3);
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, get_id_P_Lucru());
+        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, id_pct_lucru_initial);// aici vine punct lucru de la logare pt insert
         cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
         db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
         db.setTransactionSuccessful();
@@ -278,32 +312,33 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-       // NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
-        AdauganrColete();
+        NumarPacheteIncarcate();
     }
 
     public void metodaDescarca(String sCodBare) {
+
         String id_utilizator = (Incarca_Descarca_Trimiteri_Activity.this).getIntent().getExtras().getString("UTILIZATOR");
-
         SQLiteDatabase db = myDb.getWritableDatabase();
-        int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
-        db.beginTransaction();
+            int abc = LogicaVerificari.getId_Antet_Trimiteri(db, sCodBare);
+            db.beginTransaction();
 
-        ContentValues cval = new ContentValues();
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_UTILIZATOR, id_utilizator);
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI, abc);
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_TIP, 4);
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, get_id_P_Lucru());
-        cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
+            ContentValues cval = new ContentValues();
+            cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_UTILIZATOR, id_utilizator);
+            cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI, abc);
+            cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_TIP, 4);
+            cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_P_LUCRU, get_id_P_Lucru());
+            cval.put(Constructor.Tabela_Incarc_Descarc_Alt.COL_DATA, Siruri.ttos(Siruri.getDateTime()));
 
-        db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        // sincronizare
-        LogicaVerificari.executaSincroNomenc(this) ;
-        LogicaVerificari.executaSincroTrimiteri(this);
-        LogicaVerificari.executaSincroRecTrimiteri(this);
-        NumarPacheteDeDescarcat();// adaugat ulterior la metoda pt a numara corect nr pachete ramase
+            db.insert(Constructor.Tabela_Incarc_Descarc_Alt.NUME_TABEL, null, cval);
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            // sincronizare
+            LogicaVerificari.executaSincroNomenc(this) ;
+            LogicaVerificari.executaSincroTrimiteri(this);
+            LogicaVerificari.executaSincroRecTrimiteri(this);
+            NumarPacheteDeDescarcat();// adaugat
+
+
     }
 
     public void PopulareAutocomplete() {
@@ -323,7 +358,17 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
                 if (item==selectedItem){
                     cod_bare1.setEnabled(true);
                     cod_bare1.requestFocus();
-                    NumarPacheteDeDescarcat();
+                   switch (preluareIntent)
+                   {
+                       case "incarcare":
+                           NumarPacheteIncarcate();
+                           break;
+                       case "descarcare"  :
+                           NumarPacheteDeDescarcat();
+                           break;
+
+
+                   }
 
 
                 }
