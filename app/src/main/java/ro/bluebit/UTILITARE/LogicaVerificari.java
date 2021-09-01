@@ -373,13 +373,15 @@ public class LogicaVerificari {
                 " SELECT * FROM "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL+" WHERE 1<>1"+" ;"+ Siruri.CR+Siruri.LF;
         try {
             Cursor crs = db.rawQuery("SELECT * FROM " + Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Antet_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Antet_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
         try {
             Cursor crs = db.rawQuery("SELECT * FROM " + Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
@@ -390,7 +392,8 @@ public class LogicaVerificari {
                     Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI +"="+" tat."+
                     Constructor.Tabela_Antet_Trimiteri_Alt.COL_ID_ANTET_TRIMITERI ;
             Cursor crs = db.rawQuery(sCmd, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
@@ -648,6 +651,7 @@ public class LogicaVerificari {
                         " where "+"tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+"="+
                         " tid"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+")"+
                         " and "+" tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+"="+id_p_lucru+
+                        " and "+" tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP+"=1 "+
                         " Union all"+
                             " select "+" id"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+
                             " from "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL + " id"+

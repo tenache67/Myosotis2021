@@ -312,7 +312,14 @@ public class Incarca_Descarca_Trimiteri_Activity extends BazaAppCompat {
         LogicaVerificari.executaSincroNomenc(this) ;
         LogicaVerificari.executaSincroTrimiteri(this);
         LogicaVerificari.executaSincroRecTrimiteri(this);
-        NumarPacheteIncarcate();
+        try {
+            if (Integer.valueOf(numarpachete.getText().toString()) > 1)
+                numarpachete.setText(Integer.valueOf(numarpachete.getText().toString()) - 1);
+        }  catch (Exception e) {
+
+        }
+        //NumarPacheteIncarcate();
+
     }
 
     public void metodaDescarca(String sCodBare) {
