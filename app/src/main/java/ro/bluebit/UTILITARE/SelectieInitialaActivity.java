@@ -50,6 +50,7 @@ public class SelectieInitialaActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         Bundle extras = getIntent().getExtras();
+        int id_pct_lucru_initial = extras.getInt("ID_P_LUCRU");// marian - am adaugat id punt lucru initial pentru inserare in tabela incarc-descarc
         String idUtilizator = extras.getString("UTILIZATOR");
 
 

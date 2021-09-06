@@ -373,13 +373,15 @@ public class LogicaVerificari {
                 " SELECT * FROM "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL+" WHERE 1<>1"+" ;"+ Siruri.CR+Siruri.LF;
         try {
             Cursor crs = db.rawQuery("SELECT * FROM " + Constructor.Tabela_Antet_Trimiteri_Alt.NUME_TABEL, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Antet_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Antet_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
         try {
             Cursor crs = db.rawQuery("SELECT * FROM " + Constructor.Tabela_Pozitii_Trimiteri_Alt.NUME_TABEL, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
@@ -390,7 +392,8 @@ public class LogicaVerificari {
                     Constructor.Tabela_Incarc_Descarc_Alt.COL_ID_ANTET_TRIMITERI +"="+" tat."+
                     Constructor.Tabela_Antet_Trimiteri_Alt.COL_ID_ANTET_TRIMITERI ;
             Cursor crs = db.rawQuery(sCmd, null);
-            sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
+            if (crs.getCount()>0)
+                sExport =sExport+ getSqlInsertDinCursor("tmp_"+Constructor.Tabela_Incarc_Descarc.NUME_TABEL,crs)+" ;"+ Siruri.CR+Siruri.LF;
         }catch (Exception e) {
             String sMes = e.getMessage();
         }
@@ -556,7 +559,7 @@ public class LogicaVerificari {
 
         Cursor cursor = db.rawQuery(selecteazId, null);
         if (cursor==null || cursor.getCount()<=0) {
-            return cursor.getColumnCount()+5;
+            return -1;
         }
 
         if (cursor != null && cursor.getCount() > 0)
@@ -565,24 +568,189 @@ public class LogicaVerificari {
         return cursor.getInt(cursor.getColumnIndexOrThrow(Constructor.Tabela_Incarc_Descarc.COL_ID_TIP));
 
     }
-    public static int iGetNumarDeCoduriBare(SQLiteDatabase db, int id_p_lucru){
+// verificarea dintre destinatar si locul descarcarii codului
+    public static boolean verificCodBareLaPUNCTULdeDescarcare(SQLiteDatabase db,int id_p_lucru){
+        String verificare =
+                "select  distinct (" +"tat"+"."+Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE + " )  as coloana " +
+                        "from (" +
+                        Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as tat" +
+                        " inner join " +
+                        Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL + " as tpt" +
+                        " on " +
+                        " tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + "=" + " tpt" + "." + Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI +
+                        " inner join " +
+                        Constructor.Tabela_Incarc_Descarc.NUME_TABEL + " as tid" +
+                        " on " +
+                        " tat" + "." + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + "=" + " tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI + ")" +
+                        " where " +
+                        " tpt" + "." + Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP + "=" + 2 +
+                        " and " +
+                        " tpt" + "." + Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU + "=" + id_p_lucru +
+                        " and " +
+                        " tid" + "." + Constructor.Tabela_Incarc_Descarc.COL_ID_TIP + "=" + 3;
+        Cursor cursor = db.rawQuery(verificare, null);
 
-        String selecteaza_id_p_lucru=
-                "select  count ("+Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+")"+ " as coloana"+
-                        " from " + Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+
-                        " where "+
-                        Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+"='"+id_p_lucru+"'"
-                ;
-        Cursor cursor =db.rawQuery(selecteaza_id_p_lucru,null);
-        if(cursor==null){
-            return cursor.getColumnCount()+8;
+        if (cursor != null && cursor.getCount() > 0)
+            return true;
+
+        else return false;
+
+    }
+
+    // numarea codurilor de bare ce pot fi incarcate
+    public static int iGetNumarDeCoduriBareDeIncarcat(SQLiteDatabase db, int id_p_lucru){
+//        SELECT tpt.id_antet_trimiteri
+//  FROM tabela_pozitii_trimiteri AS tpt
+//       INNER JOIN
+//       tabela_antet_trimiteri AS tat ON tpt.id_antet_trimiteri = tat.id_antet_trimiteri
+// WHERE NOT EXISTS (
+//               SELECT tid.id_antet_trimiteri
+//                 FROM tabela_incarc_descarc AS tid
+//                WHERE tpt.id_antet_trimiteri = tid.id_antet_trimiteri
+//           )
+//AND
+//       tpt.id_p_lucru = 61
+//UNION ALL
+//SELECT id.id_antet_trimiteri
+//  FROM tabela_incarc_descarc id
+//       INNER JOIN
+//       (
+//           SELECT tat.id_antet_trimiteri AS coloana,
+//                  max(tid.dataora) AS data_ora
+//             FROM (
+//                      tabela_antet_trimiteri AS tat
+//                      INNER JOIN
+//                      tabela_pozitii_trimiteri AS tpt
+//                      ON tat.id_antet_trimiteri = tpt.id_antet_trimiteri
+//                      INNER JOIN
+//                      tabela_incarc_descarc AS tid
+//                      ON tat.id_antet_trimiteri = tid.id_antet_trimiteri
+//                  )
+//            WHERE tpt.id_tip = 2
+//            GROUP BY tat.id_antet_trimiteri
+//            ORDER BY max(tid.dataora) DESC
+//       )
+//       AS rez ON id.dataora = rez.data_ora AND
+//                 id.id_antet_trimiteri = rez.coloana
+// WHERE id.id_tip = 4
+// and id.id_p_lucru=61;
+        String selectareCodBare=
+                "select "+
+                        " tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+
+                        " from " +
+                        Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+ " as tpt "+
+                        " inner join " +
+                        Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " as tat " +
+                        " on "+" tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+"="+
+                        " tat"+"."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+
+
+                        " WHERE NOT EXISTS ("+
+                        " select "+
+                        " tid"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+
+                        " from "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL+ "  as tid "+
+                        " where "+"tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+"="+
+                        " tid"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+")"+
+                        " and "+" tpt"+"."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+"="+id_p_lucru+
+                        " and "+" tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP+"=1 "+
+                        " Union all"+
+                            " select "+" id"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+
+                            " from "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL + " id"+
+                                " inner join ("+
+                                " select"+" tat"+"."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " as coloana, "+
+                                " max(tid.dataora) as data_ora "+
+                                    " from ("+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+" as tat "+
+                                            " inner join "+
+                                            Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+ " as tpt "+
+                                            " on tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+"="+
+                                            " tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+
+                                            " inner join "+
+                                            Constructor.Tabela_Incarc_Descarc.NUME_TABEL+ " as tid"+
+                                            " on tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+"="+
+                                            " tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+")"+
+                                " where tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP+"="+2+
+                                " group by tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+
+                                " ORDER BY max(tid.dataora) DESC"+
+                        ") as rez ON id.dataora =rez.rez.data_ora AND"+
+                        " id."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+"= rez.coloana"+
+                        " where id."+Constructor.Tabela_Incarc_Descarc.COL_ID_TIP+"="+4+
+                        " and id."+Constructor.Tabela_Incarc_Descarc.COL_ID_P_LUCRU+"="+id_p_lucru;
+
+
+
+
+
+
+
+
+
+
+        Cursor cursor = db.rawQuery(selectareCodBare, null);
+        if (cursor == null || cursor.getCount()==0) {
+            return  -1;
         }
-        if (cursor!=null && cursor.getCount()>0)
+        if (cursor != null && cursor.getCount() > 0)
             cursor.moveToFirst();
+        return cursor.getCount();
 
-        //return cursor.getInt(cursor.getColumnIndexOrThrow(Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU));
-        return cursor.getInt(cursor.getColumnIndexOrThrow("coloana"));
-        //  return cursor.getCount();
+
+
+    }
+
+// numarea codurilor de bare ce pot fi descarcate
+    public static int iGetNumarDeCoduriBareDeDescarcat(SQLiteDatabase db, int id_p_lucru) {
+        //select id.id_antet_trimiteri
+        //    from tabela_incarc_descarc id
+        //    inner join (
+        //
+        //SELECT tat.id_antet_trimiteri as coloana, max(tid.dataora) as data_ora
+        //
+        //  FROM (
+        //           tabela_antet_trimiteri AS tat
+        //           INNER JOIN
+        //           tabela_pozitii_trimiteri AS tpt ON tat.id_antet_trimiteri = tpt.id_antet_trimiteri
+        //           INNER JOIN
+        //           tabela_incarc_descarc AS tid ON tat.id_antet_trimiteri = tid.id_antet_trimiteri
+        //       )
+        // WHERE tpt.id_tip = 2 AND
+        //       tpt.id_p_lucru = 61
+        //
+        //       group by tat.id_antet_trimiteri
+        //       order by max(tid.dataora) desc) as rez
+        //       on id.dataora=rez.data_ora and id.id_antet_trimiteri=rez.coloana
+        //       where id.id_tip=3
+        String numarCoduriBare =
+                " select "+" id"+"."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+
+                        " from "+Constructor.Tabela_Incarc_Descarc.NUME_TABEL + " id"+
+                        " inner join ("+
+                        " select"+" tat"+"."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+ " as coloana, "+
+                        " max(tid.dataora) as data_ora "+
+                        " from ("+ Constructor.Tabela_Antet_Trimiteri.NUME_TABEL+" as tat "+
+                        " inner join "+
+                        Constructor.Tabela_Pozitii_Trimiteri.NUME_TABEL+ " as tpt "+
+                        " on tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+"="+
+                        " tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_ANTET_TRIMITERI+
+                        " inner join "+
+                        Constructor.Tabela_Incarc_Descarc.NUME_TABEL+ " as tid"+
+                        " on tid."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+"="+
+                        " tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+")"+
+                        " where tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_TIP+"="+2+
+                        " and tpt."+Constructor.Tabela_Pozitii_Trimiteri.COL_ID_P_LUCRU+"="+id_p_lucru+
+                        " group by tat."+Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI+
+                        " ORDER BY max(tid.dataora) DESC"+
+                        ") as rez ON id.dataora=rez.data_ora AND"+
+                        " id."+Constructor.Tabela_Incarc_Descarc.COL_ID_ANTET_TRIMITERI+"= rez.coloana"+
+                        " where id."+Constructor.Tabela_Incarc_Descarc.COL_ID_TIP+"="+3;
+
+
+        Cursor cursor = db.rawQuery(numarCoduriBare, null);
+        if (cursor == null || cursor.getCount()==0) {
+            return -1;
+        }
+        if (cursor != null && cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getCount();
+        //return cursor.getInt(cursor.getColumnIndexOrThrow("coloana"));
+
     }
 
 }

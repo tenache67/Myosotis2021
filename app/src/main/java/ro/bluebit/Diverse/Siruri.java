@@ -187,7 +187,8 @@ public class Siruri {
 
     // creeaza sau adauga la un fis text
     public static void scrieFisLog(String sFisier, String sText, Context context) {
-        if (false) // && context!=null)
+       // if (context!=null)
+        if (false)
         {
             String sInsert =
                     Siruri.ttos(Siruri.getDateTime()) + " " +
