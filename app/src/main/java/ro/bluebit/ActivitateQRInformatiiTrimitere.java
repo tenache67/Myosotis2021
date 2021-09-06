@@ -57,14 +57,17 @@ public class ActivitateQRInformatiiTrimitere extends BazaAppCompat {
             String selectieidantet = "Select " + Constructor.Tabela_Antet_Trimiteri.COL_ID_ANTET_TRIMITERI + " from " + Constructor.Tabela_Antet_Trimiteri.NUME_TABEL + " where " + Constructor.Tabela_Antet_Trimiteri.COL_COD_BARE +
                     "=" + "'" + sCodBare + "'"; ///////Selectie ID ANTET
 
-
-        Cursor crs = db.rawQuery(selectieidantet, null);
-        if (crs.getCount() == 0) {
-            Toast.makeText(this, "Codul nu exista", Toast.LENGTH_SHORT).show();
-        } else {
-            crs.moveToFirst();
-            crs.close();
-            startActivity(intent);
+try {
+    Cursor crs = db.rawQuery(selectieidantet, null);
+    if (crs.getCount() == 0) {
+        Toast.makeText(this, "Codul nu exista", Toast.LENGTH_SHORT).show();
+    } else {
+        crs.moveToFirst();
+        crs.close();
+        startActivity(intent);
+    }
+}catch(Exception e){
+    Toast.makeText(this, "Codul nu se afla in miscare", Toast.LENGTH_SHORT).show();
         }
 
     }

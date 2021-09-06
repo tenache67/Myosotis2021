@@ -1,12 +1,15 @@
 package ro.bluebit;
 
 import android.app.AlertDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -21,6 +24,8 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import ro.bluebit.Database.Constructor;
+import ro.bluebit.Database.DatabaseHelper;
 import ro.bluebit.Database.MySQLHelper;
 
 public class MysqlActivity extends BazaAppCompat  {
@@ -28,7 +33,7 @@ public class MysqlActivity extends BazaAppCompat  {
     private TextView status, role, method;
     TextView afisareIdSesiune;
     EditText ParolaActivity;
-    Button btnOK;
+    Button btnOK, btnDELTables;
 
     OkHttpClient client = new OkHttpClient();
     public String url = "https://reqres.in/api/users/2";
@@ -55,11 +60,15 @@ public class MysqlActivity extends BazaAppCompat  {
         afisareIdSesiune=findViewById(R.id.afisare_sesiune_id);
         ParolaActivity = findViewById(R.id.ParolaActivity);
         btnOK = findViewById(R.id.button2);
+        btnDELTables = findViewById(R.id.button3);
         usernameField.setEnabled(false);
         passwordField.setEnabled(false);
         loadApi.setEnabled(false);
         postReq.setEnabled(false);
+        btnDELTables.setEnabled(false);
         afisareIdSesiune.setEnabled(false);
+        final DatabaseHelper myDb = new DatabaseHelper(this);
+       final SQLiteDatabase db = myDb.getWritableDatabase();
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +79,7 @@ public class MysqlActivity extends BazaAppCompat  {
                     loadApi.setEnabled(true);
                     postReq.setEnabled(true);
                     afisareIdSesiune.setEnabled(true);
+                    btnDELTables.setEnabled(true);
                     ParolaActivity.setVisibility(View.GONE);
                     btnOK.setVisibility(View.GONE);
                     /*ParolaActivity.setVisibility(View.INVISIBLE);
@@ -78,6 +88,21 @@ public class MysqlActivity extends BazaAppCompat  {
 
                 }
 
+            }
+        });
+
+        btnDELTables.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+                   db.execSQL("delete from tabela_antet_trimiteri");
+                   db.execSQL("delete from tabela_pozitii_trimiteri");
+
+
+                } catch (Exception e) {
+                    Toast.makeText(MysqlActivity.this, "Ceva nu a functionat", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

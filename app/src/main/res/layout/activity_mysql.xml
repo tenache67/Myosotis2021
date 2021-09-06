@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MysqlActivity">
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="596dp"
+        android:text="STERGE TABELE"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/afisare_sesiune_id" />
+
     <TextView
        android:id="@+id/afisare_sesiune_id"
         android:layout_width="150dp"
@@ -102,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="524dp"
         android:text="OK"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/afisare_sesiune_id" />
